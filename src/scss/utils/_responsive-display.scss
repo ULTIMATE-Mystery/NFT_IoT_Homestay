@@ -1,0 +1,119 @@
+@use 'validate' as validate;
+
+$breakpoints: (
+    sm: 576,
+    md: 768,
+    lg: 992,
+    xl: 1200,
+    xxl: 1600,
+);
+
+@mixin displayOnSizeLessThan($size) {
+    @include validate.check-is-number($size);
+    display: none !important;
+    @media screen and (max-width: #{$size - 1}px) {
+        display: unset !important;
+    }
+}
+
+@mixin displayOnSizeLessThanOrEqual($size) {
+    @include validate.check-is-number($size);
+    display: none !important;
+    @media screen and (max-width: #{$size}px) {
+        display: unset !important;
+    }
+}
+
+@mixin displayOnSizeGreaterThan($size) {
+    @include validate.check-is-number($size);
+    display: none !important;
+    @media screen and (min-width: #{$size + 1}px) {
+        display: unset !important;
+    }
+}
+
+@mixin displayOnSizeGreaterThanOrEqual($size) {
+    @include validate.check-is-number($size);
+    display: none !important;
+    @media screen and (min-width: #{$size}px) {
+        display: unset !important;
+    }
+}
+
+.show-on-xs {
+    @include displayOnSizeLessThan(576);
+}
+.hide-on-xs {
+    @include displayOnSizeGreaterThanOrEqual(576);
+}
+
+@for $i from 1 through length($breakpoints) {
+    $breakpointName: nth(map-keys($breakpoints), $i);
+    $breakpointValue: nth(map-values($breakpoints), $i);
+    .show-on-#{$breakpointName} {
+        @include displayOnSizeGreaterThanOrEqual($breakpointValue);
+    }
+    .hide-on-#{$breakpointName} {
+        @include displayOnSizeLessThan($breakpointValue);
+    }
+}
+
+@mixin for-sm-and-up {
+    @media screen and (min-width: map-get($breakpoints, sm)) {
+        @content;
+    }
+}
+
+@mixin for-md-and-up {
+    @media screen and (min-width: map-get($breakpoints, md)) {
+        @content;
+    }
+}
+
+@mixin for-lg-and-up {
+    @media screen and (min-width: map-get($breakpoints, lg)) {
+        @content;
+    }
+}
+
+@mixin for-xl-and-up {
+    @media screen and (min-width: map-get($breakpoints, xl)) {
+        @content;
+    }
+}
+
+@mixin for-xxl-and-up {
+    @media screen and (min-width: map-get($breakpoints, xxl)) {
+        @content;
+    }
+}
+
+@mixin for-xs {
+    @media screen and (max-width: #{map-get($breakpoints, sm) - 1}px) {
+        @content;
+    }
+}
+
+@mixin for-under-md {
+    @media screen and (max-width: #{map-get($breakpoints, md) - 1}px) {
+        @content;
+    }
+}
+
+@mixin for-under-lg {
+    @media screen and (max-width: #{map-get($breakpoints, lg) - 1}px) {
+        @content;
+    }
+}
+
+@mixin for-under-xl {
+    @media screen and (max-width: #{map-get($breakpoints, xl) - 1}px) {
+        @content;
+    }
+}
+
+@mixin for-under-xxl {
+    @media screen and (max-width: #{map-get($breakpoints, xxl) - 1}px) {
+        @content;
+    }
+}

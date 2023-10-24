@@ -1,0 +1,104 @@
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    src: local('Inter Bold'), local('Inter-Bold'),
+        url('../assets/fonts/Inter/Inter-Bold.ttf') format('truetype');
+    font-display: swap;
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    src: local('Inter Regular'), local('Inter-Regular'),
+        url('../assets/fonts/Inter/Inter-Regular.ttf') format('truetype');
+    font-display: swap;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    src: local('Inter Medium'), local('Inter-Medium'),
+        url('../assets/fonts/Inter/Inter-Medium.ttf') format('truetype');
+    font-display: swap;
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    src: local('Inter SemiBold'), local('Inter-SemiBold'),
+        url('../assets/fonts/Inter/Inter-SemiBold.ttf') format('truetype');
+    font-display: swap;
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    src: local('Inter Light'), local('Inter-Light'),
+        url('../assets/fonts/Inter/Inter-Light.ttf') format('truetype');
+    font-display: swap;
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: 'Be Vietnam Pro-Light';
+    font-style: normal;
+    src: url('../assets/fonts/BeVietnamPro/BeVietnamPro-Light.ttf');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Be Vietnam Pro-Medium';
+    font-style: normal;
+    src: url('../assets/fonts/BeVietnamPro/BeVietnamPro-Medium.ttf');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Be Vietnam Pro-SemiBold';
+    font-style: normal;
+    src: url('../assets/fonts/BeVietnamPro/BeVietnamPro-SemiBold.ttf');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Be Vietnam Pro-Regular';
+    font-style: normal;
+    src: url('../assets/fonts/BeVietnamPro/BeVietnamPro-Regular.ttf');
+    font-display: swap;
+}
+
+$font-regular: 'Inter-regular';
+$font-semibold: 'Inter-semibold';
+$font-bold: 'Inter-bold';
+$font-light: 'Inter-light';
+$font-medium: 'Inter-medium';
+$font-inter: 'Inter';
+
+$be-vietnam-pro-light: 'Be Vietnam Pro-Light';
+$be-vietnam-pro-medium: 'Be Vietnam Pro-Medium';
+$be-vietnam-pro-semibold: 'Be Vietnam Pro-SemiBold';
+$be-vietnam-pro-regular: 'Be Vietnam Pro-Regular';
+
+@mixin fontLight {
+    font-weight: 300;
+}
+
+@mixin fontRegular {
+    font-weight: 400;
+}
+
+@mixin fontMedium {
+    font-weight: 500;
+}
+
+@mixin fontSemibold {
+    font-weight: 600;
+}
+
+@mixin fontBold {
+    font-weight: 700;
+}

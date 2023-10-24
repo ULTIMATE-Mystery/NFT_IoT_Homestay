@@ -1,0 +1,17 @@
+@import 'scss/global';
+
+//Add a black overlay when hover from bottom to 50% height
+
+.destination-card {
+    &__title {
+        display: none;
+    }
+    &:hover {
+        .destination-card__title {
+            display: block;
+        }
+        cursor: pointer;
+    }
+}
+
+

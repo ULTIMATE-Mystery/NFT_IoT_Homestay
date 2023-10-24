@@ -1,0 +1,57 @@
+@mixin font8 {
+    font-size: var(--font-size-8);
+    line-height: var(--line-height-12);
+}
+
+@mixin font-tag-10-14-hard {
+    font-size: 10px;
+    line-height: 14px;
+}
+
+@mixin font12 {
+    font-size: var(--font-size-12);
+    line-height: var(--line-height-16);
+}
+
+@mixin font14 {
+    font-size: var(--font-size-14);
+    line-height: var(--line-height-18);
+}
+
+@mixin font14-20 {
+    font-size: var(--font-size-14);
+    line-height: var(--line-height-20);
+}
+
+@mixin font16 {
+    font-size: var(--font-size-16);
+    line-height: var(--line-height-20);
+}
+
+@mixin font16-24 {
+    font-size: var(--font-size-16);
+    line-height: var(--line-height-24);
+}
+
+@mixin font18 {
+    font-size: var(--font-size-18);
+    line-height: var(--line-height-24);
+}
+
+@mixin font20 {
+    font-size: var(--font-size-20);
+    line-height: var(--line-height-26);
+}
+
+@mixin font24 {
+    font-size: var(--font-size-24);
+    line-height: var(--line-height-32);
+}
+
+$font-size-list: 8, 12, 14, 16, 18, 20, 24;
+$line-height-list: 12, 16, 18, 20, 24, 26, 32;
+
+:export {
+    fontSizeList: $font-size-list;
+    lineHeightList: $line-height-list;
+}

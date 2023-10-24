@@ -1,0 +1,23 @@
+@mixin overflow-long-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+$shadow-inset-bottom: inset 0px -1px 0px rgba(
+        $color: $color--black,
+        $alpha: 0.1,
+    );
+
+$common-transition: all 0.3s ease-in-out;
+@mixin common-transition($props: all) {
+    transition: #{$props} 0.3s ease-in-out;
+}
+
+@mixin d-flex($direction: row, $align: null, $justify: null, $wrap: null) {
+    display: flex;
+    flex-direction: $direction;
+    align-items: $align;
+    justify-content: $justify;
+    flex-wrap: $wrap;
+}

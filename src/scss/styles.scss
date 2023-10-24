@@ -1,0 +1,25 @@
+@import 'variables';
+@import 'utils';
+@import 'fonts';
+@import 'common';
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+body {
+    margin: 0px;
+    font-family: 'Inter', sans-serif;
+    background-color: $color--light;
+    color: $color--black;
+    *[class^='ant-'] {
+        font-family: $font-inter;
+    }
+}
+
+.text-secondary {
+    color: #004047;
+}
+
+a {
+    text-decoration: none;
+}

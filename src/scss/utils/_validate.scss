@@ -1,0 +1,7 @@
+@use 'sass:meta' as meta;
+
+@mixin check-is-number($arg) {
+    @if (meta.type-of($arg) != number) {
+        @warn 'The argument must be a number';
+    }
+}
