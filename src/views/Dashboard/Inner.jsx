@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo } from 'react';
 import DashboardCard from './component/DashboardCard';
 import Thermometer from 'icons/Thermometer';
 import Droplet from 'icons/Droplet';
@@ -9,14 +9,15 @@ const Inner = memo(
     ({ temperature, humidity, oxygen, lightStatus, onToggle }) => {
         return (
             <>
-                <DashboardCard
-                    title="Nhiệt độ"
-                    icon={<Thermometer size={24} />}
-                    value={temperature.value}
-                    ts={temperature.ts}
-                    unit="°C"
-                />
-
+                {
+                    <DashboardCard
+                        title="Nhiệt độ"
+                        icon={<Thermometer size={24} />}
+                        value={temperature.value}
+                        ts={temperature.ts}
+                        unit="°C"
+                    />
+                    /* 
                 <DashboardCard
                     title="Độ ẩm"
                     icon={<Droplet size={24} />}
@@ -35,7 +36,8 @@ const Inner = memo(
                     title="Đèn"
                     onChange={status => onToggle(status)}
                     checked={lightStatus}
-                />
+                /> */
+                }
             </>
         );
     }

@@ -1,0 +1,68 @@
+@import 'scss/global.scss';
+
+$header-height: 48px;
+$sidebar-width: 240px; 
+
+.iot-header {
+    &-wrapper {
+        background: $color--iot;
+        height: $header-height;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        @include d-flex(row, center, center);
+        //Black shadow on bottom 
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+    }
+    &-inner {
+        @include d-flex(row, center, space-between);
+        width: calc(100% - 64px);
+        margin: auto;
+    }
+    &__group {
+        @include d-flex(row, center, center);
+        &.menu {
+            gap: 8px;
+        }
+    }
+}
+
+
+
+.iot-sidebar {
+    position: fixed;
+    top: $header-height;
+    left: 0;
+    height: 100%;
+    width: $sidebar-width;
+    background-color: $color--iot;
+    transition: transform 0.25s ease;
+    transform: translateX(-100%);
+    display: flex;
+    z-index: 99;
+    
+}
+  
+.iot-sidebar.open {
+    transform: translateX(0);
+}
+
+.iot-sidebar-mask {
+    position: fixed;
+    top: $header-height;
+    right: 0;
+    height: calc(100vh - $header-height);
+    width: 100vw;
+    background-color: white;
+    transition: opacity 0.25s ease;
+    opacity: 0;
+    z-index: 98;
+}
+
+.iot-sidebar-mask.open {
+    opacity: 0.33;
+    pointer-events: none;
+}

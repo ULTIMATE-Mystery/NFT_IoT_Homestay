@@ -8,7 +8,7 @@ interface DashboardCardProps {
     icon?: any;
     value?: number | string;
     unit?: string;
-    ts: number;
+    timestamp: number;
 }
 
 const DashboardCard: FC<DashboardCardProps> = ({
@@ -16,15 +16,15 @@ const DashboardCard: FC<DashboardCardProps> = ({
     icon,
     value,
     unit,
-    ts,
+    timestamp,
 }) => {
-    const isLoading = value === -1 || Date.now() - ts > 10 * 1000;
+    const isLoading = value === -1 || Date.now() - timestamp > 10 * 1000;
     return (
         <div className="dashboard-card">
             <Spin
                 indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
                 spinning={isLoading}
-                tip="Đang kết nối..."
+                tip="Connecting to server..."
             >
                 <div className="dashboard-card__title">
                     {title}
@@ -35,8 +35,10 @@ const DashboardCard: FC<DashboardCardProps> = ({
                     <span className="dashboard-card__unit">{unit}</span>
                 </div>
                 {/* Convert unix to HH:MM:SS - DD/MM/YY */}
-                <div className="dashboard-card__ts">
-                    {ts !== -1 ? new Date(ts).toLocaleString('vi-VN') : 'N/A'}
+                <div className="dashboard-card__timestamp">
+                    {timestamp !== -1
+                        ? new Date(timestamp).toLocaleString('vi-VN')
+                        : 'N/A'}
                 </div>
             </Spin>
         </div>
