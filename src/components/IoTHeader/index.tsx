@@ -6,12 +6,16 @@ import IoTSidebar from './Sidebar';
 
 const IoTHeader: FC = () => {
     const [sidebarState, setSidebarState] = useState(false);
+    console.log(sidebarState);
     return (
         <>
             <div className="iot-header-wrapper">
                 <div className="iot-header-inner">
                     <div className="iot-header__group menu">
-                        <div onClick={() => setSidebarState(!sidebarState)}>
+                        <div
+                            className="menu-icon"
+                            onClick={() => setSidebarState(!sidebarState)}
+                        >
                             <Menu />
                         </div>
                         <div className="text-xl">SDSC IoT</div>
@@ -22,7 +26,10 @@ const IoTHeader: FC = () => {
                     </div>
                 </div>
             </div>
-            <IoTSidebar open={sidebarState} />
+            <IoTSidebar
+                open={sidebarState}
+                onMaskClick={state => setSidebarState(state)}
+            />
         </>
     );
 };

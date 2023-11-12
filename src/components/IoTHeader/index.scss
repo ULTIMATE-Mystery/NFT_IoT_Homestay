@@ -27,10 +27,16 @@ $sidebar-width: 240px;
         &.menu {
             gap: 8px;
         }
+        .menu-icon {
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            &:hover {
+                background: gray;
+            }
+        }
     }
 }
-
-
 
 .iot-sidebar {
     position: fixed;
@@ -60,9 +66,10 @@ $sidebar-width: 240px;
     transition: opacity 0.25s ease;
     opacity: 0;
     z-index: 98;
+    display: none;
 }
 
 .iot-sidebar-mask.open {
     opacity: 0.33;
-    pointer-events: none;
+    display: block;
 }
