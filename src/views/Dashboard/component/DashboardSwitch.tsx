@@ -1,7 +1,7 @@
 import deviceService from 'apis/services/deviceService';
 import Switch from 'components/Switch';
 import { memo, FC, useCallback, useState } from 'react';
-import { getMinutesAgo } from 'utils/function/format';
+import { getTimestampAgo } from 'utils/function/format';
 interface DashboardSwitchProps {
     title: string;
     icon?: any;
@@ -53,11 +53,10 @@ const DashboardSwitch: FC<DashboardSwitchProps> = ({
                 uncheckedBg={uncheckedBg}
             />
             <div className="dashboard-card__last-changed ">
-                <div className="text-[14px]">Last changed:</div>
-                <div className="text-[14px]">
-                    {/* if 0, convert to <1 */}
-                    {getMinutesAgo(lastChangedTime)} minute(s) ago
-                </div>
+                <span className="text-[14px]">Last changed: </span>
+                <span className="text-[14px]">
+                    {getTimestampAgo(lastChangedTime)}
+                </span>
             </div>
         </div>
     );

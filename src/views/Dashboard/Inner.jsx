@@ -3,6 +3,7 @@ import DashboardCard from './component/DashboardCard';
 import Thermometer from 'icons/Thermometer';
 import Droplet from 'icons/Droplet';
 import DashboardSwitch from 'views/Dashboard/component/DashboardSwitch';
+import Bulb from 'icons/Bulb';
 
 const Inner = memo(({ lightStatus }) => {
     return (
@@ -21,6 +22,7 @@ const Inner = memo(({ lightStatus }) => {
             />
             <DashboardSwitch
                 title="Room light"
+                icon={<Bulb size={24} />}
                 feed="light"
                 defaultChecked={lightStatus.value}
                 lastChanged={lightStatus.lastChanged}

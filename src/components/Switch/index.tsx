@@ -1,6 +1,7 @@
-import React, { FC, memo, useState } from 'react';
+import { FC, memo } from 'react';
 import './index.scss';
 import { shortenString } from 'utils/function/format';
+import useToggle from 'hooks/useToggle';
 
 interface SwitchProps {
     checked?: boolean;
@@ -19,7 +20,7 @@ const Switch: FC<SwitchProps> = ({
     checkedBg,
     uncheckedBg,
 }) => {
-    const [isChecked, setIsChecked] = useState(checked);
+    const [isChecked, toggleSwitch] = useToggle(checked);
 
     return (
         <label className={`switch ${isChecked ? 'checked' : ''}`}>
@@ -28,7 +29,7 @@ const Switch: FC<SwitchProps> = ({
                 type="checkbox"
                 checked={isChecked}
                 onClick={() => {
-                    setIsChecked(!isChecked);
+                    toggleSwitch();
                     if (onChange) {
                         onChange(!isChecked);
                     }

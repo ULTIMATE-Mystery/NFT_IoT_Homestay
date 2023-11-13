@@ -30,12 +30,17 @@ export const shortenString = (str: string, maxLength: number) => {
     return str;
 };
 
-export const getMinutesAgo = (date: Date) => {
+export const getTimestampAgo = (date: Date) => {
     const ago = moment(date);
     const diff = moment().diff(ago, 'minutes');
 
     if (diff <= 0) {
-        return '<1';
+        return '<1 minute ago';
+    } else if (diff > 0 && diff < 60) {
+        return `${diff} minutes ago`;
+    } else if (diff >= 60 && diff < 60 * 24) {
+        return `${Math.floor(diff / 60)} hours ago`;
+    } else {
+        return `${Math.floor(diff / (60 * 24))} days ago`;
     }
-    return diff.toString();
 };

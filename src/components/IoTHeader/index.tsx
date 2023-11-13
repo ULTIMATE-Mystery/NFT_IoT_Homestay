@@ -1,12 +1,12 @@
-import { memo, FC, useState } from 'react';
+import { memo, FC } from 'react';
 import './index.scss';
 import Menu from 'icons/Menu';
 import UserIcon2 from 'icons/UserIcon2';
 import IoTSidebar from './Sidebar';
+import useToggle from 'hooks/useToggle';
 
 const IoTHeader: FC = () => {
-    const [sidebarState, setSidebarState] = useState(false);
-    console.log(sidebarState);
+    const [sidebarState, toggleSidebar] = useToggle(false);
     return (
         <>
             <div className="iot-header-wrapper">
@@ -14,11 +14,11 @@ const IoTHeader: FC = () => {
                     <div className="iot-header__group menu">
                         <div
                             className="menu-icon"
-                            onClick={() => setSidebarState(!sidebarState)}
+                            onClick={() => toggleSidebar}
                         >
                             <Menu />
                         </div>
-                        <div className="text-xl">SDSC IoT</div>
+                        <div className="text-xl">SDSC Smart Homestay</div>
                     </div>
                     <div className="iot-header__group">
                         <UserIcon2 />
@@ -26,10 +26,7 @@ const IoTHeader: FC = () => {
                     </div>
                 </div>
             </div>
-            <IoTSidebar
-                open={sidebarState}
-                onMaskClick={state => setSidebarState(state)}
-            />
+            <IoTSidebar open={sidebarState} onMaskClick={() => toggleSidebar} />
         </>
     );
 };
