@@ -7,7 +7,6 @@ $bg-color: #1f263c;
     background-color: $bg-color;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     padding: 16px 20px 20px 20px;
-    margin: 32px;
     width: 240px;
     min-height: 80px;
     // border: 1px solid rgba(0, 0, 0, 0.6);
@@ -51,9 +50,15 @@ $bg-color: #1f263c;
     background-color: $bg-color;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     padding: 16px 20px 20px 20px;
-    margin: 0 32px 32px 32px;
     width: calc(100% - 64px);
     min-height: 80px;
+    .ant-select-selector,
+    .ant-select-arrow,
+    .ant-select-selection-item {
+        background-color: $bg-color !important;
+        color: white !important;
+    }
+
     &__header {
         @include d-flex(row, center, center);
         position: relative;
@@ -70,13 +75,6 @@ $bg-color: #1f263c;
         &__mode {
             position: absolute;
             right: 0;
-
-            .ant-select-selector,
-            .ant-select-arrow,
-            .ant-select-selection-item {
-                background-color: $bg-color !important;
-                color: white !important;
-            }
         }
     }
     &__no-data {

@@ -7,54 +7,68 @@ import './index.scss';
 import { dateFormat } from 'utils/function/format';
 import Info from 'icons/Info';
 
-interface DashboardChartProps {
+interface ChartOptionProps {
     feed: string;
+    title: string;
+    label?: string;
+    unit?: string;
+}
+interface DashboardChartProps {
+    defaultOption: ChartOptionProps;
+    options?: ChartOptionProps[];
 }
 
-const DashboardChart: FC<DashboardChartProps> = ({ feed }) => {
+const DashboardChart: FC<DashboardChartProps> = ({
+    // feed,
+    // title,
+    // label = feed,
+    // unit = '',
+    defaultOption,
+    options = [],
+}) => {
     const [chartData, setChartData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const chartInstanceRef = useRef<Chart | null>(null);
     const [currentOpt, setCurrentOpt] = useState(72);
-
-    const fetchChartData = useCallback(
-        async (hours: number) => {
-            try {
-                const response = await deviceService.getChartData(feed, {
-                    hours: hours,
-                });
-                setChartData(
-                    //Only show max 100 data points
-                    response.data.slice(
-                        Math.max(response.length - 100, 0),
-                        response.length
-                    )
-                );
-            } catch (error) {
-                setIsLoading(true);
-            } finally {
-                setIsLoading(false);
-            }
-        },
-        [feed]
-    );
+    const [currentFeed, setCurrentFeed] = useState(defaultOption.feed);
+    const selectedOption = useCallback(() => {
+        return options.find(option => option.feed === currentFeed);
+    }, [options, currentFeed]);
+    const fetchChartData = useCallback(async (feed: string, hours: number) => {
+        try {
+            const response = await deviceService.getChartData(feed, {
+                hours: hours,
+            });
+            setChartData(
+                //Only show max 100 data points
+                response.data.slice(
+                    Math.max(response.length - 100, 0),
+                    response.length
+                )
+            );
+        } catch (error) {
+            setIsLoading(true);
+        } finally {
+            setIsLoading(false);
+        }
+    }, []);
 
     useEffect(() => {
-        fetchChartData(currentOpt);
-    }, [fetchChartData, currentOpt]);
+        fetchChartData(currentFeed, currentOpt);
+    }, [fetchChartData, currentFeed, currentOpt]);
 
     const checkAndUpdateChart = useCallback(async () => {
-        const response = await deviceService.getLatestValue(feed);
+        const response = await deviceService.getLatestValue(currentFeed);
         const updated =
             chartData.length > 0
                 ? response?.created_at !== chartData[chartData.length - 1][0] // The dataset has been updated
                 : response; // If there is response and prev chartData is empty => New dataset
         if (updated) {
             // console.log('Updated');
-            fetchChartData(currentOpt);
+            fetchChartData(currentFeed, currentOpt);
         }
-    }, [fetchChartData, feed, chartData, currentOpt]);
+    }, [fetchChartData, currentFeed, chartData, currentOpt]);
 
     useEffect(() => {
         const interval = setInterval(
@@ -87,7 +101,9 @@ const DashboardChart: FC<DashboardChartProps> = ({ feed }) => {
                         labels,
                         datasets: [
                             {
-                                label: 'Temperature (°C)',
+                                label: `${selectedOption()?.label || ''} (${
+                                    selectedOption()?.unit || ''
+                                })`,
                                 data,
                                 fill: false,
                                 borderColor: '#00ffff', // Line color
@@ -144,14 +160,25 @@ const DashboardChart: FC<DashboardChartProps> = ({ feed }) => {
                 chartInstanceRef.current = newChartInstance;
             }
         }
-    }, [isLoading, chartData]);
+    }, [isLoading, chartData, currentFeed, selectedOption]);
 
     return (
         <>
             <div className="dashboard-chart">
                 <div className="dashboard-chart__header">
                     <div className="dashboard-chart__header__title">
-                        Temperature chart
+                        <Select
+                            defaultValue={defaultOption.feed}
+                            style={{ width: 'max-content' }}
+                            options={options.map(item => ({
+                                value: item.feed,
+                                label: item.title,
+                            }))}
+                            onChange={value => {
+                                setCurrentFeed(value);
+                            }}
+                        />
+                        {/* {title} */}
                         <Tooltip title="Only max 100 data points are displayed">
                             <Info />
                         </Tooltip>

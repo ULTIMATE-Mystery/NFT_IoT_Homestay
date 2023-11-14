@@ -1,14 +1,31 @@
-import { memo } from 'react';
-import DashboardCard from './component/DashboardCard';
+import { memo, useMemo } from 'react';
+import DashboardCard from './components/DashboardCard';
 import Thermometer from 'icons/Thermometer';
 import Droplet from 'icons/Droplet';
-import DashboardSwitch from 'views/Dashboard/component/DashboardSwitch';
+import DashboardSwitch from './components/DashboardSwitch';
 import Bulb from 'icons/Bulb';
-import DashboardChart from './component/DashboardChart';
+import DashboardChart from './components/DashboardChart';
 
 const Inner = memo(({ lightStatus }) => {
+    const chartOptions = useMemo(() => {
+        return [
+            {
+                feed: 'temperature',
+                title: 'Temperature chart',
+                label: 'Temperature',
+                unit: '°C',
+            },
+            {
+                feed: 'humidity',
+                title: 'Humidity chart',
+                label: 'Humidity',
+                unit: '%',
+            },
+        ];
+    }, []);
+
     return (
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap gap-[24px] ml-[32px] mt-[32px] mr-[32px]">
             <DashboardCard
                 title="Temperature"
                 feed="temperature"
@@ -31,7 +48,14 @@ const Inner = memo(({ lightStatus }) => {
                 checkedText="ON"
                 uncheckedText="OFF"
             />
-            <DashboardChart feed="temperature" />
+            <DashboardChart
+                // feed="temperature"
+                // title="Temperature chart"
+                // label="Temperature"
+                // unit="°C"
+                defaultOption={chartOptions[0]}
+                options={chartOptions}
+            />
         </div>
     );
 });
