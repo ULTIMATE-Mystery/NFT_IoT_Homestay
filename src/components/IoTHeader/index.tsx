@@ -14,7 +14,7 @@ const IoTHeader: FC = () => {
                     <div className="iot-header__group menu">
                         <div
                             className="menu-icon"
-                            onClick={() => toggleSidebar}
+                            onClick={() => toggleSidebar()}
                         >
                             <Menu />
                         </div>
@@ -26,7 +26,10 @@ const IoTHeader: FC = () => {
                     </div>
                 </div>
             </div>
-            <IoTSidebar open={sidebarState} onMaskClick={() => toggleSidebar} />
+            <IoTSidebar
+                open={sidebarState}
+                onMaskClick={() => toggleSidebar()}
+            />
         </>
     );
 };
