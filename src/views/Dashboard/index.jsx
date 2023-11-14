@@ -2,11 +2,13 @@ import React, { memo, useState, useCallback, useEffect } from 'react';
 import deviceService from 'apis/services/deviceService';
 import IoTLayout from 'layouts/IoT';
 import Inner from './Inner';
+import { formatBoolean } from 'utils/function/format';
 
 const Dashboard = memo(() => {
     const [lightStatus, setLightStatus] = useState({
         value: false,
         lastChanged: Date.now(),
+        connected: false,
     });
     const [isLoading, setIsLoading] = useState(true);
 
@@ -14,24 +16,29 @@ const Dashboard = memo(() => {
         try {
             const response = await deviceService.getLatestValue('light');
             setLightStatus({
-                value: response.value === '1',
+                value: formatBoolean(response.value),
                 lastChanged: new Date(response.created_at),
+                connected: true,
             });
         } catch (error) {
-            console.error('Error occurred: ', error);
+            setLightStatus(prev => ({
+                ...prev,
+                connected: false,
+            }));
         } finally {
             setIsLoading(false);
         }
     }, []);
 
-    //update on first render and every 1 minute
+    //update on first render and every 1 minute (if connected) or 5 seconds (if disconnected)
     useEffect(() => {
         getLastSwitchStatus();
+        const intervalPeriod = lightStatus.connected ? 60000 : 5000;
         const interval = setInterval(() => {
             getLastSwitchStatus();
-        }, 60000);
+        }, intervalPeriod);
         return () => clearInterval(interval);
-    }, [getLastSwitchStatus]);
+    }, [getLastSwitchStatus, lightStatus.connected]);
 
     return (
         <IoTLayout title="Dashboard">

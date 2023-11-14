@@ -1,13 +1,20 @@
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 import deviceService from 'apis/services/deviceService';
 import Switch from 'components/Switch';
 import { memo, FC, useCallback, useState } from 'react';
 import { getTimestampAgo } from 'utils/function/format';
+
+interface StatusProps {
+    value: boolean;
+    lastChanged: Date;
+    connected: boolean;
+}
 interface DashboardSwitchProps {
     title: string;
     icon?: any;
     feed: string;
-    defaultChecked?: boolean;
-    lastChanged: Date;
+    status: StatusProps;
     checkedText?: string;
     uncheckedText?: string;
     checkedBg?: string;
@@ -18,15 +25,14 @@ const DashboardSwitch: FC<DashboardSwitchProps> = ({
     title,
     icon = <></>,
     feed,
-    defaultChecked = false,
-    lastChanged,
+    status,
     checkedText = '',
     uncheckedText = '',
     checkedBg = '#0000ff',
     uncheckedBg = '#bbb',
 }) => {
-    const [switchStatus, setSwitchStatus] = useState(defaultChecked);
-    const [lastChangedTime, setLastChangedTime] = useState(lastChanged);
+    const [switchStatus, setSwitchStatus] = useState(status.value);
+    const [lastChangedTime, setLastChangedTime] = useState(status.lastChanged);
 
     const handleControlSwitch = useCallback(
         async (state: boolean) => {
@@ -36,28 +42,33 @@ const DashboardSwitch: FC<DashboardSwitchProps> = ({
         },
         [feed]
     );
-
     return (
         <div className="dashboard-card">
-            <div className="dashboard-card__title">
-                {title}
-                <span className="dashboard-card__icon">{icon}</span>
-            </div>
+            <Spin
+                indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
+                spinning={!status.connected}
+                tip="Connecting to server..."
+            >
+                <div className="dashboard-card__title">
+                    {title}
+                    <span className="dashboard-card__icon">{icon}</span>
+                </div>
 
-            <Switch
-                checked={switchStatus}
-                onChange={status => handleControlSwitch(status)}
-                checkedText={checkedText}
-                uncheckedText={uncheckedText}
-                checkedBg={checkedBg}
-                uncheckedBg={uncheckedBg}
-            />
-            <div className="dashboard-card__last-changed ">
-                <span className="text-[14px]">Last changed: </span>
-                <span className="text-[14px]">
-                    {getTimestampAgo(lastChangedTime)}
-                </span>
-            </div>
+                <Switch
+                    checked={switchStatus}
+                    onChange={status => handleControlSwitch(status)}
+                    checkedText={checkedText}
+                    uncheckedText={uncheckedText}
+                    checkedBg={checkedBg}
+                    uncheckedBg={uncheckedBg}
+                />
+                <div className="dashboard-card__last-changed ">
+                    <span className="text-[14px]">Last changed: </span>
+                    <span className="text-[14px]">
+                        {getTimestampAgo(lastChangedTime)}
+                    </span>
+                </div>
+            </Spin>
         </div>
     );
 };

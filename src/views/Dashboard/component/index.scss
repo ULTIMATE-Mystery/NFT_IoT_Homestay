@@ -35,4 +35,55 @@ $bg-color: #1f263c;
     &__last-changed {
         margin-top: 12px;
     }
+
+    .ant-spin-text {
+        text-shadow: none;
+        color: white;
+    }
+
+    .ant-spin-dot {
+        color: white;
+    }
+}
+
+.dashboard-chart {
+    border-radius: 6px;
+    background-color: $bg-color;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px 20px 20px 20px;
+    margin: 0 32px 32px 32px;
+    width: calc(100% - 64px);
+    min-height: 80px;
+    &__header {
+        @include d-flex(row, center, center);
+        position: relative;
+
+        &__title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-align: center;
+            @include d-flex(row, center, center);
+            gap: 6px;
+        }
+
+        &__mode {
+            position: absolute;
+            right: 0;
+
+            .ant-select-selector,
+            .ant-select-arrow,
+            .ant-select-selection-item {
+                background-color: $bg-color !important;
+                color: white !important;
+            }
+        }
+    }
+    &__no-data {
+        text-align: center;
+        padding-top: 32px;
+        padding-bottom: 16px;
+        font-size: 24px;
+        font-weight: 600;
+    }
 }

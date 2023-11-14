@@ -10,7 +10,7 @@ interface Props {
 const IoTLayout: FC<PropsWithChildren<Props>> = memo(
     ({ children, title, subTitle }) => {
         return (
-            <div>
+            <div style={{ width: '100%' }}>
                 <IoTHeader />
                 {children}
             </div>

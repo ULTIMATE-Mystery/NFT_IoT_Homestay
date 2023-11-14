@@ -12,6 +12,10 @@ class DeviceService extends ApiBase {
         };
         return this.post(url, { body });
     };
+    getChartData = (feedName: string, params: any) => {
+        const url = `/${process.env.REACT_APP_AIO_USERNAME}/feeds/${feedName}/data/chart`;
+        return this.get(url, { params });
+    };
     // getAllValues = (params: any) => {
     //     const url = `/plugins/telemetry/DEVICE/${DEVICE_ID.DHT22}/values/timeseries`;
     //     return this.get(url, { params });

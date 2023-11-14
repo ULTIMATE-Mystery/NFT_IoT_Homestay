@@ -2,9 +2,12 @@ import { memo, FC, useState, useCallback, useEffect } from 'react';
 import './index.scss';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
-import moment from 'moment';
-import { DEFAULT_DATE_TIME_FORMAT } from 'utils/constant';
+import {
+    DASHBOARD_UPDATE_PERIOD,
+    DEFAULT_DATE_TIME_FORMAT,
+} from 'utils/constant';
 import deviceService from 'apis/services/deviceService';
+import { dateFormat } from 'utils/function/format';
 
 interface DashboardCardProps {
     title: string;
@@ -15,40 +18,44 @@ interface DashboardCardProps {
 
 const DashboardCard: FC<DashboardCardProps> = ({ title, icon, feed, unit }) => {
     const [deviceData, setDeviceData] = useState({
-        value: '-1',
+        value: 'N/A',
         createdAt: Date.now(),
     });
-
-    // const [lightStatus, setLightStatus] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchData = useCallback(async () => {
         try {
             const response = await deviceService.getLatestValue(feed);
 
-            //only temperature
             const formatNumber = (value: string) =>
                 parseFloat(value).toFixed(2);
 
             setDeviceData({
-                value: formatNumber(response?.value || -1),
+                value: response ? formatNumber(response?.value) : 'N/A',
                 createdAt: response?.created_at || Date.now(),
             });
         } catch (error) {
             setDeviceData({
-                value: '-1',
+                value: 'N/A',
                 createdAt: Date.now(),
             });
         }
     }, [feed]);
-    // // Get data every 10s
+
     useEffect(() => {
         fetchData();
-        const interval = setInterval(fetchData, 10000);
+        const interval = setInterval(fetchData, 1000 * DASHBOARD_UPDATE_PERIOD);
         return () => clearInterval(interval);
     }, [fetchData]);
-    const isLoading =
-        deviceData.value === '-1' ||
-        Date.now() - deviceData.createdAt > 10 * 1000;
+
+    useEffect(() => {
+        if (deviceData.value === 'N/A') {
+            setIsLoading(true);
+        } else {
+            setIsLoading(false);
+        }
+    }, [deviceData]);
+
     return (
         <div className="dashboard-card">
             <Spin
@@ -64,10 +71,10 @@ const DashboardCard: FC<DashboardCardProps> = ({ title, icon, feed, unit }) => {
                     {!isLoading ? deviceData.value : 'N/A'}
                     <span className="dashboard-card__unit">{unit}</span>
                 </div>
-                {/* Convert unix to HH:MM:SS - DD/MM/YY */}
                 <div className="dashboard-card__timestamp">
                     {deviceData.createdAt !== Date.now()
-                        ? moment(deviceData.createdAt).format(
+                        ? dateFormat(
+                              deviceData.createdAt,
                               DEFAULT_DATE_TIME_FORMAT
                           )
                         : 'N/A'}

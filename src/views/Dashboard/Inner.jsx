@@ -4,10 +4,11 @@ import Thermometer from 'icons/Thermometer';
 import Droplet from 'icons/Droplet';
 import DashboardSwitch from 'views/Dashboard/component/DashboardSwitch';
 import Bulb from 'icons/Bulb';
+import DashboardChart from './component/DashboardChart';
 
 const Inner = memo(({ lightStatus }) => {
     return (
-        <div className="flex">
+        <div className="flex flex-wrap">
             <DashboardCard
                 title="Temperature"
                 feed="temperature"
@@ -24,11 +25,13 @@ const Inner = memo(({ lightStatus }) => {
                 title="Room light"
                 icon={<Bulb size={24} />}
                 feed="light"
+                status={lightStatus}
                 defaultChecked={lightStatus.value}
                 lastChanged={lightStatus.lastChanged}
                 checkedText="ON"
                 uncheckedText="OFF"
             />
+            <DashboardChart feed="temperature" />
         </div>
     );
 });

@@ -1,8 +1,11 @@
 import moment from 'moment';
 
-export const dateFormat = (date: string, format: string = 'DD/MM/YYYY') => {
+export const dateFormat = (
+    date: string | number,
+    format: string = 'DD/MM/YYYY'
+) => {
     try {
-        return date ? moment(date).format(format) : '--';
+        return date ? moment(date.toString()).format(format) : '--';
     } catch (error) {
         return '--';
     }
@@ -18,6 +21,10 @@ export const formatBoolean = (value: string) => {
             return true;
         case 'off':
             return false;
+        case '0':
+            return false;
+        case '1':
+            return true;
         default:
             return false;
     }
