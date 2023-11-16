@@ -1,159 +1,159 @@
-import { useContract, useContractRead } from '@thirdweb-dev/react';
+import React from 'react'
+import {
+  ConnectWallet,
+  Web3Button,
+  useAddress,
+  useContract,
+  useContractRead,
+} from "@thirdweb-dev/react";
 import { shortenAddress } from 'utils/shortenAddress';
-import Money from 'icons/Money';
-import Clock from 'icons/Clock';
-import Calendar from 'icons/Calendar';
-import Checkbox from 'icons/Checkbox';
-import Home from 'icons/Home';
-import Copy from 'icons/Copy';
-import { Tooltip } from 'antd';
-import Message from 'components/Message';
-import UserIcon from 'icons/UserIcon';
+import UserIcon2 from 'icons/UserIcon2';
+import WaterPlant from 'icons/WaterPlant';
+import Money2 from 'icons/Money2';
+import Clock2 from 'icons/Clock2';
+import Calendar3 from 'icons/Calendar3';
+import Calendar2 from 'icons/Calendar2';
+import background6 from 'assets/image/background/background6.jpg';
 
-const BookedCard = ({ tokenId }) => {
-    const contractAddress = '0xC8339AEeCa4a529a7a0571b9654024600f5FC137';
-    const { contract } = useContract(contractAddress);
-    const { data, isLoading } = useContractRead(contract, 'getNFTInfo', [
-        tokenId,
-    ]);
-    console.log(data);
-    const formatDate = timestamp => {
-        const date = new Date(timestamp * 1000); // Multiply by 1000 to convert seconds to milliseconds
-        const options = {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric',
-            hour12: false, // Use 24-hour format
-            timeZoneName: 'short',
-        };
-        return date.toLocaleString('en-US', options);
+const BookedCard = ({tokenId}) => {
+  const contractAddress = "0xC8339AEeCa4a529a7a0571b9654024600f5FC137";
+  const { contract } = useContract(contractAddress);
+  const { data, isLoading } = useContractRead(contract, "getNFTInfo", [tokenId]);
+  console.log(data)
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp * 1000); // Multiply by 1000 to convert seconds to milliseconds
+    const options = {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: false, // Use 24-hour format
+      timeZoneName: "short",
     };
+    return date.toLocaleString("en-US", options);
+  };
 
-    const parseBigNumber = value => {
-        return value ? value.toString() : '';
-    };
-    return (
-        <>
-            {!isLoading && data && (
-                <div className="border-2 p-4 rounded-lg flex flex-col justify-between gap-4 max-w-1/3">
-                    <div className="w-full flex justify-between">
-                        <div className="flex gap-2">
-                            <UserIcon />
-                            <p className="flex my-auto justify-center">
-                                Renter
-                            </p>
-                        </div>
-                        <div className="flex flex-row items-center gap-2">
-                            <span
-                                className="cursor-pointer"
-                                onClick={() => {
-                                    navigator.clipboard.writeText(
-                                        contractAddress
-                                    );
-                                    Message.sendSuccess('Copied to clipboard');
-                                }}
-                            >
-                                <Copy />
-                            </span>
-                            <Tooltip title={data[0]}>
-                                <span className="font-[700]">
-                                    {shortenAddress(data[0])}
-                                </span>
-                            </Tooltip>
-                        </div>
-                    </div>
-                    <div className="w-full flex justify-between">
-                        <div className="flex gap-2">
-                            <UserIcon />
-                            <p className="flex my-auto justify-center">
-                                Provider
-                            </p>
-                        </div>
-                        <div className="flex flex-row items-center gap-2">
-                            <span
-                                className="cursor-pointer"
-                                onClick={() => {
-                                    navigator.clipboard.writeText(
-                                        contractAddress
-                                    );
-                                    Message.sendSuccess('Copied to clipboard');
-                                }}
-                            >
-                                <Copy />
-                            </span>
-                            <Tooltip title={data[1]}>
-                                <span className="font-[700]">
-                                    {shortenAddress(data[1])}
-                                </span>
-                            </Tooltip>
-                        </div>
-                    </div>
+  const parseBigNumber = (value) => {
+    return value ? value.toString() : "";
+  };
+  return (
+    <>{!isLoading && data &&(
+    <div className='flex flex-cols'>
+      <div className='m-4 items-center justify-center flex '>
+        <img
+                    src={background6}
+                    alt="Background"
+                    className="left-0 w-100 h-100 object-contain transition-opacity duration-1000"
+                    style={{ opacity: '100%' }}
+        />
+        </div>
+      <div className='flex m-4 rounded-xl bg-gradient-to-r from-teal-200 via-cyan-300 
+      via-purple-400 to-pink-400 text-base rounded-2xl'>
+        
+        <div className="m-[2px] bg-white rounded-xl w-full p-4">
+            <div className='w-fit mx-auto'>
+            <div className='flex flex-row justify-between gap-2'>
+            <div className='w-full'>
+              <div className='flex justify-center'>
+                <UserIcon2 className="w-8"/>
+                <p className='flex my-auto justify-center font-extrabold text-sky-600'>
+                Provider
+                </p>
+              </div>
+              <p className='flex justify-center 
+              font-[1000] bg-gradient-to-r from-sky-500 to-purple-500 text-transparent 
+              bg-clip-text '>{shortenAddress(data[0])}</p>
+            </div>
+            <div className='w-full'>
+              <div className='flex justify-center'>
+                <UserIcon2 className="w-8"/>
+                <p className='flex my-auto justify-center font-extrabold text-sky-600'>
+                Renter
+                </p>
+              </div>
+              <p className='flex justify-center 
+              font-[1000] bg-gradient-to-r from-sky-500 to-purple-500 text-transparent 
+              bg-clip-text '>{shortenAddress(data[1])}</p>
+            </div>
+          </div>
+          <div className='flex flex-row justify-between gap-4'>
+            <div className='w-full'>
+              <div className='flex justify-center'>
+                <WaterPlant className="w-10"/>
+                <p className='flex my-auto justify-center font-extrabold text-sky-600'>
+                Room ID
+                </p>
+              </div>
+              <p className='flex justify-center 
+              font-[1000]  bg-gradient-to-r from-sky-500 to-purple-500 text-transparent 
+              bg-clip-text '>{parseBigNumber(data[2])}</p>
+            </div>
+            <div className='w-full'>
+              <div className='flex justify-center'>
+                <Money2 className="w-10"/>
+                <p className='flex my-auto justify-center font-extrabold text-sky-600'>
+                Rent Amount
+                </p>
+              </div>
+              <p className='flex justify-center
+              font-[1000] bg-gradient-to-r from-sky-500 to-purple-500 text-transparent 
+              bg-clip-text'>{parseBigNumber(data[3])} $</p>
+            </div>
+          </div>
+          <div className='justify-center'>
+            <div className='flex justify-center'>
+              <Clock2 className="w-8 mr-2"/>
+              <p className='flex my-auto justify-center font-extrabold text-sky-600'>
+                Duration
+              </p>
+            </div>
+            <p className='flex w-full justify-center
+            font-[1000]  bg-gradient-to-r from-sky-500 to-purple-500 text-transparent 
+            bg-clip-text'>{parseBigNumber(data[5])-parseBigNumber(data[4])} seconds</p>
+          </div>
+          <div className='justify-center'>
+            <div className='flex justify-center'>
+              <Calendar3 className="mb-6 w-10 mr-2"/>
+              <p className='flex my-auto justify-center font-extrabold text-sky-600'>
+              Contract Creation Time
+              </p>
+            </div>
+            <p className='flex w-full justify-center
+            font-[1000] bg-gradient-to-r from-sky-500 to-purple-500 text-transparent 
+            bg-clip-text'>{formatDate(parseBigNumber(data[6]))}</p>
+          </div>
+          <div className='justify-center'>
+            <div className='flex justify-center'>
+              <Calendar2 className="w-10 mr-2"/>
+              <p className='flex my-auto justify-center font-extrabold text-sky-600'>
+              Available Time
+              </p>
+            </div>
+            <p className='flex w-full justify-center font-[1000] bg-gradient-to-r from-sky-500 to-purple-500 text-transparent bg-clip-text'>
+                {formatDate(parseBigNumber(data[4]))}
+            </p>
+          </div>
+          <div className='justify-center'>
+            <div className='flex justify-center'>
+              <Calendar2 className="w-10 mr-2"/>
+              <p className='flex my-auto justify-center font-extrabold text-sky-600'>
+              Due Time
+              </p>
+            </div>
+            <p className='flex w-full justify-center font-[1000] bg-gradient-to-r from-sky-500 to-purple-500 text-transparent bg-clip-text'>
+                {formatDate(parseBigNumber(data[5]))}
+            </p>
+          </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    )}
+    
+    </>
+  )
+}
 
-                    <div className="w-full flex justify-between">
-                        <div className="flex gap-2">
-                            <Home />
-                            <p className="flex my-auto justify-center">
-                                Room ID
-                            </p>
-                        </div>
-                        <p className="flex justify-center font-[700]">
-                            {parseBigNumber(data[2])}
-                        </p>
-                    </div>
-                    <div className="w-full flex justify-between">
-                        <div className="flex gap-2">
-                            <Money />
-                            <p className="flex my-auto justify-center">Price</p>
-                        </div>
-                        <p className="flex justify-center font-[700]">
-                            ${parseBigNumber(data[3])}
-                        </p>
-                    </div>
-                    <div className="w-full flex justify-between">
-                        <div className="flex gap-2">
-                            <Clock />
-                            <p className="flex my-auto justify-center">
-                                Duration
-                            </p>
-                        </div>
-                        <p className="flex justify-center font-[700]">
-                            {new Date(parseBigNumber(data[6]) * 1000)
-                                .toISOString()
-                                .slice(11, 19)}
-                        </p>
-                    </div>
-                    <div className="w-full flex justify-between gap-[2rem]">
-                        <div className="flex gap-2">
-                            <Calendar />
-                            <p className="flex my-auto justify-center">
-                                Create time
-                            </p>
-                        </div>
-                        <p className="flex justify-center font-[700]">
-                            {formatDate(parseBigNumber(data[4]))}
-                        </p>
-                    </div>
-                    <div className="w-full flex justify-between gap-4">
-                        <div className="flex gap-2">
-                            <Checkbox />
-                            <p className="flex my-auto justify-center">
-                                Available Time
-                            </p>
-                        </div>
-                        <p className="flex justify-center font-[700]">
-                            {formatDate(
-                                parseInt(parseBigNumber(data[4])) +
-                                    parseInt(parseBigNumber(data[5]))
-                            )}
-                        </p>
-                    </div>
-                </div>
-            )}
-        </>
-    );
-};
-
-export default BookedCard;
+export default BookedCard
