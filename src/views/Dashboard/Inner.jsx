@@ -5,6 +5,7 @@ import Droplet from 'icons/Droplet';
 import DashboardSwitch from './components/DashboardSwitch';
 import Bulb from 'icons/Bulb';
 import DashboardChart from './components/DashboardChart';
+import Fingerprint from './components/Fingerprint';
 
 const Inner = memo(({ lightStatus }) => {
     const chartOptions = useMemo(() => {
@@ -56,6 +57,7 @@ const Inner = memo(({ lightStatus }) => {
                 defaultOption={chartOptions[0]}
                 options={chartOptions}
             />
+            <Fingerprint title="Fingerprint" />
         </div>
     );
 });
