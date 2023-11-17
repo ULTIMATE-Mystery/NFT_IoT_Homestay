@@ -30,7 +30,7 @@ const DashboardChart: FC<DashboardChartProps> = ({
     const [isLoading, setIsLoading] = useState(true);
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const chartInstanceRef = useRef<Chart | null>(null);
-    const [currentOpt, setCurrentOpt] = useState(72);
+    const [currentOpt, setCurrentOpt] = useState(1);
     const [currentFeed, setCurrentFeed] = useState(defaultOption.feed);
     const selectedOption = useCallback(() => {
         return options.find(option => option.feed === currentFeed);
@@ -144,7 +144,7 @@ const DashboardChart: FC<DashboardChartProps> = ({
                                 ticks: {
                                     color: 'white', // y-axis label text color
                                 },
-                                stacked: true,
+                                // stacked: true,
                             },
                         },
                         plugins: {
@@ -185,11 +185,11 @@ const DashboardChart: FC<DashboardChartProps> = ({
                     </div>
                     <div className="dashboard-chart__header__mode">
                         <Select
-                            defaultValue="72"
+                            defaultValue="1"
                             style={{ width: 'max-content' }}
                             onChange={value => setCurrentOpt(Number(value))}
                             options={[
-                                { value: '1', label: 'Last 1 hour' },
+                                { value: '1', label: 'Last hour' },
                                 { value: '3', label: 'Last 3 hours' },
                                 { value: '6', label: 'Last 6 hours' },
                                 { value: '12', label: 'Last 12 hours' },
