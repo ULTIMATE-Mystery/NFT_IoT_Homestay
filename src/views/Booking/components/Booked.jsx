@@ -1,31 +1,26 @@
 import BookedCard from './BookedCard';
+import SmallCard from './SmallCard';
 import GetBookedContracts from '../GetBookedContracts';
 
 const Booked = ({ isButtonClicked }) => {
-    // const { contract } = useContract("0xC8339AEeCa4a529a7a0571b9654024600f5FC137");
-    // const { data, isLoading } = useContractRead(contract, "getNftsIdOfRenter", [[]])
-
     const { data, isLoading } = GetBookedContracts();
-    // Handle the data when it's available
-    // useEffect(() => {
-    //   if (!isLoading && data && data.length > 0) {
-    //     // Process the data here
-    //     console.log(data);
-    //   }
-    // }, [isLoading, data]);
-
     return (
         <>
-            <div className="mt-10 ml-40 bg-white rounded-xl w-full flex flex-wrap justify-start gap-8">
-                {isLoading && <p>Loading data...</p>}
-                {isButtonClicked && data && !isLoading && (
-                    <>
-                        {data.map((data, index) => (
-                            <BookedCard key={index} tokenId={data}></BookedCard>
-                        ))}
-                    </>
-                )}
-                {!isLoading && !data && <div>Token Id does not exist!</div>}
+            <div className="flex mx-40 mr-40 rounded-xl text-base rounded-2xl mt-8 ">
+                <div className="m-[2px] bg-white rounded-xl w-full grid min-[1580px]:grid-cols-5 min-[1400px]:grid-cols-4 lg:grid-cols-3 min-[780px]:grid-cols-2 grid-cols-1 justify-between justify-items-center gap-10">
+                    {isLoading && <p>Loading data...</p>}
+                    {isButtonClicked && data && !isLoading && (
+                        <>
+                            {data.map((data, index) => (
+                                <SmallCard
+                                    key={index}
+                                    tokenId={data}
+                                ></SmallCard>
+                            ))}
+                        </>
+                    )}
+                    {!isLoading && !data && <div>Token Id does not exist!</div>}
+                </div>
             </div>
         </>
     );
