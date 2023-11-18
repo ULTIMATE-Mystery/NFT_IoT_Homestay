@@ -3,50 +3,10 @@ import LeftArrow from "icons/LeftArrow";
 import RightArrow from "icons/RightArrow";
 import Filter from "icons/Filter";
 import { columns, data } from "./data";
+import {useContract, useContractRead} from "@thirdweb-dev/react";
+import Modal from "./HistoryModal";
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
-
-const Modal = ({ transaction, onClose }) => {
-    const modalClassName = transaction
-      ? "fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50 transition-opacity ease-in-out duration-300"
-      : "fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-0 z-50 pointer-events-none transition-opacity ease-in-out duration-300";
-  
-    const modalContentClassName =
-      "bg-white rounded-lg p-6 w-1/2 relative transition-all transform scale-0 opacity-0";
-  
-    useEffect(() => {
-      if (transaction) {
-        // Timeout to ensure the transition classes are applied after the component is mounted
-        const timeoutId = setTimeout(() => {
-          document.getElementById("modal-content").classList.remove("scale-0", "opacity-0");
-          document.getElementById("modal-content").classList.add("scale-100", "opacity-100");
-        }, 100);
-  
-        return () => clearTimeout(timeoutId);
-      }
-    }, [transaction]);
-  
-    return (
-        <div className={modalClassName} onClick={onClose}>
-          <div
-            id="modal-content"
-            className={modalContentClassName}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button className="absolute top-2 right-2 text-xl" onClick={onClose}>
-              ×
-            </button>
-            <h2 className="text-2xl mb-4">Transaction Details</h2>
-            {columns.map((column) => (
-              <div key={column.index} className="mb-3">
-                <strong>{column.title}: </strong> {transaction[column.index]}
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    };
-  
 
 const TransactionHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,9 +14,7 @@ const TransactionHistory = () => {
   const [selectedData, setSelectedData] = useState(null);
   const [totalDataCount, setTotalDataCount] = useState(0);
   const [displayedData, setDisplayedData] = useState([]);
-  const [sortOrder, setSortOrder] = useState("desc"); // 'asc' or 'desc'
   const [filter, setFilter] = useState("");
-
   const totalPages = Math.ceil(totalDataCount / rowsPerPage);
 
   useEffect(() => {
@@ -64,20 +22,12 @@ const TransactionHistory = () => {
       const startIdx = (currentPage - 1) * rowsPerPage;
       const endIdx = startIdx + rowsPerPage;
       let subsetData = data.slice(startIdx, endIdx);
-
-      // Sort the data based on "CONTRACT CREATION TIME" column
-      subsetData = subsetData.sort((a, b) => {
-        const timeA = new Date(a.contractCreationTime).getTime();
-        const timeB = new Date(b.contractCreationTime).getTime();
-        return timeB - timeA;
-      });
-
       setTotalDataCount(data.length);
       setDisplayedData(subsetData);
     };
 
     fetchData();
-  }, [currentPage, rowsPerPage, sortOrder]);
+  }, [currentPage, rowsPerPage]);
 
   const handleRowChange = (e) => {
     setRowsPerPage(Number(e.target.value));
