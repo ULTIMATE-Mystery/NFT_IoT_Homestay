@@ -13,7 +13,7 @@ import Money2 from 'icons/Money2';
 import Clock2 from 'icons/Clock2';
 import Calendar3 from 'icons/Calendar3';
 import Calendar2 from 'icons/Calendar2';
-import background6 from 'assets/image/background/background6.jpg';
+import homestay4 from 'assets/image/homestay/homestay4.jpg';
 
 const BookedCard = ({tokenId}) => {
   const contractAddress = "0xC8339AEeCa4a529a7a0571b9654024600f5FC137";
@@ -43,7 +43,7 @@ const BookedCard = ({tokenId}) => {
     <div className='flex flex-cols'>
       <div className='m-4 items-center justify-center flex '>
         <img
-                    src={background6}
+                    src={homestay4}
                     alt="Background"
                     className="left-0 w-100 h-100 object-contain transition-opacity duration-1000"
                     style={{ opacity: '100%' }}
