@@ -7,7 +7,7 @@ export default function ContractData() {
     );
     const { data, isLoading } = useContractRead(
         contract,
-        'getNftsIdOfRenter',
+        'getNftsIdOfProvider',
         [],
         { from: address }
     );
