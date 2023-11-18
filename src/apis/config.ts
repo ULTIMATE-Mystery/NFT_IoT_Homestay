@@ -1,6 +1,6 @@
 // import { getToken } from 'reducers/token/action';
 
-import { API_URL, JWT_TOKEN } from 'utils/constant';
+import { API_URL } from 'utils/constant';
 
 interface IApiOptions {
     method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -51,7 +51,7 @@ class ApiBase {
         // }
         // Delete below line when back-end authorization is ready
         // newOptions.headers.Authorization = `Bearer ${process.env.REACT_APP_JWT_TOKEN}`;
-        newOptions.headers.Authorization = `Bearer ${JWT_TOKEN}`;
+        newOptions.headers['X-AIO-Key'] = process.env.REACT_APP_AIO_KEY;
         return newOptions;
     };
 

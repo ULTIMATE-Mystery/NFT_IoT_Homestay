@@ -1,45 +1,66 @@
-import { memo, useCallback, useEffect, useState } from 'react';
-import DashboardCard from './component/DashboardCard';
+import { memo, useMemo } from 'react';
+import DashboardCard from './components/DashboardCard';
 import Thermometer from 'icons/Thermometer';
 import Droplet from 'icons/Droplet';
-import DashboardSwitch from 'views/Dashboard/component/DashboardSwitch';
-import Lung from 'icons/Lung';
+import DashboardSwitch from './components/DashboardSwitch';
+import Bulb from 'icons/Bulb';
+import DashboardChart from './components/DashboardChart';
+import Fingerprint from './components/Fingerprint';
 
-const Inner = memo(
-    ({ temperature, humidity, oxygen, lightStatus, onToggle }) => {
-        return (
-            <>
-                <DashboardCard
-                    title="Nhiệt độ"
-                    icon={<Thermometer size={24} />}
-                    value={temperature.value}
-                    ts={temperature.ts}
-                    unit="°C"
-                />
+const Inner = memo(({ lightStatus }) => {
+    const chartOptions = useMemo(() => {
+        return [
+            {
+                feed: 'temperature',
+                title: 'Temperature chart',
+                label: 'Temperature',
+                unit: '°C',
+            },
+            {
+                feed: 'humidity',
+                title: 'Humidity chart',
+                label: 'Humidity',
+                unit: '%',
+            },
+        ];
+    }, []);
 
-                <DashboardCard
-                    title="Độ ẩm"
-                    icon={<Droplet size={24} />}
-                    value={humidity.value}
-                    ts={humidity.ts}
-                    unit="%"
-                />
-                <DashboardCard
-                    title="Ô-xi"
-                    icon={<Lung size={24} />}
-                    value={oxygen.value}
-                    ts={oxygen.ts}
-                    unit="%"
-                />
-                <DashboardSwitch
-                    title="Đèn"
-                    onChange={status => onToggle(status)}
-                    checked={lightStatus}
-                />
-            </>
-        );
-    }
-);
+    return (
+        <div className="flex flex-wrap gap-[24px] ml-[32px] mt-[32px] mr-[32px]">
+            <DashboardCard
+                title="Temperature"
+                feed="temperature"
+                icon={<Thermometer size={24} />}
+                unit="°C"
+            />
+            <DashboardCard
+                title="Humidity"
+                feed="humidity"
+                icon={<Droplet size={24} />}
+                unit="%"
+            />
+            <DashboardSwitch
+                title="Room light"
+                icon={<Bulb size={24} />}
+                feed="light"
+                status={lightStatus}
+                defaultChecked={lightStatus.value}
+                lastChanged={lightStatus.lastChanged}
+                checkedText="ON"
+                uncheckedText="OFF"
+            />
+            <DashboardChart
+                // feed="temperature"
+                // title="Temperature chart"
+                // label="Temperature"
+                // unit="°C"
+                defaultOption={chartOptions[0]}
+                options={chartOptions}
+            />
+            <Fingerprint title="Fingerprint" />
+        </div>
+    );
+});
 
 Inner.displayName = 'Dashboard Inner';
 

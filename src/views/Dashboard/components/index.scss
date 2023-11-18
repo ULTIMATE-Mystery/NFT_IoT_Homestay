@@ -1,0 +1,87 @@
+@import 'scss/global.scss';
+
+$bg-color: #1f263c;
+
+.dashboard-card {
+    border-radius: 6px;
+    background-color: $bg-color;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px 20px 20px 20px;
+    width: 240px;
+    min-height: 80px;
+    // border: 1px solid rgba(0, 0, 0, 0.6);
+    &__title {
+        width: 100%;
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 12px;
+        @include d-flex(row, center, space-around);
+    }
+    &__icon {
+        margin-left: auto;
+    }
+    &__value {
+        font-size: 40px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        min-width: 40px;
+    }
+    &__unit {
+        font-size: 16px;
+        font-weight: 500;
+        padding-left: 8px;
+    }
+    &__last-changed {
+        margin-top: 12px;
+    }
+
+    .ant-spin-text {
+        text-shadow: none;
+        color: white;
+    }
+
+    .ant-spin-dot {
+        color: white;
+    }
+}
+
+.dashboard-chart {
+    border-radius: 6px;
+    background-color: $bg-color;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px 20px 20px 20px;
+    width: calc(100% - 64px);
+    min-height: 80px;
+    .ant-select-selector,
+    .ant-select-arrow,
+    .ant-select-selection-item {
+        background-color: $bg-color !important;
+        color: white !important;
+    }
+
+    &__header {
+        @include d-flex(row, center, center);
+        position: relative;
+
+        &__title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-align: center;
+            @include d-flex(row, center, center);
+            gap: 6px;
+        }
+
+        &__mode {
+            position: absolute;
+            right: 0;
+        }
+    }
+    &__no-data {
+        text-align: center;
+        padding-top: 32px;
+        padding-bottom: 16px;
+        font-size: 24px;
+        font-weight: 600;
+    }
+}
