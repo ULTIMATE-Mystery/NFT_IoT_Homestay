@@ -20,3 +20,7 @@ export const DASHBOARD_UPDATE_PERIOD = 10; // seconds
 //     LIGHT: 'LIGHT_TEST_TOKEN',
 //     OXYGEN: 'OXYGEN_TEST_TOKEN',
 // };
+
+
+//for blockchain
+export const CONTRACT_ADDRESS = "0xC8339AEeCa4a529a7a0571b9654024600f5FC137"

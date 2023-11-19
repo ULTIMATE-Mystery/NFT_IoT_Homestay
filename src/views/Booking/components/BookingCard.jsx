@@ -86,9 +86,9 @@ const BookingCard = () => {
             {address && (
                 <div
                     className="flex p-25 mx-40 mr-40 rounded-xl bg-gradient-to-r from-teal-200 via-cyan-300 
-      via-purple-400 to-pink-400 text-base rounded-2xl mt-8"
+      via-purple-400 to-pink-400 text-base rounded-2xl mt-8 text-white"
                 >
-                    <div className="m-[2px] bg-white rounded-xl w-full flex">
+                    <div className="m-[2px] bg-black rounded-xl w-full flex">
                         <div
                             to="/home"
                             className="p-20 mr-0 w-full flex flex-col"
@@ -118,7 +118,7 @@ const BookingCard = () => {
                                         <input
                                             className=" border-2 px-4 rounded-xl mr-4
                   focus:border-sky-500 focus:border-2 focus:outline-none 
-                  w-fit"
+                  w-fit bg-black text-white"
                                             placeholder="Room No"
                                             type="number"
                                             onChange={handleRoomIdChange}
@@ -140,14 +140,14 @@ const BookingCard = () => {
                                     </label>
                                     <input
                                         type="time"
-                                        className="mt-2 mr-4 border-2 py-1.5 px-4 rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none "
+                                        className="mt-2 mr-4 border-2 py-1.5 px-4 rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-black text-white"
                                         placeholder="Select time start"
                                         value={startTime}
                                         onChange={handleStartTimeChange}
                                     />
                                     <input
                                         type="date"
-                                        className="mt-2 border-2 py-1.5 px-4 rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none "
+                                        className="mt-2 border-2 py-1.5 px-4 rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-black text-white"
                                         placeholder="Select date start"
                                         value={startDate}
                                         onChange={handleStartDateChange}
@@ -159,14 +159,14 @@ const BookingCard = () => {
                                     </label>
                                     <input
                                         type="time"
-                                        className="mt-2 mr-4 border-2 py-1.5 px-4  rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none "
+                                        className="mt-2 mr-4 border-2 py-1.5 px-4  rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-black text-white"
                                         placeholder="Select time end"
                                         value={endTime}
                                         onChange={handleEndTimeChange}
                                     />
                                     <input
                                         type="date"
-                                        className="mt-2 border-2 py-1.5 px-4  rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none "
+                                        className="mt-2 border-2 py-1.5 px-4  rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-black text-white"
                                         placeholder="Select date end"
                                         value={endDate}
                                         onChange={handleEndDateChange}

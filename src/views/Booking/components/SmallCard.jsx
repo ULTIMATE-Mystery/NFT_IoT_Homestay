@@ -5,7 +5,7 @@ import {
 } from "@thirdweb-dev/react";
 import { Modal } from 'antd';
 import BookedCard from './BookedCard';
-
+import homestay4 from 'assets/image/homestay/homestay4.jpg';
 
 
 
@@ -21,16 +21,19 @@ const SmallCard = ({tokenId}) => {
   return (
     <>{!isLoading && data &&(
       <div>
-    <div class="w-60 h-100 bg-gray-50 p-3 flex flex-col 
-    gap-1 rounded-2xl  border border-sky-500 border-1 
-    drop-shadow-lg"
-    >
-      <div class="h-48 bg-slate-200 rounded-xl"></div>
+    <div className="w-60 h-100 bg-slate-800 p-3 flex flex-col gap-1 rounded-2xl border border-sky-500 border-1 drop-shadow-lg">
+          <div className="h-48 rounded-xl overflow-hidden">
+            <img
+              src={homestay4}
+              alt="Background"
+              className="w-full h-full object-cover"
+            />
+          </div>
       <div class="flex flex-col gap-4">
         <div class="flex flex-row justify-between">
           <div class="flex flex-col">
             <span class="text-xl font-bold">Alex Homestay </span>
-            <p class="text-sm text-gray-700">Room ID: {parseBigNumber(data[2])}</p>
+            <p class="text-sm text-slate-400">Room ID: {parseBigNumber(data[2])}</p>
           </div>
           <span class="pt-0.5 font-bold  text-green-600">{parseBigNumber(data[3])}$</span>
         </div>

@@ -51,3 +51,4 @@ export const getTimestampAgo = (date: Date) => {
         return `${Math.floor(diff / (60 * 24))} days ago`;
     }
 };
+
