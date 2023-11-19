@@ -17,7 +17,6 @@ const ContractInfo = ({ tokenId, isButtonClicked }) => {
     const { data, isLoading } = useContractRead(contract, 'getNFTInfo', [
         tokenId,
     ]);
-    console.log(data);
     const formatDate = timestamp => {
         const date = new Date(timestamp * 1000); // Multiply by 1000 to convert seconds to milliseconds
         const options = {
