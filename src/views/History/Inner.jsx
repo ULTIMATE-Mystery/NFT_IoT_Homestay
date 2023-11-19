@@ -1,5 +1,4 @@
 import React, { memo } from 'react';
-import TransactionHistory from './components/TransactionHistory'
 import Transactions from './components/Transactions';
 
 const Inner = memo(() => {
