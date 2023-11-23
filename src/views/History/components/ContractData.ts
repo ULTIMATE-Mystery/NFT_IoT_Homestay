@@ -1,10 +1,9 @@
 import { useContract, useContractRead, useAddress } from '@thirdweb-dev/react';
+import { CONTRACT_ADDRESS } from 'utils/constant';
 
 export default function ContractData() {
     const address = useAddress();
-    const { contract } = useContract(
-        '0xC8339AEeCa4a529a7a0571b9654024600f5FC137'
-    );
+    const { contract } = useContract(CONTRACT_ADDRESS);
     const { data, isLoading } = useContractRead(
         contract,
         'getNftsIdOfProvider',

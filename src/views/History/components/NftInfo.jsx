@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useContract, useContractRead } from "@thirdweb-dev/react";
 import { Modal } from 'antd';
 import './index.scss';
+import { CONTRACT_ADDRESS } from 'utils/constant';
 
 const NftInfo = ({ tokenId }) => {
-  const contractAddress = "0xC8339AEeCa4a529a7a0571b9654024600f5FC137";
-  const { contract } = useContract(contractAddress);
+  const { contract } = useContract(CONTRACT_ADDRESS);
   const { data, isLoading } = useContractRead(contract, "getNFTInfo", [tokenId]);
 
   const parseBigNumber = (value) => {

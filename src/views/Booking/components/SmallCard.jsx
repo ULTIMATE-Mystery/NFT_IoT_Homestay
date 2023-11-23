@@ -6,12 +6,12 @@ import {
 import { Modal } from 'antd';
 import BookedCard from './BookedCard';
 import homestay4 from 'assets/image/homestay/homestay4.jpg';
+import { CONTRACT_ADDRESS } from 'utils/constant';
 
 
 
 const SmallCard = ({tokenId}) => {
-  const contractAddress = "0xC8339AEeCa4a529a7a0571b9654024600f5FC137";
-  const { contract } = useContract(contractAddress);
+  const { contract } = useContract(CONTRACT_ADDRESS);
   const { data, isLoading } = useContractRead(contract, "getNFTInfo", [tokenId]);
   const [isClicked,setIsClicked] = useState(false);
   const parseBigNumber = (value) => {

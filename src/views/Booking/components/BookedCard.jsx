@@ -14,10 +14,10 @@ import Clock2 from 'icons/Clock2';
 import Calendar3 from 'icons/Calendar3';
 import Calendar2 from 'icons/Calendar2';
 import homestay4 from 'assets/image/homestay/homestay4.jpg';
+import { CONTRACT_ADDRESS } from 'utils/constant';
 
 const BookedCard = ({tokenId}) => {
-  const contractAddress = "0xC8339AEeCa4a529a7a0571b9654024600f5FC137";
-  const { contract } = useContract(contractAddress);
+  const { contract } = useContract(CONTRACT_ADDRESS);
   const { data, isLoading } = useContractRead(contract, "getNFTInfo", [tokenId]);
   console.log(data)
   const formatDate = (timestamp) => {

@@ -46,11 +46,13 @@ const Transactions = () => {
               <button
                 className={`${!mode ? 'bg-slate-800' : 'bg-slate-600'} p-3 rounded-lg`}
                 onClick={() => setMode(1)}>
-                By contract
+                Analytics
               </button>
             </div>
             {/*Transactions card*/}
-            <div className='w-full flex flex-row text-slate-500 p-4'>
+            {!mode
+            ?(<div>
+              <div className='w-full flex flex-row text-slate-500 p-4'>
               <div class="basis-1/12 flex justify-center">Nft ID</div>
               <div class="basis-1/4 flex justify-center">Transaction hash</div>
               <div class="basis-1/6 flex justify-center">Timestamp</div>
@@ -73,6 +75,11 @@ const Transactions = () => {
                     )}
             {!isLoading && !data && <div>No contracts was created.</div>}
             </div>
+            </div>)
+            :(<div>
+              
+            </div>)}
+            
         </div>
     </>
     
