@@ -57,7 +57,7 @@ const Inner = memo(({ lightStatus }) => {
                 defaultOption={chartOptions[0]}
                 options={chartOptions}
             />
-            <Fingerprint title="Fingerprint" />
+            {/* <Fingerprint title="Fingerprint" /> */}
         </div>
     );
 });

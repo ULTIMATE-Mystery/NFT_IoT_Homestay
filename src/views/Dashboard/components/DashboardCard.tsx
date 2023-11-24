@@ -31,8 +31,8 @@ const DashboardCard: FC<DashboardCardProps> = ({ title, icon, feed, unit }) => {
                 parseFloat(value).toFixed(2);
 
             setDeviceData({
-                value: response ? formatNumber(response?.value) : 'N/A',
-                createdAt: response?.created_at || Date.now(),
+                value: response ? formatNumber(response?.data?.value) : 'N/A',
+                createdAt: response?.data?.createdAt || Date.now(),
             });
         } catch (error) {
             setDeviceData({
