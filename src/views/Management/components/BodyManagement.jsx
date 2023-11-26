@@ -6,10 +6,10 @@ import Money from 'icons/Money';
 import Clock from 'icons/Clock';
 import Calendar from 'icons/Calendar';
 import Calendar2 from 'icons/Calendar2';
+import { CONTRACT_ADDRESS } from 'utils/constant';
 
 const BodyManagement = ({ tokenId, isButtonClicked }) => {
-    const contractAddress = '0xC8339AEeCa4a529a7a0571b9654024600f5FC137';
-    const { contract } = useContract(contractAddress);
+    const { contract } = useContract(CONTRACT_ADDRESS);
     const { data, isLoading } = useContractRead(contract, 'getNFTInfo', [
         tokenId,
     ]);

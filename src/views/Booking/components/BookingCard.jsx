@@ -112,7 +112,10 @@ const BookingCard = () => {
                                 className="flex flex-col "
                             >   <div>
                                     <label className='text-2xl font-bold text-slate-500'>Homestay Name</label>
-                                    <p className="text-4xl bg-gradient-to-r from-primary to-danger bg-clip-text text-transparent w-fit font-[1000]">Alexander Homestay</p>
+                                    <p className="text-4xl bg-gradient-to-r from-primary to-danger bg-clip-text
+                                     text-transparent w-fit font-[1000]">
+                                        Alexander Homestay
+                                    </p>
                                 </div>
                         
                                 <div className="flex flex-col mt-6">
