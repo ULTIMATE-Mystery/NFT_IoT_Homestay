@@ -46,15 +46,14 @@ const data = [
   },
 ];
 
-export default class RevenueChart extends PureComponent {
-  static demoUrl = 'https://codesandbox.io/s/stacked-area-chart-ix341';
-
+class RevenueChart extends PureComponent {
   render() {
     return (
-      <ResponsiveContainer width="100%" height="100%">
+      <div className="w-full h-full py-8">
+        <ResponsiveContainer width="100%" height="100%">
         <AreaChart
-          width={500}
-          height={400}
+          width={400}
+          height={240}
           data={data}
           margin={{
             top: 10,
@@ -63,7 +62,6 @@ export default class RevenueChart extends PureComponent {
             bottom: 0,
           }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
@@ -71,7 +69,9 @@ export default class RevenueChart extends PureComponent {
           <Area type="monotone" dataKey="pv" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
           <Area type="monotone" dataKey="amt" stackId="1" stroke="#ffc658" fill="#ffc658" />
         </AreaChart>
-      </ResponsiveContainer>
+        </ResponsiveContainer>
+      </div>
     );
   }
 }
+export default RevenueChart

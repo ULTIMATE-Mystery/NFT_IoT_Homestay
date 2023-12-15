@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell } from 'recharts';
 
 const data = [
   { name: 'Group A', value: 400 },
@@ -9,12 +9,10 @@ const data = [
 ];
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
-export default class SDPieChart extends PureComponent {
-  static demoUrl = 'https://codesandbox.io/s/pie-chart-with-padding-angle-7ux0o';
-
+class SDPieChart extends PureComponent {
   render() {
     return (
-      <PieChart width={300} height={300} onMouseEnter={this.onPieEnter}>
+      <PieChart width={300} height={300}>
         <Pie
           data={data}
           cx={150}
@@ -33,3 +31,5 @@ export default class SDPieChart extends PureComponent {
     );
   }
 }
+
+export default SDPieChart;

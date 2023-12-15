@@ -14,6 +14,7 @@ import { CONTRACT_ADDRESS } from 'utils/constant';
 import { useAddress, useContract, useContractRead } from '@thirdweb-dev/react';
 import OwnerDashboard from './components/OwnerDashboard';
 import UserDashboard from './components/UserDashboard';
+import Loading from 'components/Loading';
 const Inner = memo(() => {
     const address = useAddress();
     const {contract} = useContract(CONTRACT_ADDRESS);
@@ -39,8 +40,8 @@ const Inner = memo(() => {
                 <UserDashboard/>
             </div>))}
             {isLoadingOwner&&(
-            <div>
-                Data is loading...
+            <div className='w-full h-full flex mx-auto px-auto align-center justify-center py-40'>
+                <Loading/>
             </div>)}
             </div>
             )}
