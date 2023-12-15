@@ -6,7 +6,13 @@ import SourceDistributionCard from './SourceDistributionCard'
 import ProfitChart from './ProfitChart'
 import VisitChart from './VisitChart'
 import RevenueChart from './RevenueChart'
-
+const dataTotalCard = [
+    ["Total Users",11238,45],
+    ["Total Revenue",56432,-12], 
+    ["Total Products",238,21], 
+    ["Total Ratio",2.6,12],
+  
+  ]
 const OwnerDashboard = () => {
   return (
     <div className='mt-4 mx-20 flex flex-col md:flex-row md:space-x-4 justify-center'>
@@ -22,12 +28,12 @@ const OwnerDashboard = () => {
         <div className="md:basis-1/2 mb-4 flex flex-col space-y-4">
             <div className="basis-1/2 border border-slate-600 rounded-md p-4 space-y-4 flex flex-col justify-between space-y-2 h-full">
                 <div className='flex flex-row justify-between space-x-2 h-full'>
-                    <TotalCard></TotalCard>
-                    <TotalCard></TotalCard>
+                    <TotalCard data={dataTotalCard[0]}></TotalCard>
+                    <TotalCard data={dataTotalCard[1]}></TotalCard>
                 </div>
                 <div className='flex flex-row justify-between space-x-2 h-full'>
-                    <TotalCard></TotalCard>
-                    <TotalCard></TotalCard>
+                    <TotalCard data={dataTotalCard[2]}></TotalCard>
+                    <TotalCard data={dataTotalCard[3]}></TotalCard>
                 </div>
                 
             </div>
