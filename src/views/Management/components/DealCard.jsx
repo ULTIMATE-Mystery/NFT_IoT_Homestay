@@ -5,7 +5,7 @@ import christmastree2 from 'assets/image/avatar/christmasTree2.png';
 const DealCard = () => {
   return (
     <div className='flex flex-row border border-slate-800 bg-slate-900
-    p-2 w-full rounded-md space-x-2'>
+    p-2 w-full rounded-md space-x-2 shadow-lg hover:scale-110 duration-200 hover:drop-shadow-lg hover:shadow-[#7dd3fc] hover:cursor-pointer'>
       <svg width="80" height="80" viewBox="0 0 100 100">
         <defs>
           <pattern

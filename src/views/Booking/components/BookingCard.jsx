@@ -61,7 +61,7 @@ const BookingCard = () => {
                 // Call the safeMint function
                 const data = await contract.call('safeMint', [
                     roomId,
-                    1000,
+                    1,
                     startTimestamp,
                     endTimestamp,
                 ]);
@@ -178,14 +178,14 @@ const BookingCard = () => {
                                 <div className="w-full flex justify-center mt-10">
                                     <button
                                         type="submit"
-                                        className="rounded-xl text-white bg-gradient-to-r from-cyan-500 to-blue-500 
-                  hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 
-                  dark:focus:ring-cyan-800 font-medium rounded-lg 
-                  text-sm py-4 px-16 text-center flex w-fit "
+                                        className="rounded-xl text-white bg-gradient-to-r 
+                                        from-blue-700 via-pink-400 via-purple-600 to-blue-600 
+                                        shadow-lg hover:scale-110 duration-200 hover:drop-shadow-2xl hover:shadow-[#7dd3fc] hover:cursor-pointer
+                                        hover:bg-gradient-to-bl font-bold rounded-md 
+                                        text-sm py-4 px-16 text-center flex w-fit "
                                     >
                                         <p className="text-xl">
-                                            {' '}
-                                            Book with 1000${' '}
+                                            Book now
                                         </p>
                                     </button>
                                 </div>

@@ -7,7 +7,7 @@
 - Input show NFT info
 - Card NFT info (Thêm Due Time)
 */
-import { useState, memo } from 'react';
+import { useState, memo, useEffect } from 'react';
 import HomeLayout from 'layouts/Home';
 import { shortenAddress } from 'utils/shortenAddress';
 import { CONTRACT_ADDRESS } from 'utils/constant';
@@ -19,6 +19,11 @@ const Inner = memo(() => {
     const address = useAddress();
     const {contract} = useContract(CONTRACT_ADDRESS);
     const {data:owner,isLoading:isLoadingOwner} = useContractRead(contract,"owner");
+    const [mode,setMode] = useState("owner")
+    console.log(mode);
+    useEffect(()=>{
+        setMode(mode);
+    },[mode])
     return (
         <HomeLayout title="Management">
             {address == undefined ? (
@@ -32,12 +37,14 @@ const Inner = memo(() => {
             <div className=''>
             {!isLoadingOwner&&(
                 // owner==address
-                1
+                mode=="owner"
             ?(<div>
-                <OwnerDashboard/>
+                {()=>setMode("owner")}
+                <OwnerDashboard mode={mode} setMode={setMode}/>
             </div>)
             :(<div>
-                <UserDashboard/>
+                {()=>setMode("user")}
+                <UserDashboard mode={mode} setMode={setMode}/>
             </div>))}
             {isLoadingOwner&&(
             <div className='w-full h-full flex mx-auto px-auto align-center justify-center py-40'>

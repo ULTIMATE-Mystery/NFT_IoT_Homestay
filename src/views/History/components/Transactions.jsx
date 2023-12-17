@@ -5,6 +5,7 @@ import TransactionCard from "./TransactionCard";
 import LeftArrow from "icons/LeftArrow";
 import RightArrow from "icons/RightArrow";
 import GetAllContractsHomestay from "../GetAllContractsHomestay";
+import Loading from "components/Loading";
 
 const Transactions = () => {
   const { data, isLoading } = GetAllContractsHomestay();
@@ -99,7 +100,9 @@ const Transactions = () => {
           <div class="basis-1/6 flex justify-center">Price</div>
         </div>
         <div>
-          {isLoading && <p>Loading data...</p>}
+          {isLoading && <div className='w-full h-full flex mx-auto px-auto align-center justify-center py-40'>
+                            <Loading/>
+                        </div>}
           {currentData.length > 0 && (
             <>
               {currentData.map((data, index) => (
@@ -108,7 +111,13 @@ const Transactions = () => {
             </>
           )}
           {!isLoading && currentData.length === 0 && (
-            <div>No contracts were created.</div>
+            <div>
+              <div className='justify-center flex'>
+                  <div className="text-4xl p-20 bg-gradient-to-r from-blue-700 via-sky-400 to-purple-600 bg-clip-text text-transparent w-fit mx-auto">
+                    No contracts were created.
+                  </div>  
+              </div>
+            </div>
           )}
         </div>
 

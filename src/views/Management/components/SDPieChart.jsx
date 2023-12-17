@@ -17,8 +17,8 @@ class SDPieChart extends PureComponent {
           data={data}
           cx={150}
           cy={150}
-          innerRadius={60}
-          outerRadius={80}
+          innerRadius={90}
+          outerRadius={110}
           fill="#8884d8"
           paddingAngle={5}
           dataKey="value"

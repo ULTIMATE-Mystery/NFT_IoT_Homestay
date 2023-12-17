@@ -1,6 +1,6 @@
 import React from 'react'
 import DealCard from './DealCard'
-const data=[1,2,3,4,5,6]
+const data=[1,2,3,4,5,6,7]
 
 const TopDealCard = () => {
   return (
@@ -8,7 +8,7 @@ const TopDealCard = () => {
         <p className='text-2xl font-bold'>
             Top Deals
         </p>
-        <div className='mt-4 flex flex-col space-y-2'>
+        <div className='mt-4 flex flex-col space-y-[10px]'>
           {data.map((item)=>(
             <DealCard/>
           ))}
