@@ -4,8 +4,11 @@ import GetBookedContracts from '../GetBookedContracts';
 import Loading from 'components/Loading';
 import { useParams } from 'react-router-dom';
 
-const Booked = ({ isButtonClicked,page,selectContractId }) => {
+const Booked = ({ isButtonClicked,page,contractId,selectContract}) => {
     const { data, isLoading } = GetBookedContracts();
+    const select = (contractId)=>{
+        selectContract(contractId);
+    }
     return (
         <>
             <div className="flex mx-40 mr-40 mb-40 rounded-xl text-base rounded-2xl mt-8 relative">
@@ -20,7 +23,8 @@ const Booked = ({ isButtonClicked,page,selectContractId }) => {
                                     key={index}
                                     tokenId={data}
                                     page={page}
-                                    selectContractId={selectContractId}
+                                    contractId={contractId}
+                                    select={select}
                                 ></SmallCard>
                             ))}
                         </>

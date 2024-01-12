@@ -5,8 +5,11 @@ import LogCheckout from './LogCheckout';
 const UserDashboard = ({mode,setMode}) => {
   const [isModalCheckoutOpened, setModalCheckoutOpened] = useState(false);
   const [isModalLogOpened, setModalLogOpened] = useState(false);
+  const [isModalConfirmOpened, setModalConfirmOpened] = useState(false);
   const [contractId,selectContractId] = useState(-1);
-  console.log(contractId);
+  const selectContract = (contractId)=>{
+    selectContractId(contractId);
+  }
   return (
     <div className='mt-4 mx-20 flex flex-col md:flex-row md:space-x-4 border-slate-800 border rounded-md bg-slate-900'>
       <div className='w-full p-10 justify-between space-y-12'>
@@ -38,7 +41,8 @@ const UserDashboard = ({mode,setMode}) => {
              onOk={()=>setModalCheckoutOpened(false)} width={1200}>
                <Booked isButtonClicked={isModalCheckoutOpened}
                 page={"management"} 
-                selectContractId={selectContractId}/>
+                contractId ={contractId}
+                selectContract={selectContract}/>
             </Modal>
                
           )}
@@ -69,16 +73,22 @@ const UserDashboard = ({mode,setMode}) => {
           </div>
         </div>
         <div className='w-full justify-center flex'>
-          <button onClick={()=>setModalCheckoutOpened(true)}
+          <button onClick={()=>setModalConfirmOpened(true)}
             class="w-fit px-12 py-3 text-white font-semibold bg-gradient-to-r from-blue-800 via-pink-400 via-purple-600 to-blue-600 shadow-lg hover:scale-110 duration-200 hover:drop-shadow-2xl hover:shadow-[#7dd3fc] hover:cursor-pointer
             hover:bg-gradient-to-bl font-bold rounded-md shadow-lg hover:scale-105 duration-200 hover:drop-shadow-2xl hover:shadow-[#7dd3fc] hover:cursor-pointer">
             Check out
           </button>
-          {isModalCheckoutOpened&&(
+          {isModalConfirmOpened&&(
             <Modal 
-             open={isModalCheckoutOpened} onCancel={()=>setModalCheckoutOpened(false)} 
-             onOk={()=>setModalCheckoutOpened(false)} width={1200}>
-               <Booked isButtonClicked={isModalCheckoutOpened}/>
+             open={isModalConfirmOpened} onCancel={()=>setModalConfirmOpened(false)} 
+             onOk={()=>setModalConfirmOpened(false)} width={1200}>
+              <div className='w-full'>
+                <div className='w-full justify-center flex text-3xl mt-6 '>
+                  After checkout, you can not turn back!
+                </div>
+                <button className='"w-fit px-12 py-3 text-white font-semibold bg-gradient-to-r from-blue-800 via-pink-400 via-purple-600 to-blue-600 shadow-lg hover:scale-110 duration-200 hover:drop-shadow-2xl hover:shadow-[#7dd3fc] hover:cursor-pointer
+            hover:bg-gradient-to-bl font-bold rounded-md shadow-lg hover:scale-105 duration-200 hover:drop-shadow-2xl hover:shadow-[#7dd3fc] hover:cursor-pointer flex justify-center px-auto mx-auto mt-8 text-white text-2xl font-bold'>Confirm</button>
+              </div>
             </Modal>
                
           )}

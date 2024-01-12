@@ -10,7 +10,7 @@ import { CONTRACT_ADDRESS } from 'utils/constant';
 
 
 
-const SmallCard = ({tokenId,page,selectContractId}) => {
+const SmallCard = ({tokenId,page,contractId,select}) => {
   const { contract } = useContract(CONTRACT_ADDRESS);
   const { data, isLoading } = useContractRead(contract, "getNFTInfo", [tokenId]);
   const [isClicked,setIsClicked] = useState(false);
@@ -18,6 +18,10 @@ const SmallCard = ({tokenId,page,selectContractId}) => {
     return value ? value.toString() : "";
   
   };
+  const handleSelectContract = ()=>{
+    select(tokenId);
+  }
+  console.log(select)
   return (
     <>{!isLoading && data &&(
       <div>
@@ -42,7 +46,7 @@ const SmallCard = ({tokenId,page,selectContractId}) => {
           View details</button>
           
           <button class={`${page=="booking"?"hidden":""} hover:bg-sky-700 text-gray-50 bg-sky-800 py-2 rounded-md`}
-        onClick={()=>selectContractId(tokenId)}>
+        onClick={handleSelectContract}>
           Select
           </button>
       </div>
