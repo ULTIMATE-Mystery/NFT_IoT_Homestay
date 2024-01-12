@@ -16,10 +16,9 @@ import Calendar2 from 'icons/Calendar2';
 import homestay4 from 'assets/image/homestay/homestay4.jpg';
 import { CONTRACT_ADDRESS } from 'utils/constant';
 
-const BookedCard = ({tokenId}) => {
+const BookedCard = ({tokenId,page}) => {
   const { contract } = useContract(CONTRACT_ADDRESS);
   const { data, isLoading } = useContractRead(contract, "getNFTInfo", [tokenId]);
-  console.log(data)
   const formatDate = (timestamp) => {
     const date = new Date(timestamp * 1000); // Multiply by 1000 to convert seconds to milliseconds
     const options = {

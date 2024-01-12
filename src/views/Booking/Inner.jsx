@@ -33,7 +33,9 @@ const Inner = memo(() => {
                         <p>Booked contract</p>
                     </div>
                 </div>
-                <Booked isButtonClicked={isButtonClicked}></Booked>
+                <Booked isButtonClicked={isButtonClicked}
+                page={"booking"}
+                ></Booked>
             </div>
         )}
         </>

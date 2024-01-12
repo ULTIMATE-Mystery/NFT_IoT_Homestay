@@ -2,8 +2,9 @@ import BookedCard from './BookedCard';
 import SmallCard from './SmallCard';
 import GetBookedContracts from '../GetBookedContracts';
 import Loading from 'components/Loading';
+import { useParams } from 'react-router-dom';
 
-const Booked = ({ isButtonClicked }) => {
+const Booked = ({ isButtonClicked,page,selectContractId }) => {
     const { data, isLoading } = GetBookedContracts();
     return (
         <>
@@ -18,6 +19,8 @@ const Booked = ({ isButtonClicked }) => {
                                 <SmallCard
                                     key={index}
                                     tokenId={data}
+                                    page={page}
+                                    selectContractId={selectContractId}
                                 ></SmallCard>
                             ))}
                         </>

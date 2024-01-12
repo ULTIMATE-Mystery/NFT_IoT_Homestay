@@ -10,7 +10,7 @@ import { CONTRACT_ADDRESS } from 'utils/constant';
 
 
 
-const SmallCard = ({tokenId}) => {
+const SmallCard = ({tokenId,page,selectContractId}) => {
   const { contract } = useContract(CONTRACT_ADDRESS);
   const { data, isLoading } = useContractRead(contract, "getNFTInfo", [tokenId]);
   const [isClicked,setIsClicked] = useState(false);
@@ -40,13 +40,18 @@ const SmallCard = ({tokenId}) => {
         <button class="hover:bg-sky-700 text-gray-50 bg-sky-800 py-2 rounded-md"
         onClick={()=>setIsClicked(true)}>
           View details</button>
+          
+          <button class={`${page=="booking"?"hidden":""} hover:bg-sky-700 text-gray-50 bg-sky-800 py-2 rounded-md`}
+        onClick={()=>selectContractId(tokenId)}>
+          Select
+          </button>
       </div>
       
       </div>
       {isClicked&&(
       <Modal open={isClicked} onCancel={()=>setIsClicked(false)} 
       onOk={()=>setIsClicked(false)} width={1200}>
-        <BookedCard tokenId={tokenId}>
+        <BookedCard tokenId={tokenId} page={page}>
         </BookedCard>
         </Modal>
       )}

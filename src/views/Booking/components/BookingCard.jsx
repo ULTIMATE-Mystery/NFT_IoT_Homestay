@@ -47,13 +47,13 @@ const BookingCard = () => {
         const endDateTime = new Date(`${endDate}T${endTime}`);
         const endTimestamp = Math.floor(endDateTime.getTime() / 1000); // Convert to seconds
         // Handle the captured date, time, and duration values as needed
-        console.log('Current Date and Time:', nowDateTime);
-        console.log('Current Timestamp:', nowTimestamp);
-        console.log('Start Date:', startDateTime);
-        console.log('Start Date Timestamp:', startTimestamp);
-        console.log('End Date:', endDateTime);
-        console.log('End Date Timestamp:', endTimestamp);
-        console.log('Room ID:', roomId);
+        // console.log('Current Date and Time:', nowDateTime);
+        // console.log('Current Timestamp:', nowTimestamp);
+        // console.log('Start Date:', startDateTime);
+        // console.log('Start Date Timestamp:', startTimestamp);
+        // console.log('End Date:', endDateTime);
+        // console.log('End Date Timestamp:', endTimestamp);
+        // console.log('Room ID:', roomId);
 
         // Call the safeMint function with your contract
         if (contract) {
@@ -70,7 +70,7 @@ const BookingCard = () => {
                 Message.sendSuccess('Successfully booked!');
             } catch (error) {
                 console.error('Error calling safeMint:', error);
-                Message.sendError('Error booking homestay');
+                Message.sendError('Oops! Your booking was not successful! Maybe check your bookings parameters and try again');
             }
         } else {
             console.error('Contract not loaded or not connected to Web3');
