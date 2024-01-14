@@ -1,6 +1,6 @@
 import React from 'react';
 import { ConnectWallet } from '@thirdweb-dev/react';
-import logo from 'assets/logo/logo.png';
+import logo from 'assets/logo/logo.jpg';
 import { useNavigate } from 'react-router-dom';
 import routeConstants from 'route/routeConstants';
 
@@ -11,9 +11,9 @@ const Header = () => {
     const activeTab =
         'm-auto text-xl font-[1000] bg-gradient-to-r from-teal-400 via-cyan-400 via-purple-300 to-pink-300 text-transparent bg-clip-text';
     return (
-        <div className="header p-2 border-b-2 ml-4">
-            <div className="flex gap-4 w-full justify-between">
-                <div>
+        <div className="header py-2 px-4 ">
+            <div className="flex gap-4 w-full justify-between h-full">
+                <div className='h-full'>
                     <img className="w-16" src={logo} alt="Logo"></img>
                 </div>
                 <div

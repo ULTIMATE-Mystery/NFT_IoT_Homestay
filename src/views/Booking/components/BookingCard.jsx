@@ -91,7 +91,7 @@ const BookingCard = () => {
                             to="/home"
                             className="p-20 mr-0 w-full flex flex-col"
                         >
-                            <div className="w-full flex justify-end space-x-4">
+                            <div className="min-[1000px]:w-full flex justify-end min-[1000px]:space-x-4 max-[1000px]:space-y-3 mb-4 min-[1000px]:flex-row flex-col">
                                 <button class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-32 my-auto  rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold">
                                         <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
                                         <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
@@ -119,7 +119,7 @@ const BookingCard = () => {
                                 </div>
                         
                                 <div className="flex flex-col mt-6">
-                                    <div className="flex">
+                                    <div className="flex min-[800px]:flex-row flex-col">
                                         <label className="mr-4 my-auto text-2xl font-bold text-slate-500">
                                             Room ID
                                         </label>
@@ -134,8 +134,8 @@ const BookingCard = () => {
                                     </div>
                                     
                                 </div>
-                                <div className='flex flex-cols justify-between'>
-                                     <div className="mt-6 flex flex-row mx-auto">
+                                <div className='flex min-[1450px]:flex-row flex-col justify-between'>
+                                     <div className="mt-6 flex min-[900px]:flex-row flex-col min-[1450px]:mx-auto">
                                         <label className="mt-4 mr-8 text-2xl font-bold text-slate-500">
                                             Start Date
                                         </label>
@@ -154,7 +154,7 @@ const BookingCard = () => {
                                             onChange={handleStartDateChange}
                                         />
                                     </div>
-                                    <div className="mt-6 flex flex-row mx-auto">
+                                    <div className="mt-6 flex min-[900px]:flex-row flex-col min-[1450px]:mx-auto">
                                         <label className="mt-4 mr-10 text-2xl font-bold text-slate-500">
                                             End Date
                                         </label>
