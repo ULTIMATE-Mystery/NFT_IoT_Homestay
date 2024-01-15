@@ -10,14 +10,13 @@ import Message from 'components/Message';
 import Copy from 'icons/Copy';
 import Checkbox from 'icons/Checkbox';
 import { Tooltip } from 'antd';
+import { CONTRACT_ADDRESS } from 'utils/constant';
 
 const ContractInfo = ({ tokenId, isButtonClicked }) => {
-    const contractAddress = '0x7e15935f8ae6FCbBAc0211D2E15A2166143707B3';
-    const { contract } = useContract(contractAddress);
+    const { contract } = useContract(CONTRACT_ADDRESS);
     const { data, isLoading } = useContractRead(contract, 'getNFTInfo', [
         tokenId,
     ]);
-    console.log(data);
     const formatDate = timestamp => {
         const date = new Date(timestamp * 1000); // Multiply by 1000 to convert seconds to milliseconds
         const options = {
@@ -54,7 +53,7 @@ const ContractInfo = ({ tokenId, isButtonClicked }) => {
                                 className="cursor-pointer"
                                 onClick={() => {
                                     navigator.clipboard.writeText(
-                                        contractAddress
+                                        CONTRACT_ADDRESS
                                     );
                                     Message.sendSuccess('Copied to clipboard');
                                 }}
@@ -80,7 +79,7 @@ const ContractInfo = ({ tokenId, isButtonClicked }) => {
                                 className="cursor-pointer"
                                 onClick={() => {
                                     navigator.clipboard.writeText(
-                                        contractAddress
+                                        CONTRACT_ADDRESS
                                     );
                                     Message.sendSuccess('Copied to clipboard');
                                 }}

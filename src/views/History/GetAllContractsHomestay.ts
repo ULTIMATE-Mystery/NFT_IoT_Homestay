@@ -1,12 +1,12 @@
 import { useContract, useContractRead, useAddress } from '@thirdweb-dev/react';
 import { CONTRACT_ADDRESS } from 'utils/constant';
 
-export default function GetBookedContracts() {
+export default function GetAllContractsHomestay() {
     const address = useAddress();
     const { contract } = useContract(CONTRACT_ADDRESS);
     const { data, isLoading } = useContractRead(
         contract,
-        'getNftsIdOfRenter',
+        'getNftsIdOfProvider',
         [],
         { from: address }
     );
