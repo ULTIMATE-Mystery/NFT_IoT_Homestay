@@ -34,16 +34,15 @@ const RFID: FC<RFIDProps> = ({ title = '', icon = <></> }) => {
 
     useEffect(() => {
         if (currentState === 1) {
-            setDisplayText('Correct card!');
+            setDisplayText('Correct card! Please enter!');
         } else if (currentState === 0) {
-            setDisplayText('Wrong card!');
+            setDisplayText('Wrong card! Please try again!');
         } else {
             setDisplayText('No card scanned!');
         }
     }, [currentState]);
     return (
         <div className="dashboard-card">
-            {' '}
             <div className="dashboard-card__title">
                 {title}
                 <span className="dashboard-card__icon">{icon}</span>

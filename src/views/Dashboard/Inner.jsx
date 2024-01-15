@@ -5,7 +5,7 @@ import Droplet from 'icons/Droplet';
 import DashboardSwitch from './components/DashboardSwitch';
 import Bulb from 'icons/Bulb';
 import DashboardChart from './components/DashboardChart';
-import Fingerprint from './components/Fingerprint';
+//import Fingerprint from './components/Fingerprint';
 import RFID from './components/RFID';
 import Lightning from 'icons/Lightning';
 
@@ -42,10 +42,10 @@ const Inner = memo(({ lightStatus }) => {
                 unit="%"
             />
             <DashboardCard
-                title="Voltage"
-                feed="voltage"
+                title="Power usage"
+                feed="power-usage"
                 icon={<Lightning size={24} />}
-                unit="V"
+                unit="W"
             />
             <DashboardSwitch
                 title="Room light"
@@ -57,7 +57,7 @@ const Inner = memo(({ lightStatus }) => {
                 checkedText="ON"
                 uncheckedText="OFF"
             />
-            <RFID title="RFID" />
+            <RFID title="Door access" />
             <DashboardChart
                 // feed="temperature"
                 // title="Temperature chart"

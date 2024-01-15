@@ -74,6 +74,10 @@ const DashboardChart: FC<DashboardChartProps> = ({
     }, [fetchChartData, currentFeed, currentOpt]);
     const checkAndUpdateChart = useCallback(async () => {
         const response = await deviceService.getLatestValue(currentFeed);
+        if (!response) {
+            setIsLoading(true);
+            return;
+        }
         // const updated =
         //     chartData.length > 0
         //         ? response?.data?.createdAt !==
@@ -127,7 +131,7 @@ const DashboardChart: FC<DashboardChartProps> = ({
             const data = chartData.map(item => Number(item.value));
             if (ctx) {
                 const newChartInstance = new Chart(ctx, {
-                    type: 'line',
+                    type: 'bar',
                     data: {
                         labels,
                         datasets: [
@@ -136,9 +140,10 @@ const DashboardChart: FC<DashboardChartProps> = ({
                                     selectedOption()?.unit || ''
                                 })`,
                                 data,
-                                fill: false,
+                                //fill: false,
                                 borderColor: '#00ffff', // Line color
-                                tension: 0.1,
+                                backgroundColor: '#00ffff', // Line color
+                                //tension: 0.1,
                             },
                         ],
                     },
@@ -169,6 +174,8 @@ const DashboardChart: FC<DashboardChartProps> = ({
                                 },
                             },
                             y: {
+                                min: 0,
+                                max: 100,
                                 grid: {
                                     color: 'rgba(255, 255, 255, 0.15)',
                                 },
@@ -226,6 +233,7 @@ const DashboardChart: FC<DashboardChartProps> = ({
                                 { value: '12', label: 'Last 12 hours' },
                                 { value: '24', label: 'Last 24 hours' },
                                 { value: '72', label: 'Last 3 days' },
+                                { value: '168', label: 'Last 7 days' },
                             ]}
                         />
                     </div>

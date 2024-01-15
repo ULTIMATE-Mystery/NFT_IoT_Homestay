@@ -17,7 +17,7 @@ const Dashboard = memo(() => {
             const response = await deviceService.getLatestValue('light');
             setLightStatus({
                 value: formatBoolean(response.data.value),
-                lastChanged: new Date(response.data.createdAt),
+                lastChanged: new Date(response.data.updatedAt),
                 connected: true,
             });
         } catch (error) {
