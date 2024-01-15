@@ -1,4 +1,5 @@
 import { useContract, useContractRead } from '@thirdweb-dev/react'
+import Loading from 'components/Loading';
 import React from 'react'
 import { CONTRACT_ADDRESS } from 'utils/constant'
 import { formatDate } from 'utils/function/formatDate';
@@ -10,6 +11,9 @@ const LogCardCheckout = ({tokenId}) => {
     console.log(data)
   return (
     <div>
+        {isLoading && <div className='absolute w-full h-full flex mx-auto px-auto align-center justify-center py-40'>
+                                        <Loading/>
+                                    </div>}
         {!isLoading && data && (
             <div className='w-full'>
                 {data.map((item)=>
