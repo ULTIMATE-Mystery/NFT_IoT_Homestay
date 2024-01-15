@@ -10,7 +10,7 @@ import { CONTRACT_ADDRESS } from 'utils/constant';
 
 
 
-const SmallCard = ({tokenId,page,contractId,select}) => {
+const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened}) => {
   const { contract } = useContract(CONTRACT_ADDRESS);
   const { data, isLoading } = useContractRead(contract, "getNFTInfo", [tokenId]);
   const [isClicked,setIsClicked] = useState(false);
@@ -20,8 +20,8 @@ const SmallCard = ({tokenId,page,contractId,select}) => {
   };
   const handleSelectContract = ()=>{
     select(tokenId);
+    setModalCheckoutOpened(false);
   }
-  console.log(select)
   return (
     <>{!isLoading && data &&(
       <div>

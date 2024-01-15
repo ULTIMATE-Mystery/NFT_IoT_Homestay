@@ -4,10 +4,10 @@ import GetBookedContracts from '../GetBookedContracts';
 import Loading from 'components/Loading';
 import { useParams } from 'react-router-dom';
 
-const Booked = ({ isButtonClicked,page,contractId,selectContract}) => {
+const Booked = ({ isButtonClicked,page,contractId,selectContract,setModalCheckoutOpened}) => {
     const { data, isLoading } = GetBookedContracts();
-    const select = (contractId)=>{
-        selectContract(contractId);
+    const select = (id)=>{
+        selectContract(id);
     }
     return (
         <>
@@ -25,6 +25,7 @@ const Booked = ({ isButtonClicked,page,contractId,selectContract}) => {
                                     page={page}
                                     contractId={contractId}
                                     select={select}
+                                    setModalCheckoutOpened={setModalCheckoutOpened}
                                 ></SmallCard>
                             ))}
                         </>

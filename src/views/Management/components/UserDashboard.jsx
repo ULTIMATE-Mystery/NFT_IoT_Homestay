@@ -2,14 +2,16 @@ import { Modal } from 'antd'
 import React, { useState } from 'react'
 import Booked from 'views/Booking/components/Booked';
 import LogCheckout from './LogCheckout';
+import { parseBigNumber } from 'utils/function/parseBigNumber';
 const UserDashboard = ({mode,setMode}) => {
   const [isModalCheckoutOpened, setModalCheckoutOpened] = useState(false);
   const [isModalLogOpened, setModalLogOpened] = useState(false);
   const [isModalConfirmOpened, setModalConfirmOpened] = useState(false);
   const [contractId,selectContractId] = useState(-1);
-  const selectContract = (contractId)=>{
-    selectContractId(contractId);
+  const selectContract = (id)=>{
+    selectContractId(id);
   }
+  console.log(contractId);
   return (
     <div className='mt-4 mx-20 flex flex-col md:flex-row md:space-x-4 border-slate-800 border rounded-md bg-slate-900'>
       <div className='w-full p-10 justify-between space-y-12'>
@@ -27,14 +29,20 @@ const UserDashboard = ({mode,setMode}) => {
           <div className='text-xl text-slate-400 h-full align-center flex my-auto'>
             First, you should select contract that you want check out. 
           </div>
-          <button onClick={()=>setModalCheckoutOpened(true)}
-          class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-32 my-auto  rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold">
-            <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
-            <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
-            <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
-            <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-600"></div>
-            <p class="z-10">Select contract</p>
-          </button>
+          <div className='flex flex-row'>
+            <div className='text-3xl mr-4'>
+              {contractId!=-1?parseBigNumber(contractId):""}
+            </div>
+            <button onClick={()=>setModalCheckoutOpened(true)}
+            class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-32 my-auto  rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold">
+              <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
+              <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
+              <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
+              <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-600"></div>
+              <p class="z-10">{contractId==-1?"Select contract":"Change contract"}</p>
+            </button>
+          </div>
+          
           {isModalCheckoutOpened&&(
             <Modal 
              open={isModalCheckoutOpened} onCancel={()=>setModalCheckoutOpened(false)} 
@@ -42,7 +50,8 @@ const UserDashboard = ({mode,setMode}) => {
                <Booked isButtonClicked={isModalCheckoutOpened}
                 page={"management"} 
                 contractId ={contractId}
-                selectContract={selectContract}/>
+                selectContract={selectContract}
+                setModalCheckoutOpened={setModalCheckoutOpened}/>
             </Modal>
                
           )}
