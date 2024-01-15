@@ -49,9 +49,8 @@ class ApiBase {
         // if (token) {
         //     newOptions.headers.Authorization = `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2aWVucGh1YzI1MTFAZ21haWwuY29tIiwidXNlcklkIjoiNjUyNjZkOTAtNTQ3OC0xMWVlLWE5YTAtNGI0NGY4Yzc2Yzk1Iiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJzZXNzaW9uSWQiOiJkOTE4MzdiNC1iYjU3LTQ5ZWQtYTMwYy1lZjAzZmU5MGE5OWQiLCJpc3MiOiJ0aGluZ3Nib2FyZC5pbyIsImlhdCI6MTY5NTExMDc2MiwiZXhwIjoxNjk1MTE5NzYyLCJmaXJzdE5hbWUiOiJWacOqbiBNaW5oIiwibGFzdE5hbWUiOiJQaMO6YyIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiIyZDEwMGY2MC01NDc4LTExZWUtYTlhMC00YjQ0ZjhjNzZjOTUiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIn0.nobKg5EXkIy6I_0TK8fxYhB1VlcsK7y5woeGjO2UKRhtxyp915vcKBjcNRsgP2TlPrZSSaXJMPkfDKUXNR9nPg`;
         // }
-        // Delete below line when back-end authorization is ready
-        // newOptions.headers.Authorization = `Bearer ${process.env.REACT_APP_JWT_TOKEN}`;
-        newOptions.headers['X-AIO-Key'] = process.env.REACT_APP_AIO_KEY;
+        // Using Adafruit
+        // newOptions.headers['X-AIO-Key'] = process.env.REACT_APP_AIO_KEY;
         return newOptions;
     };
 

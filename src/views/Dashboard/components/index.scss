@@ -59,6 +59,9 @@ $bg-color: #1f263c;
         color: white !important;
     }
 
+    .ant-select-selection-item {
+        width: 150px;
+    }
     &__header {
         @include d-flex(row, center, center);
         position: relative;

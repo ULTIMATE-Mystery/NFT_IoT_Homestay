@@ -3,7 +3,8 @@ export const DEFAULT_DATE_FORMAT = 'DD/MM/YYYY';
 //add AM and PM
 export const DEFAULT_DATE_TIME_FORMAT = 'hh:mm:ss A, MM/DD/YYYY';
 
-export const API_URL = 'https://io.adafruit.com/api/v2';
+// export const API_URL = 'https://io.adafruit.com/api/v2';
+export const API_URL = 'http://localhost:8000/api';
 
 export const DASHBOARD_UPDATE_PERIOD = 10; // seconds
 // export const JWT_TOKEN =

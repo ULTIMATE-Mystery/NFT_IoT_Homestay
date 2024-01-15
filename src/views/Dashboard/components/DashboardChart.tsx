@@ -1,5 +1,13 @@
 import deviceService from 'apis/services/deviceService';
-import { FC, memo, useState, useCallback, useEffect, useRef } from 'react';
+import {
+    FC,
+    memo,
+    useState,
+    useCallback,
+    useEffect,
+    useRef,
+    useMemo,
+} from 'react';
 import { Chart } from 'chart.js/auto';
 import { Spin, Select, Tooltip } from 'antd';
 import { DASHBOARD_UPDATE_PERIOD } from 'utils/constant';
@@ -18,6 +26,11 @@ interface DashboardChartProps {
     options?: ChartOptionProps[];
 }
 
+interface DataPointProps {
+    value: string;
+    createdAt: string;
+}
+
 const DashboardChart: FC<DashboardChartProps> = ({
     // feed,
     // title,
@@ -26,7 +39,7 @@ const DashboardChart: FC<DashboardChartProps> = ({
     defaultOption,
     options = [],
 }) => {
-    const [chartData, setChartData] = useState([]);
+    const [chartData, setChartData] = useState<DataPointProps[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const chartRef = useRef<HTMLCanvasElement | null>(null);
     const chartInstanceRef = useRef<Chart | null>(null);
@@ -40,16 +53,18 @@ const DashboardChart: FC<DashboardChartProps> = ({
             const response = await deviceService.getChartData(feed, {
                 hours: hours,
             });
+
             setChartData(
                 //Only show max 100 data points
                 response.data.slice(
-                    Math.max(response.length - 100, 0),
-                    response.length
+                    Math.max(response.data.length - 100, 0),
+                    response.data.length
                 )
             );
         } catch (error) {
             setIsLoading(true);
         } finally {
+            // console.log(chartData);
             setIsLoading(false);
         }
     }, []);
@@ -57,14 +72,33 @@ const DashboardChart: FC<DashboardChartProps> = ({
     useEffect(() => {
         fetchChartData(currentFeed, currentOpt);
     }, [fetchChartData, currentFeed, currentOpt]);
-
     const checkAndUpdateChart = useCallback(async () => {
         const response = await deviceService.getLatestValue(currentFeed);
-        const updated =
-            chartData.length > 0
-                ? response?.created_at !== chartData[chartData.length - 1][0] // The dataset has been updated
-                : response; // If there is response and prev chartData is empty => New dataset
-        if (updated) {
+        if (!response) {
+            setIsLoading(true);
+            return;
+        }
+        // const updated =
+        //     chartData.length > 0
+        //         ? response?.data?.createdAt !==
+        //           chartData[chartData.length - 1].createdAt // The dataset has been updated
+        //         : response; // If there is response and prev chartData is empty => New dataset
+        const isNewChartData = () => {
+            if (chartData.length > 0) {
+                const chartLatestTimestamp =
+                    chartData[chartData.length - 1].createdAt;
+                return (
+                    response?.data?.createdAt !== chartLatestTimestamp ||
+                    // If latest data point is older than current option
+                    Date.now() - new Date(chartLatestTimestamp).getTime() >
+                        currentOpt * 3600 * 1000
+                );
+            } else {
+                // If there is response and prev chartData is empty => New dataset
+                return response;
+            }
+        };
+        if (isNewChartData()) {
             // console.log('Updated');
             fetchChartData(currentFeed, currentOpt);
         }
@@ -90,13 +124,14 @@ const DashboardChart: FC<DashboardChartProps> = ({
 
             const ctx = chartRef.current.getContext('2d');
             const labels = chartData.map(item =>
-                dateFormat(item[0], 'hh:mm A, MM/DD/YYYY')
+                dateFormat(item.createdAt, 'hh:mm A, MM/DD/YYYY')
             );
-            const data = chartData.map(item => item[1]);
-
+            // const data = chartData.map(item => item[0]);
+            // Get all chartData.value from chartData object
+            const data = chartData.map(item => Number(item.value));
             if (ctx) {
                 const newChartInstance = new Chart(ctx, {
-                    type: 'line',
+                    type: 'bar',
                     data: {
                         labels,
                         datasets: [
@@ -105,9 +140,10 @@ const DashboardChart: FC<DashboardChartProps> = ({
                                     selectedOption()?.unit || ''
                                 })`,
                                 data,
-                                fill: false,
+                                //fill: false,
                                 borderColor: '#00ffff', // Line color
-                                tension: 0.1,
+                                backgroundColor: '#00ffff', // Line color
+                                //tension: 0.1,
                             },
                         ],
                     },
@@ -138,6 +174,8 @@ const DashboardChart: FC<DashboardChartProps> = ({
                                 },
                             },
                             y: {
+                                min: 0,
+                                max: 100,
                                 grid: {
                                     color: 'rgba(255, 255, 255, 0.15)',
                                 },
@@ -195,6 +233,7 @@ const DashboardChart: FC<DashboardChartProps> = ({
                                 { value: '12', label: 'Last 12 hours' },
                                 { value: '24', label: 'Last 24 hours' },
                                 { value: '72', label: 'Last 3 days' },
+                                { value: '168', label: 'Last 7 days' },
                             ]}
                         />
                     </div>

@@ -2,24 +2,31 @@ import ApiBase from 'apis/config';
 
 class DeviceService extends ApiBase {
     getLatestValue = (feedName: string) => {
-        const url = `/${process.env.REACT_APP_AIO_USERNAME}/feeds/${feedName}/data/last`;
+        const url = `/topic/${feedName}/data/latest`;
         return this.get(url);
     };
     controlSwitch = (feedName: string, state: boolean) => {
-        const url = `/${process.env.REACT_APP_AIO_USERNAME}/feeds/${feedName}/data`;
+        const url = `/topic/${feedName}/data/create`;
         const body = {
-            value: state ? 1 : 0,
+            value: state ? '1' : '0',
         };
         return this.post(url, { body });
     };
     getChartData = (feedName: string, params: any) => {
-        const url = `/${process.env.REACT_APP_AIO_USERNAME}/feeds/${feedName}/data/chart`;
+        const url = `/topic/${feedName}/data/chart`;
         return this.get(url, { params });
     };
     publishData = (feedName: string, payload: any) => {
-        const url = `/${process.env.REACT_APP_AIO_USERNAME}/feeds/${feedName}/data`;
+        const url = `/topic/${feedName}/data/create`;
         const body = {
             value: payload,
+        };
+        return this.post(url, { body });
+    };
+    scanRFID = () => {
+        const url = '/room/scan-rfid';
+        const body = {
+            roomId: 1,
         };
         return this.post(url, { body });
     };
