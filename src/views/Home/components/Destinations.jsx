@@ -5,7 +5,7 @@ import routeConstants from 'route/routeConstants';
 const Destinations = () => {
     const navigate = useNavigate();
     return (
-        <div className="w-11/12 h-[540px] mx-auto">
+        <div className="w-11/12 mx-auto flex flex-col mb-20 mt-10">
             <div className="w-full flex flex-row justify-between items-center py-4">
                 <div className="w-1/3">
                     <div className="text-gray-500 font-[600]">DESTINATIONS</div>
@@ -27,8 +27,8 @@ const Destinations = () => {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col h-[600px] gap-3">
-                <div className="flex flex-row w-[calc(100%-12px)] gap-3">
+            <div className="flex flex-col gap-6">
+                <div className="flex flex-row w-[calc(100%-24px)] gap-6">
                     <DestinationCard
                         imagePath={require('assets/image/destinations/hochiminh.webp')}
                         title="Ho Chi Minh City"
@@ -41,7 +41,7 @@ const Destinations = () => {
                     />
                 </div>
 
-                <div className="flex flex-row w-[calc(100%-24px)] gap-3">
+                <div className="flex flex-row w-[calc(100%-24px)] gap-6">
                     <DestinationCard
                         imagePath={require('assets/image/destinations/mekongdelta.webp')}
                         title="Mekong Delta"
