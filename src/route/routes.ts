@@ -61,6 +61,18 @@ const routes = [
         authorization: true,
     },
     {
+        name: 'Marketplace',
+        path: routeConstants.MARKETPLACE,
+        Component: commonLoadable(() => import('views/Marketplace')),
+        authorization: true,
+    },
+    {
+        name: 'AboutUs',
+        path: routeConstants.ABOUT_US,
+        Component: commonLoadable(() => import('views/AboutUs')),
+        authorization: true,
+    },
+    {
         name: '404',
         path: '*',
         Component: commonLoadable(() => import('views/404')),
