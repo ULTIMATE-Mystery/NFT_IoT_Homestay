@@ -92,18 +92,18 @@ const BookingCard = () => {
                             className="p-20 mr-0 w-full flex flex-col"
                         >
                             <div className="min-[1000px]:w-full flex justify-end min-[1000px]:space-x-4 max-[1000px]:space-y-3 mb-4 min-[1000px]:flex-row flex-col">
-                                <button class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-32 my-auto  rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold">
-                                        <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
-                                        <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
-                                        <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
-                                        <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-600"></div>
+                                <button class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-40 my-auto  rounded-md bg-sky-600 p-2 flex justify-center items-center font-extrabold">
+                                        <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-950"></div>
+                                        <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-900"></div>
+                                        <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
+                                        <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
                                         <p class="z-10">See room validity</p>
                                 </button>
-                                <button class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-64 my-auto  rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold">
-                                        <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
-                                        <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
-                                        <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
-                                        <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-600"></div>
+                                <button class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-64 my-auto  rounded-md bg-sky-600 p-2 flex justify-center items-center font-extrabold">
+                                        <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-950"></div>
+                                        <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-900"></div>
+                                        <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
+                                        <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
                                         <p class="z-10">Change homestay contract</p>
                                 </button>
                             </div>
@@ -124,8 +124,8 @@ const BookingCard = () => {
                                             Room ID
                                         </label>
                                         <input
-                                            className=" border px-4 rounded-xl mr-4 focus:border-sky-500 focus:border-2 focus:outline-none 
-                                            w-fit bg-black text-white"
+                                            className=" border-2 border-slate-950 px-4 py-1.5 rounded-xl mr-4 focus:border-sky-500 focus:border-2 focus:outline-none 
+                                            w-fit bg-slate-800 text-white placeholder-slate-500 "
                                             placeholder="Room No"
                                             type="number"
                                             onChange={handleRoomIdChange}
@@ -141,14 +141,14 @@ const BookingCard = () => {
                                         </label>
                                         <input
                                             type="time"
-                                            className="mt-2 mr-4 border py-1.5 px-4 rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-slate-700 text-white"
+                                            className="mt-2 mr-4 border border-slate-950 py-1.5 px-4 rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-slate-800 text-white"
                                             placeholder="Select time start"
                                             value={startTime}
                                             onChange={handleStartTimeChange}
                                         />
                                         <input
                                             type="date"
-                                            className="mt-2 border py-1.5 px-4 rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-slate-700 text-white"
+                                            className="mt-2 border border-slate-950 py-1.5 px-4 rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-slate-800 text-white"
                                             placeholder="Select date start"
                                             value={startDate}
                                             onChange={handleStartDateChange}
@@ -160,14 +160,14 @@ const BookingCard = () => {
                                         </label>
                                         <input
                                             type="time"
-                                            className="mt-2 mr-4 border py-1.5 px-4  rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-slate-700 text-white"
+                                            className="mt-2 mr-4 border border-slate-950 py-1.5 px-4  rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-slate-800 text-white"
                                             placeholder="Select time end"
                                             value={endTime}
                                             onChange={handleEndTimeChange}
                                         />
                                         <input
                                             type="date"
-                                            className="mt-2 border py-1.5 px-4  rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-slate-700 text-white"
+                                            className="mt-2 border border-slate-950 py-1.5 px-4  rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-slate-800 text-white"
                                             placeholder="Select date end"
                                             value={endDate}
                                             onChange={handleEndDateChange}

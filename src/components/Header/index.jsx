@@ -61,6 +61,26 @@ const Header = () => {
                     >
                         History
                     </button>
+                    {/* <button
+                        className={`${
+                            window.location.pathname === routeConstants.ABOUT_US
+                                ? activeTab
+                                : pageNameStyle
+                        }`}
+                        onClick={() => navigate(routeConstants.ABOUT_US)}
+                    >
+                        About us
+                    </button> */}
+                    <button
+                        className={`${
+                            window.location.pathname === routeConstants.MARKETPLACE
+                                ? activeTab
+                                : pageNameStyle
+                        }`}
+                        onClick={() => navigate(routeConstants.MARKETPLACE)}
+                    >
+                        Marketplace
+                    </button>
                 </div>
                 <div className="flex">
                     <ConnectWallet></ConnectWallet>

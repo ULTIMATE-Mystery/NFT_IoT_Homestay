@@ -41,11 +41,11 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened}) 
           </div>
           <span class="pt-0.5 font-bold  text-green-600">{parseBigNumber(data[3])}$</span>
         </div>
-        <button class="hover:bg-sky-700 text-gray-50 bg-sky-800 py-2 rounded-md"
+        <button class="hover:bg-sky-900 text-gray-50 bg-blue-950 py-2 rounded-md text-slate-300"
         onClick={()=>setIsClicked(true)}>
           View details</button>
           
-          <button class={`${page=="booking"?"hidden":""} hover:bg-sky-700 text-gray-50 bg-sky-800 py-2 rounded-md`}
+          <button class={`${page=="booking"?"hidden":""} hover:bg-sky-900 text-gray-50 bg-blue-950 py-2 rounded-md text-slate-300`}
         onClick={handleSelectContract}>
           Select
           </button>
