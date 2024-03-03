@@ -10,7 +10,7 @@ import { CONTRACT_ADDRESS } from 'utils/constant';
 
 
 
-const SmallCard = ({tokenId,page,contractId,select}) => {
+const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened}) => {
   const { contract } = useContract(CONTRACT_ADDRESS);
   const { data, isLoading } = useContractRead(contract, "getNFTInfo", [tokenId]);
   const [isClicked,setIsClicked] = useState(false);
@@ -20,12 +20,12 @@ const SmallCard = ({tokenId,page,contractId,select}) => {
   };
   const handleSelectContract = ()=>{
     select(tokenId);
+    setModalCheckoutOpened(false);
   }
-  console.log(select)
   return (
     <>{!isLoading && data &&(
       <div>
-    <div className="w-60 h-100 bg-slate-800 p-3 flex flex-col gap-1 rounded-2xl border border-sky-500 border-1 drop-shadow-lg">
+    <div className="w-60 h-100 bg-slate-900 p-3 flex flex-col gap-1 rounded-2xl border border-sky-500 border-1 drop-shadow-lg">
           <div className="h-48 rounded-xl overflow-hidden">
             <img
               src={homestay4}
@@ -36,7 +36,7 @@ const SmallCard = ({tokenId,page,contractId,select}) => {
       <div class="flex flex-col gap-4">
         <div class="flex flex-row justify-between">
           <div class="flex flex-col">
-            <span class="text-xl font-bold">Alex Homestay </span>
+            <span class="text-xl font-bold text-white">Alex Homestay </span>
             <p class="text-sm text-slate-400">Room ID: {parseBigNumber(data[2])}</p>
           </div>
           <span class="pt-0.5 font-bold  text-green-600">{parseBigNumber(data[3])}$</span>

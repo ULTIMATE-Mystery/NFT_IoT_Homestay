@@ -49,12 +49,12 @@ const HeadBanner = () => {
 
     return (
         <div>
-            <div className="relative h-screen">
+            <div className="relative h-screen mx-20 mt-4">
                 {/* Background image */}
                 <img
                     src={backgroundImages[bgIndex]}
                     alt="Background"
-                    className="absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000"
+                    className="absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 rounded-lg"
                     style={{ opacity: '100%' }}
                 />
                 <div className="absolute top-0 left-0 w-full h-full bg-black opacity-40"></div>
