@@ -11,7 +11,7 @@ const LogCardCheckout = ({tokenId}) => {
     console.log(data)
   return (
     <div>
-        {isLoading && <div className='absolute w-full h-full flex mx-auto px-auto align-center justify-center py-40'>
+        {isLoading && <div className='w-full h-full py-40'>
                                         <Loading/>
                                     </div>}
         {!isLoading && data && (
