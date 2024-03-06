@@ -5,7 +5,7 @@ export const dateFormat = (
     format: string = 'DD/MM/YYYY'
 ) => {
     try {
-        return date ? moment(date.toString()).format(format) : '--';
+        return date ? moment(date).format(format) : '--';
     } catch (error) {
         return '--';
     }
@@ -51,4 +51,3 @@ export const getTimestampAgo = (date: Date) => {
         return `${Math.floor(diff / (60 * 24))} days ago`;
     }
 };
-

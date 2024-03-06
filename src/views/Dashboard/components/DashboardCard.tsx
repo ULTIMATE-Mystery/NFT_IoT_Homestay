@@ -2,12 +2,10 @@ import { memo, FC, useState, useCallback, useEffect } from 'react';
 import './index.scss';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
-import {
-    DASHBOARD_UPDATE_PERIOD,
-    DEFAULT_DATE_TIME_FORMAT,
-} from 'utils/constant';
+import { DEFAULT_DATE_TIME_FORMAT } from 'utils/constant';
 import deviceService from 'apis/services/deviceService';
 import { dateFormat } from 'utils/function/format';
+import socket from 'utils/socket';
 
 interface DashboardCardProps {
     title: string;
@@ -23,7 +21,7 @@ const DashboardCard: FC<DashboardCardProps> = ({ title, icon, feed, unit }) => {
     });
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchData = useCallback(async () => {
+    const fetchLatestData = useCallback(async () => {
         try {
             const response = await deviceService.getLatestValue(feed);
 
@@ -43,10 +41,22 @@ const DashboardCard: FC<DashboardCardProps> = ({ title, icon, feed, unit }) => {
     }, [feed]);
 
     useEffect(() => {
-        fetchData();
-        const interval = setInterval(fetchData, 1000 * DASHBOARD_UPDATE_PERIOD);
-        return () => clearInterval(interval);
-    }, [fetchData]);
+        fetchLatestData();
+        // const interval = setInterval(fetchLatestData, 1000 * DASHBOARD_UPDATE_PERIOD);
+        // return () => clearInterval(interval);
+    }, [fetchLatestData]);
+
+    useEffect(() => {
+        socket.on('receive_data', (receivedFeed, receivedValue, receivedTs) => {
+            if (receivedFeed === feed) {
+                setDeviceData({
+                    value: receivedValue,
+                    createdAt: receivedTs,
+                });
+                console.log(dateFormat(receivedTs, DEFAULT_DATE_TIME_FORMAT));
+            }
+        });
+    }, [feed]);
 
     useEffect(() => {
         if (deviceData.value === 'N/A') {
@@ -68,13 +78,13 @@ const DashboardCard: FC<DashboardCardProps> = ({ title, icon, feed, unit }) => {
                     <span className="dashboard-card__icon">{icon}</span>
                 </div>
                 <div className="dashboard-card__value">
-                    {!isLoading ? deviceData.value : 'N/A'}
+                    {!isLoading ? deviceData?.value : 'N/A'}
                     <span className="dashboard-card__unit">{unit}</span>
                 </div>
                 <div className="dashboard-card__timestamp">
-                    {deviceData.createdAt !== Date.now()
+                    {deviceData?.createdAt !== Date.now()
                         ? dateFormat(
-                              deviceData.createdAt,
+                              deviceData?.createdAt,
                               DEFAULT_DATE_TIME_FORMAT
                           )
                         : 'N/A'}
