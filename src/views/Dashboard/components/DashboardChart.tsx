@@ -1,19 +1,11 @@
 import deviceService from 'apis/services/deviceService';
-import {
-    FC,
-    memo,
-    useState,
-    useCallback,
-    useEffect,
-    useRef,
-    useMemo,
-} from 'react';
+import { FC, memo, useState, useCallback, useEffect, useRef } from 'react';
 import { Chart } from 'chart.js/auto';
 import { Spin, Select, Tooltip } from 'antd';
-import { DASHBOARD_UPDATE_PERIOD } from 'utils/constant';
 import './index.scss';
 import { dateFormat } from 'utils/function/format';
 import Info from 'icons/Info';
+import socket from 'utils/socket';
 
 interface ChartOptionProps {
     feed: string;
@@ -72,45 +64,56 @@ const DashboardChart: FC<DashboardChartProps> = ({
     useEffect(() => {
         fetchChartData(currentFeed, currentOpt);
     }, [fetchChartData, currentFeed, currentOpt]);
-    const checkAndUpdateChart = useCallback(async () => {
-        const response = await deviceService.getLatestValue(currentFeed);
-        if (!response) {
-            setIsLoading(true);
-            return;
-        }
-        // const updated =
-        //     chartData.length > 0
-        //         ? response?.data?.createdAt !==
-        //           chartData[chartData.length - 1].createdAt // The dataset has been updated
-        //         : response; // If there is response and prev chartData is empty => New dataset
-        const isNewChartData = () => {
-            if (chartData.length > 0) {
-                const chartLatestTimestamp =
-                    chartData[chartData.length - 1].createdAt;
-                return (
-                    response?.data?.createdAt !== chartLatestTimestamp ||
-                    // If latest data point is older than current option
-                    Date.now() - new Date(chartLatestTimestamp).getTime() >
-                        currentOpt * 3600 * 1000
-                );
-            } else {
-                // If there is response and prev chartData is empty => New dataset
-                return response;
-            }
-        };
-        if (isNewChartData()) {
-            // console.log('Updated');
-            fetchChartData(currentFeed, currentOpt);
-        }
-    }, [fetchChartData, currentFeed, chartData, currentOpt]);
+    // const checkAndUpdateChart = useCallback(async () => {
+    //     const response = await deviceService.getLatestValue(currentFeed);
+    //     if (!response) {
+    //         setIsLoading(true);
+    //         return;
+    //     }
+    //     // const updated =
+    //     //     chartData.length > 0
+    //     //         ? response?.data?.createdAt !==
+    //     //           chartData[chartData.length - 1].createdAt // The dataset has been updated
+    //     //         : response; // If there is response and prev chartData is empty => New dataset
+    //     const isNewChartData = () => {
+    //         if (chartData.length > 0) {
+    //             const chartLatestTimestamp =
+    //                 chartData[chartData.length - 1].createdAt;
+    //             return (
+    //                 response?.data?.createdAt !== chartLatestTimestamp ||
+    //                 // If latest data point is older than current option
+    //                 Date.now() - new Date(chartLatestTimestamp).getTime() >
+    //                     currentOpt * 3600 * 1000
+    //             );
+    //         } else {
+    //             // If there is response and prev chartData is empty => New dataset
+    //             return response;
+    //         }
+    //     };
+    //     if (isNewChartData()) {
+    //         // console.log('Updated');
+    //         fetchChartData(currentFeed, currentOpt);
+    //     }
+    // }, [fetchChartData, currentFeed, chartData, currentOpt]);
 
     useEffect(() => {
-        const interval = setInterval(
-            checkAndUpdateChart,
-            DASHBOARD_UPDATE_PERIOD * 1000
-        );
-        return () => clearInterval(interval);
-    }, [checkAndUpdateChart]);
+        socket.on('receive_data', (receivedFeed, receivedValue, receivedTs) => {
+            if (receivedFeed === currentFeed) {
+                const newData = {
+                    value: receivedValue,
+                    createdAt: receivedTs,
+                };
+                setChartData(prevData => [...prevData, newData]);
+            }
+        });
+    }, [currentFeed]);
+    // useEffect(() => {
+    //     const interval = setInterval(
+    //         checkAndUpdateChart,
+    //         DASHBOARD_UPDATE_PERIOD * 1000
+    //     );
+    //     return () => clearInterval(interval);
+    // }, [checkAndUpdateChart]);
 
     useEffect(() => {
         if (!chartData) {
@@ -150,12 +153,16 @@ const DashboardChart: FC<DashboardChartProps> = ({
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+
                         scales: {
                             x: {
                                 grid: {
                                     color: 'rgba(255, 255, 255, 0.15)',
+                                    // offset: false,
                                 },
                                 ticks: {
+                                    // fixed column width
+
                                     color: 'white', // x-axis label text color
                                     // display: false,
                                     callback: function (
