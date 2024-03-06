@@ -1,8 +1,13 @@
+import HomeLayout from 'layouts/Home';
 import { memo } from 'react';
 import Inner from 'views/AboutUs/Inner';
 
 const Wrapper = memo(() => {
-    return <Inner />;
+    return (
+        <HomeLayout title="AboutUs">
+            <Inner />
+        </HomeLayout>
+    );
 });
 Wrapper.displayName = 'AboutUs';
 
