@@ -17,6 +17,8 @@
         "autoprefixer": "^10.4.16",
         "browserify-zlib": "npm:browserify-zlib",
         "chart.js": "^4.4.0",
+        "eccrypto": "^1.1.6",
+        "eth-crypto": "^2.6.0",
         "ethers": "^5.7.2",
         "framer-motion": "^10.16.4",
         "http": "npm:http-browserify",
@@ -68,5 +70,6 @@
     "devDependencies": {
         "@types/react-loadable": "^5.5.9",
         "tailwindcss": "^3.3.3"
-    }
+    },
+    "type": "module"
 }
