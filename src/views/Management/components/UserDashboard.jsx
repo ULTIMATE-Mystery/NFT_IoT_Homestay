@@ -1,29 +1,46 @@
 import { Modal } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Booked from 'views/Booking/components/Booked';
 import LogCheckout from './LogCheckout';
 import { parseBigNumber } from 'utils/function/parseBigNumber';
-import { useContract, useContractWrite } from '@thirdweb-dev/react';
+import { useContract, useContractRead, useContractWrite } from '@thirdweb-dev/react';
 import { CONTRACT_ADDRESS } from 'utils/constant';
 import Message from 'components/Message';
+import GetLog from './GetLog';
+import CryptoJS from 'crypto-js';
 
-  
+
+// const secretKey = 4a03b6fd42e25117a10b89240d1e8eb71c7c0e0b42c201fe1e7db5d8d4919dbf; // 32 bytes (256 bits) key for AES-256
+
+
+
+
 
 const UserDashboard = ({mode,setMode}) => {
+  const secretKey = process.env.REACT_APP_SECRET_KEY_WEB;
+  // const secretKey = "4a03b6fd42e25117a10b89240d1e8eb71c7c0e0b42c201fe1e7db5d8d4919dbf";
+  const encryptedData = "U2FsdGVkX19ZdPl8H87V8zRmJOqw0EEjldL6IrWS7lzZ6Nt6+9sUMcSApC3ep6Y7";
+  console.log(secretKey,encryptedData);
+  const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, secretKey.toString());
+  const decryptedData = JSON.parse(decryptedBytes.toString(CryptoJS.enc.Utf8));
+  console.log('Decrypted data:', decryptedData);
+  
   const [isModalCheckoutOpened, setModalCheckoutOpened] = useState(false);
   const [isModalLogOpened, setModalLogOpened] = useState(false);
   const [isModalReviewLogOpened, setModalReviewLogOpened] = useState(false);
   const [isModalConfirmOpened, setModalConfirmOpened] = useState(false);
   const [contractId,selectContractId] = useState(-1);
+  const [log,setLog] = useState(false);
+  const [isLogLoading,setLogLoading] = useState(false);
+  const [decryptedLog, setDecryptedLog] = useState(false);
   const selectContract = (id)=>{
     selectContractId(id);
   }
-  const devices = [[4,true,3579],[5,true,3600],[4,false,4078],[5,false,5662]];
   const { contract } = useContract(CONTRACT_ADDRESS);
   const { mutateAsync: checkout, isLoading } = useContractWrite(contract, "checkout")
   const Checkout = async () => {
     try {
-      const data = await checkout({ args: [contractId, devices] });
+      const data = await checkout({ args: [contractId] });
       console.info("contract call successs", data);
       Message.sendSuccess('Successfully checkout!');
     } catch (err) {
@@ -31,6 +48,11 @@ const UserDashboard = ({mode,setMode}) => {
       Message.sendError('Can not checkout!');
     }
   }
+
+  const {data:logVar, isLoading:isLogLoadingVar} = GetLog(parseBigNumber(contractId));
+  console.log(logVar)
+
+  
   
   return (
     <div className='mt-4 mx-20 flex flex-col md:flex-row md:space-x-4 border-slate-800 border rounded-md bg-slate-900'>
@@ -105,9 +127,13 @@ const UserDashboard = ({mode,setMode}) => {
             <Modal 
              open={isModalReviewLogOpened} onCancel={()=>setModalReviewLogOpened(false)} 
              onOk={()=>setModalReviewLogOpened(false)} width={1200}>
-               {devices}
+               {
+                contractId!=-1 ? (logVar && !isLogLoadingVar && <>{logVar}</>)
+                : (<div>You need to select contract</div>)
+               }
             </Modal>
           )}
+          {/* {logVar && console.log(decryptWithPrK(logVar))} */}
           {isModalLogOpened&&(
             <Modal 
              open={isModalLogOpened} onCancel={()=>setModalLogOpened(false)} 

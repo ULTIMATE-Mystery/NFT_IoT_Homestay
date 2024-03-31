@@ -16,7 +16,15 @@
         "jsx": "react-jsx",
         "noFallthroughCasesInSwitch": true,
         "baseUrl": "src",
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "paths": {
+            "crypto": [
+              "node_modules/crypto-browserify"
+            ],
+            "stream": [
+              "node_modules/stream-browserify"
+            ]
+          }
     },
     "include": ["src"]
 }
