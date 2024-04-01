@@ -47,7 +47,7 @@ const Inner = memo(() => {
                 <UserDashboard mode={mode} setMode={setMode}/>
             </div>))}
             {isLoadingOwner&&(
-            <div className='w-full h-full py-80'>
+            <div className='w-full h-full py-80 flex justify-center'>
                 <Loading/>
             </div>)}
             </div>

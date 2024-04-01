@@ -23,7 +23,7 @@ const LogCardCheckout = ({tokenId}) => {
     }
   return (
     <div>
-        {isLoading && <div className='w-full h-full py-40'>
+        {isLoading && <div className='w-full h-full py-40 flex justify-center'>
                                         <Loading/>
                                     </div>}
         {!isLoading && data && (
@@ -40,7 +40,7 @@ const LogCardCheckout = ({tokenId}) => {
                         {formatDate(parseBigNumber(item[2]))}
                     </div>
                 </div>)}
-                {(data.length==0) && (<div className='mb-6'>
+                {(decrypt(data).length==0) && (<div className='mb-6'>
                     <div className='w-full justify-center flex'>
                         <p className="text-xl bg-gradient-to-r from-indigo-700 via-purple-500 to-pink-600 bg-clip-text
                             text-transparent w-fit font-bold">

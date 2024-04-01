@@ -15,7 +15,7 @@ const LogCheckout = ({isButtonClicked,contractId}) => {
                                     Device ID
                                 </div>
                                 <div className="basis-1/4 flex justify-center">
-                                    Status
+                                    Status/Value
                                 </div>
                                 <div className="basis-2/4 flex justify-center">
                                     Time
