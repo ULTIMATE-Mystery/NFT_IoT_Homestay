@@ -1,6 +1,7 @@
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { CONTRACT_ADDRESS } from "../constants.js";
 import EthCrypto from 'eth-crypto';
+import CryptoJS from 'crypto-js';
 import dotenv from 'dotenv'
 dotenv.config({ path: "../../../.env" })
 
@@ -9,11 +10,12 @@ import decryptWithPrK from './decryptWithPrK.js';
 
 // Get private key and secret key from environment variables
 const clientId = process.env.CLIENT_ID;
-const secretKey = process.env.SECKET_CLIENT_ID;
+const secretClientKey = process.env.SECRET_CLIENT_KEY;
 const privateKey = process.env.PRIVATE_KEY;
+const secretKey = process.env.REACT_APP_SECRET_KEY_WEB;
 
 const sdk = new ThirdwebSDK("binance-testnet", {
-  secretKey: secretKey,
+  secretKey: secretClientKey,
   clientId: clientId,
 });
 const sdk2 = ThirdwebSDK.fromPrivateKey(
@@ -24,21 +26,30 @@ const sdk2 = ThirdwebSDK.fromPrivateKey(
 const contract = await sdk.getContract(CONTRACT_ADDRESS);
 const contract2 = await sdk2.getContract(CONTRACT_ADDRESS);
 
-// // retrive past events of checkout activities
-// const events = await contract.events.getEvents("Checkout")
-// console.log("Check out: " , events); 
+const data = [[2,true,1711964243],[2,false,1713964243]];
+
+// Convert data to string
+const jsonData = JSON.stringify(data);
+const sha256Data = '0x' + CryptoJS.SHA256(data).toString(CryptoJS.enc.Hex).padStart(64, '0');;
+
+
 
 // listen to a checkout event (in real time)
 contract.events.addEventListener("Checkout", async (event) => {
   const tokenId = parseInt(event.data.tokenId._hex, 16);
+  const roomId = parseInt(event.data.roomId._hex, 16);
   console.log('Token ID', tokenId);
   console.log('__________');
+  console.log('Room ID', roomId);
+  console.log('__________');
   //backend func
-  let encrypted = await encryptWithPbK("b8fe1cb154f4785431a51baba402007be5962e2d9ef601d78270044b5d18ad49354619cd717b1a4b1bf04cc8c81fa1d84f72b637d64823c7940bdfec93c4a316","foobar");
-  const data = await contract2.call("sendData", [
+  //encryption
+  const encryptedData = CryptoJS.AES.encrypt(jsonData, secretKey).toString();
+  console.log('Encrypted data:', encryptedData);
+  const res = await contract2.call("sendData", [
     event.data.tokenId, 
-    JSON.stringify(encrypted), 
-    EthCrypto.hash.keccak256("foobar")
+    encryptedData, 
+    sha256Data
   ])
-  console.log(data);
+  console.log(res);
 });
