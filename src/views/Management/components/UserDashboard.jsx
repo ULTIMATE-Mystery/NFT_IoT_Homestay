@@ -6,33 +6,12 @@ import { parseBigNumber } from 'utils/function/parseBigNumber';
 import { useContract, useContractRead, useContractWrite } from '@thirdweb-dev/react';
 import { CONTRACT_ADDRESS } from 'utils/constant';
 import Message from 'components/Message';
-import GetLog from './GetLog';
-import CryptoJS from 'crypto-js';
-
-
-// const secretKey = 4a03b6fd42e25117a10b89240d1e8eb71c7c0e0b42c201fe1e7db5d8d4919dbf; // 32 bytes (256 bits) key for AES-256
-
-
-
-
 
 const UserDashboard = ({mode,setMode}) => {
-  const secretKey = process.env.REACT_APP_SECRET_KEY_WEB;
-  // const secretKey = "4a03b6fd42e25117a10b89240d1e8eb71c7c0e0b42c201fe1e7db5d8d4919dbf";
-  const encryptedData = "U2FsdGVkX19ZdPl8H87V8zRmJOqw0EEjldL6IrWS7lzZ6Nt6+9sUMcSApC3ep6Y7";
-  console.log(secretKey,encryptedData);
-  const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, secretKey.toString());
-  const decryptedData = JSON.parse(decryptedBytes.toString(CryptoJS.enc.Utf8));
-  console.log('Decrypted data:', decryptedData);
-  
   const [isModalCheckoutOpened, setModalCheckoutOpened] = useState(false);
-  const [isModalLogOpened, setModalLogOpened] = useState(false);
   const [isModalReviewLogOpened, setModalReviewLogOpened] = useState(false);
   const [isModalConfirmOpened, setModalConfirmOpened] = useState(false);
   const [contractId,selectContractId] = useState(-1);
-  const [log,setLog] = useState(false);
-  const [isLogLoading,setLogLoading] = useState(false);
-  const [decryptedLog, setDecryptedLog] = useState(false);
   const selectContract = (id)=>{
     selectContractId(id);
   }
@@ -48,11 +27,6 @@ const UserDashboard = ({mode,setMode}) => {
       Message.sendError('Can not checkout!');
     }
   }
-
-  const {data:logVar, isLoading:isLogLoadingVar} = GetLog(parseBigNumber(contractId));
-  console.log(logVar)
-
-  
   
   return (
     <div className='mt-4 mx-20 flex flex-col md:flex-row md:space-x-4 border-slate-800 border rounded-md bg-slate-900'>
@@ -105,40 +79,23 @@ const UserDashboard = ({mode,setMode}) => {
           <div className='text-xl text-slate-400 h-full align-center flex my-auto'>
             After selection, you'ld check iot's history logs of devices. 
           </div>
-          <div className='flex flex-row space-x-4'>
-            <button onClick={()=>setModalReviewLogOpened(true)}
+          <button onClick={()=>setModalReviewLogOpened(true)}
             class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-32 my-auto  rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold">
               <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
               <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
               <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
               <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-600"></div>
               <p class="z-10">Review logs</p>
-            </button>
-            <button onClick={()=>setModalLogOpened(true)}
-            class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-36 my-auto  rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold">
-              <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
-              <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
-              <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
-              <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-600"></div>
-              <p class="z-10">Confirmed Logs</p>
-            </button>
-          </div>
+          </button>
           {isModalReviewLogOpened&&(
             <Modal 
              open={isModalReviewLogOpened} onCancel={()=>setModalReviewLogOpened(false)} 
              onOk={()=>setModalReviewLogOpened(false)} width={1200}>
-               {
-                contractId!=-1 ? (logVar && !isLogLoadingVar && <>{logVar}</>)
-                : (<div>You need to select contract</div>)
-               }
-            </Modal>
-          )}
-          {/* {logVar && console.log(decryptWithPrK(logVar))} */}
-          {isModalLogOpened&&(
-            <Modal 
-             open={isModalLogOpened} onCancel={()=>setModalLogOpened(false)} 
-             onOk={()=>setModalLogOpened(false)} width={1200}>
-               <LogCheckout isButtonClicked={isModalLogOpened} contractId={contractId}/>
+               {contractId !== -1 ? (
+                  <LogCheckout isButtonClicked={isModalReviewLogOpened} contractId={contractId}/>
+                ) : (
+                  <div>You need to select a contract</div>
+                )}
             </Modal>
           )}
         </div>

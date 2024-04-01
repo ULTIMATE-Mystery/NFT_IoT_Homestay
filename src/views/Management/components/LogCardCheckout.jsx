@@ -1,14 +1,26 @@
-import { useContract, useContractRead } from '@thirdweb-dev/react'
+import { useAddress, useContract, useContractRead } from '@thirdweb-dev/react'
 import Loading from 'components/Loading';
 import React from 'react'
 import { CONTRACT_ADDRESS } from 'utils/constant'
 import { formatDate } from 'utils/function/formatDate';
 import { parseBigNumber } from 'utils/function/parseBigNumber';
+import CryptoJS from 'crypto-js';
+const secretKey = process.env.REACT_APP_SECRET_KEY_WEB;
 
 const LogCardCheckout = ({tokenId}) => {
     const {contract} =useContract(CONTRACT_ADDRESS);
-    const { data, isLoading } = useContractRead(contract, "getLogsForToken", [tokenId]);
-    console.log(data)
+    const address = useAddress();
+    const { data, isLoading } = useContractRead(
+        contract,
+        'getLogsForToken',
+        [tokenId],
+        { from: address }
+    );
+    const decrypt = (encryptedData) => {
+        const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, secretKey.toString());
+        const decryptedData = JSON.parse(decryptedBytes.toString(CryptoJS.enc.Utf8));
+        return decryptedData;
+    }
   return (
     <div>
         {isLoading && <div className='w-full h-full py-40'>
@@ -16,7 +28,7 @@ const LogCardCheckout = ({tokenId}) => {
                                     </div>}
         {!isLoading && data && (
             <div className='w-full'>
-                {data.map((item)=>
+                {decrypt(data).map((item)=>
                 <div className={`flex flex-cols justify-center w-full ${parseBigNumber(item[1])?"":"" } mb-4 border-t text-2xl font-bold text-slate-600 py-2`}>
                     <div className='basis-1/4 flex justify-center text-slate-500'>
                         {parseBigNumber(item[0])}
