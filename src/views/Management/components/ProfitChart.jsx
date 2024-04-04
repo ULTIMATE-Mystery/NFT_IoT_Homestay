@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react';
-import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { PureComponent } from 'react';
+import { BarChart, Bar, ResponsiveContainer } from 'recharts';
 
 const data = [
   {

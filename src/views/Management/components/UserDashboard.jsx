@@ -1,5 +1,5 @@
 import { Modal } from 'antd'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Booked from 'views/Booking/components/Booked';
 import LogCheckout from './LogCheckout';
 import { parseBigNumber } from 'utils/function/parseBigNumber';
@@ -7,23 +7,19 @@ import { useContract, useContractWrite } from '@thirdweb-dev/react';
 import { CONTRACT_ADDRESS } from 'utils/constant';
 import Message from 'components/Message';
 
-  
-
 const UserDashboard = ({mode,setMode}) => {
   const [isModalCheckoutOpened, setModalCheckoutOpened] = useState(false);
-  const [isModalLogOpened, setModalLogOpened] = useState(false);
   const [isModalReviewLogOpened, setModalReviewLogOpened] = useState(false);
   const [isModalConfirmOpened, setModalConfirmOpened] = useState(false);
   const [contractId,selectContractId] = useState(-1);
-  const selectContract = (id)=>{
+  const selectContract = (id) => {
     selectContractId(id);
   }
-  const devices = [[4,true,3579],[5,true,3600],[4,false,4078],[5,false,5662]];
   const { contract } = useContract(CONTRACT_ADDRESS);
   const { mutateAsync: checkout, isLoading } = useContractWrite(contract, "checkout")
   const Checkout = async () => {
     try {
-      const data = await checkout({ args: [contractId, devices] });
+      const data = await checkout({ args: [contractId] });
       console.info("contract call successs", data);
       Message.sendSuccess('Successfully checkout!');
     } catch (err) {
@@ -50,8 +46,8 @@ const UserDashboard = ({mode,setMode}) => {
             First, you should select contract that you want check out. 
           </div>
           <div className='flex flex-row'>
-            <div className={`text-4xl mr-4 my-auto font-bold ${contractId!=-1?"py-[2px] px-4 rounded-lg bg-sky-950 border-[2px] border-sky-300":""} `}>
-              {contractId!=-1?(<div>
+            <div className={`text-4xl mr-4 my-auto font-bold ${contractId!==-1?"py-[2px] px-4 rounded-lg bg-sky-950 border-[2px] border-sky-300":""} `}>
+              {contractId!==-1?(<div>
                 {parseBigNumber(contractId)}
                 </div>
                 ):""}
@@ -62,7 +58,7 @@ const UserDashboard = ({mode,setMode}) => {
               <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
               <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
               <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-600"></div>
-              <p class="z-10">{contractId==-1?"Select contract":"Change contract"}</p>
+              <p class="z-10">{contractId===-1?"Select contract":"Change contract"}</p>
             </button>
           </div>
           
@@ -83,36 +79,23 @@ const UserDashboard = ({mode,setMode}) => {
           <div className='text-xl text-slate-400 h-full align-center flex my-auto'>
             After selection, you'ld check iot's history logs of devices. 
           </div>
-          <div className='flex flex-row space-x-4'>
-            <button onClick={()=>setModalReviewLogOpened(true)}
+          <button onClick={()=>setModalReviewLogOpened(true)}
             class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-32 my-auto  rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold">
               <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
               <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
               <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
               <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-600"></div>
               <p class="z-10">Review logs</p>
-            </button>
-            <button onClick={()=>setModalLogOpened(true)}
-            class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-36 my-auto  rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold">
-              <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
-              <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
-              <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
-              <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-600"></div>
-              <p class="z-10">Confirmed Logs</p>
-            </button>
-          </div>
+          </button>
           {isModalReviewLogOpened&&(
             <Modal 
              open={isModalReviewLogOpened} onCancel={()=>setModalReviewLogOpened(false)} 
              onOk={()=>setModalReviewLogOpened(false)} width={1200}>
-               {devices}
-            </Modal>
-          )}
-          {isModalLogOpened&&(
-            <Modal 
-             open={isModalLogOpened} onCancel={()=>setModalLogOpened(false)} 
-             onOk={()=>setModalLogOpened(false)} width={1200}>
-               <LogCheckout isButtonClicked={isModalLogOpened} contractId={contractId}/>
+               {contractId !== -1 ? (
+                  <LogCheckout isButtonClicked={isModalReviewLogOpened} contractId={contractId}/>
+                ) : (
+                  <div>You need to select a contract</div>
+                )}
             </Modal>
           )}
         </div>

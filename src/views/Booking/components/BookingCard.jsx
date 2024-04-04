@@ -36,8 +36,8 @@ const BookingCard = () => {
         e.preventDefault();
 
         // Validate input here (you can use a library like moment.js for more advanced date-time handling)
-        const nowDateTime = new Date(); // Current date and time
-        const nowTimestamp = Math.floor(Date.now() / 1000); // Current timestamp in seconds
+        // const nowDateTime = new Date(); // Current date and time
+        // const nowTimestamp = Math.floor(Date.now() / 1000); // Current timestamp in seconds
 
         // Combine start date and time
         const startDateTime = new Date(`${startDate}T${startTime}`);
@@ -59,7 +59,7 @@ const BookingCard = () => {
         if (contract) {
             try {
                 // Call the safeMint function
-                const data = await contract.call('safeMint', [
+                await contract.call('safeMint', [
                     roomId,
                     1,
                     startTimestamp,

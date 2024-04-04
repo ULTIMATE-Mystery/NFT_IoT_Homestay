@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import { useState } from 'react'
 import {
   useContract,
   useContractRead,
@@ -7,7 +7,6 @@ import { shortenAddress } from 'utils/shortenAddress';
 import {formatDate} from 'utils/function/formatDate';
 import { parseBigNumber } from 'utils/function/parseBigNumber';
 import { CONTRACT_ADDRESS } from 'utils/constant';
-import { Modal } from 'antd';
 import LogCard from './LogCard';
 // import BookedCard from 'views/Booking/components/BookedCard';
 

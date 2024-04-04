@@ -1,0 +1,10 @@
+#wallet key
+PRIVATE_KEY= 
+
+#secret key and client key
+CLIENT_ID = 
+SECRET_CLIENT_KEY = 
+
+#secret for encryption and decryption through blockchain
+#32 bytes (256 bits) key for AES-256
+REACT_APP_SECRET_KEY_WEB = 

@@ -1,8 +1,4 @@
-import React from 'react'
 import {
-  ConnectWallet,
-  Web3Button,
-  useAddress,
   useContract,
   useContractRead,
 } from "@thirdweb-dev/react";
