@@ -9,7 +9,6 @@
 */
 import { useState, memo, useEffect } from 'react';
 import HomeLayout from 'layouts/Home';
-import { shortenAddress } from 'utils/shortenAddress';
 import { CONTRACT_ADDRESS } from 'utils/constant';
 import { useAddress, useContract, useContractRead } from '@thirdweb-dev/react';
 import OwnerDashboard from './components/OwnerDashboard';
@@ -18,7 +17,7 @@ import Loading from 'components/Loading';
 const Inner = memo(() => {
     const address = useAddress();
     const {contract} = useContract(CONTRACT_ADDRESS);
-    const {data:owner,isLoading:isLoadingOwner} = useContractRead(contract,"owner");
+    const {data: owner, isLoading: isLoadingOwner } = useContractRead(contract,"owner");
     const [mode,setMode] = useState("owner")
     console.log(mode);
     useEffect(()=>{
@@ -26,7 +25,7 @@ const Inner = memo(() => {
     },[mode])
     return (
         <HomeLayout title="Management">
-            {address == undefined ? (
+            {address === undefined ? (
                 <div className='justify-center flex'>
                     <div className="text-4xl mt-60 mx-20 bg-gradient-to-r from-blue-700 via-sky-400 to-purple-600 bg-clip-text text-transparent w-fit mx-auto">
                     You need to connect wallet first
@@ -35,9 +34,9 @@ const Inner = memo(() => {
                 
             ):(
             <div className=''>
-            {!isLoadingOwner&&(
+            {!isLoadingOwner && (
                 // owner==address
-                mode=="owner"
+                mode === "owner"
             ?(<div>
                 {()=>setMode("owner")}
                 <OwnerDashboard mode={mode} setMode={setMode}/>

@@ -45,7 +45,7 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened}) 
         onClick={()=>setIsClicked(true)}>
           View details</button>
           
-          <button class={`${page=="booking"?"hidden":""} hover:bg-sky-900 text-gray-50 bg-blue-950 py-2 rounded-md text-slate-300`}
+          <button class={`${page==="booking"?"hidden":""} hover:bg-sky-900 text-gray-50 bg-blue-950 py-2 rounded-md text-slate-300`}
         onClick={handleSelectContract}>
           Select
           </button>

@@ -1,6 +1,5 @@
 import { useAddress, useContract, useContractRead } from '@thirdweb-dev/react'
 import Loading from 'components/Loading';
-import React from 'react'
 import { CONTRACT_ADDRESS } from 'utils/constant'
 import { formatDate } from 'utils/function/formatDate';
 import { parseBigNumber } from 'utils/function/parseBigNumber';
@@ -40,7 +39,7 @@ const LogCardCheckout = ({tokenId}) => {
                         {formatDate(parseBigNumber(item[2]))}
                     </div>
                 </div>)}
-                {(data.length==0) && (<div className='mb-6'>
+                {(data.length===0) && (<div className='mb-6'>
                     <div className='w-full justify-center flex'>
                         <p className="text-xl bg-gradient-to-r from-indigo-700 via-purple-500 to-pink-600 bg-clip-text
                             text-transparent w-fit font-bold">

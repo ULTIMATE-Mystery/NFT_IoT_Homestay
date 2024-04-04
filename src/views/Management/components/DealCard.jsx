@@ -1,5 +1,3 @@
-import React from 'react';
-import christmastree from 'assets/image/avatar/christmasTree.jpg';
 import christmastree2 from 'assets/image/avatar/christmasTree2.png';
 
 const DealCard = () => {

@@ -1,6 +1,3 @@
-import Loading from 'components/Loading';
-import React from 'react'
-import GetBookedContracts from 'views/Booking/GetBookedContracts';
 import LogCardCheckout from './LogCardCheckout';
 
 const LogCheckout = ({isButtonClicked,contractId}) => {

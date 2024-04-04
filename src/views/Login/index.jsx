@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect } from 'react';
+import { memo } from 'react';
 import Inner from 'views/Login/Inner';
 
 const Wrapper = memo(() => {

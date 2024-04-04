@@ -23,7 +23,7 @@ const LogCard = ({tokenId}) => {
                         Timestamp: {parseBigNumber(item[2])}
                     </div>
                 </div>)}
-                {(data.length==0) && (<div className='mb-6'>
+                {(data.length===0) && (<div className='mb-6'>
                     <div className='w-full justify-center flex'>
                         <p className="text-xl bg-gradient-to-r from-indigo-700 via-purple-500 to-pink-600 bg-clip-text
                             text-transparent w-fit font-bold">
