@@ -16,8 +16,8 @@ const Inner = memo(() => {
             </div>
             
         ):(
-            <div className=''>
-                <div className="ml-40 pt-6 flex ">
+            <div className='flex flex-col min-[800px]:mx-40 min-[600px]:mx-10 min-[400px]:mx-4 mx-2 '>
+                <div className="pt-6 flex ">
                     <div className="border-r-2 pr-4 w-fit text-xl font-bold text-cyan-700">
                         <p>Mint NFT Stay</p>
                     </div>
@@ -26,7 +26,7 @@ const Inner = memo(() => {
                     </div>
                 </div>
                 <BookingCard></BookingCard>
-                <div className="ml-40 pt-6 flex ">
+                <div className="pt-6 flex ">
                     <div className="border-r-2 pr-4 w-fit text-xl font-bold text-cyan-700">
                         <p>Your NFT Stay</p>
                     </div>

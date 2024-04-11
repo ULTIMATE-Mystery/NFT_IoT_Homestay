@@ -22,7 +22,7 @@ const LogCardCheckout = ({tokenId}) => {
     }
   return (
     <div>
-        {isLoading && <div className='w-full h-full py-40 flex justify-center'>
+        {isLoading && <div className='py-40 flex justify-center w-fit mx-auto'>
                                         <Loading/>
                                     </div>}
         {!isLoading && data && (
@@ -33,7 +33,7 @@ const LogCardCheckout = ({tokenId}) => {
                         {parseBigNumber(item[0])}
                     </div>
                     <div className={`basis-1/4 flex justify-center ${parseBigNumber(item[1])?"text-lime-400":"text-red-300" }`}>
-                        {parseBigNumber(item[1])?"ON":"OFF"}
+                        {!parseBigNumber(item[1])?"OFF":parseBigNumber(item[1])!=true?parseBigNumber(item[1]):"ON"}
                     </div>
                     <div className='basis-2/4 flex justify-center text-slate-500'>
                         {formatDate(parseBigNumber(item[2]))}

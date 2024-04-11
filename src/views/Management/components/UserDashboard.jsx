@@ -89,6 +89,7 @@ const UserDashboard = ({mode,setMode}) => {
           </button>
           {isModalReviewLogOpened&&(
             <Modal 
+            footer={null}
              open={isModalReviewLogOpened} onCancel={()=>setModalReviewLogOpened(false)} 
              onOk={()=>setModalReviewLogOpened(false)} width={1200}>
                {contractId !== -1 ? (
