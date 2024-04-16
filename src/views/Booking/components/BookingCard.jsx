@@ -4,6 +4,7 @@ import Message from 'components/Message';
 import { CONTRACT_ADDRESS } from 'utils/constant';
 import {  DatePicker, Space  } from 'antd';
 import './Booking.scss';
+import { ConnectWallet } from "@thirdweb-dev/react";
 const { RangePicker } = DatePicker;
 
 
@@ -63,7 +64,7 @@ const BookingCard = () => {
     return (
         <>
         <div className=''>
-            {address && (
+            
                 <div
                     className="flex rounded-xl bg-gradient-to-r from-teal-200 via-cyan-300 
       via-purple-400 to-pink-400 text-base rounded-2xl mt-8 text-white"
@@ -131,7 +132,7 @@ const BookingCard = () => {
                                 </div>
                                 
                                 <div className="w-full flex justify-center pt-8">
-                                    <button
+                                    {address&&<button
                                         type="submit"
                                         className="rounded-xl text-white bg-gradient-to-r 
                                         from-blue-700 via-pink-400 via-purple-600 to-blue-600 
@@ -142,18 +143,30 @@ const BookingCard = () => {
                                         <p className="text-xl">
                                             Book now
                                         </p>
-                                    </button>
+                                    </button>}
+                                    {
+                                    !address && (
+                                        <ConnectWallet
+                                            btnTitle="Connect wallet" 
+                                            className='!rounded-xl !text-white !bg-gradient-to-r 
+                                            !from-blue-700 !via-pink-400 !via-purple-600 !to-blue-600 
+                                            !shadow-lg !hover:scale-110 !duration-200 !hover:drop-shadow-2xl 
+                                            !hover:shadow-[#7dd3fc] !hover:cursor-pointer !hover:bg-gradient-to-bl 
+                                            !font-bold !rounded-md !text-lg !py-4 !px-16 !text-center !flex !w-fit'
+                                        />
+                                    )
+                                    }
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-            )}
-            {!address && (
+            
+            {/* {!address && (
                 <div className="text-center">
                     You need to collect wallet first.
                 </div>
-            )}
+            )} */}
         </div>
         </>
     );

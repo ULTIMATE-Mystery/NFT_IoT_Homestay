@@ -99,8 +99,10 @@ const Header = () => {
                         <Pages stylePages={menuPages}/>
                         <div className='h-16'></div>
                     </div>)}
-                <div className="flex flex-end justify-end max-xl:w-full">
-                    <ConnectWallet></ConnectWallet>
+                <div className="flex flex-end justify-end border-white border-2 rounded-lg border-r-b w-fit">
+                    <ConnectWallet
+                    className='!rounded-md !bg-slate-950 !w-fit !text-white'>
+                    </ConnectWallet>
                 </div>
             </div>
         </div>

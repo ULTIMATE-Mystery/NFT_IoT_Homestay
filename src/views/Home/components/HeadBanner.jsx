@@ -61,7 +61,7 @@ const HeadBanner = () => {
                 {/* Content */}
                 <div className="flex flex-col items-center justify-center h-full relative z-1 text-white
                 min-[800px]:text-xl min-[600px]:text-base min-[400px]:text-sm text-[8px]">
-                    <div className='flex flex-col  min-[800px]:space-y-16 min-[600px]:space-y-8 min-[400px]:space-y-4 space-y-2 '>
+                    <div className='flex flex-col min-[1200px]:space-y-24 min-[1000px]:space-y-16 min-[800px]:space-y-10 min-[600px]:space-y-8 min-[400px]:space-y-4 space-y-2 '>
                         <div className=" text-center w-full">
                             SHSC HOMESTAY TRAVELS
                         </div>

@@ -1,8 +1,10 @@
 import SmallCard from './SmallCard';
 import GetBookedContracts from '../GetBookedContracts';
 import Loading from 'components/Loading';
+import { useAddress } from '@thirdweb-dev/react';
 
 const Booked = ({ isButtonClicked,page,contractId,selectContract,setModalCheckoutOpened}) => {
+    const address = useAddress();
     const { data, isLoading } = GetBookedContracts();
     const select = (id)=>{
         selectContract(id);
@@ -30,12 +32,19 @@ const Booked = ({ isButtonClicked,page,contractId,selectContract,setModalCheckou
                     )}
                 </div>
             </div>
-            {!isLoading && data.length === 0 && 
+            {address && !isLoading && data.length === 0 && 
                     <div className='justify-center flex w-full'>
                         <div className="text-4xl p-20 bg-gradient-to-r from-blue-700 via-sky-400 to-purple-600 bg-clip-text text-transparent w-fit mx-auto">
                             No contracts were created.
                         </div>  
                     </div>}
+            {!address &&(
+                <div className='justify-center flex w-full'>
+                    <div className="text-4xl p-20 bg-gradient-to-r from-blue-700 via-sky-400 to-purple-600 bg-clip-text text-transparent w-fit mx-auto">
+                        You need to connect wallet first.
+                    </div>  
+                </div>)
+            }
         </>
     );
 };
