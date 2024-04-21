@@ -106,7 +106,7 @@ const BookingCard = () => {
                                     </label>
                                     <input
                                         className=" border-2 border-slate-950 px-6 py-3 rounded-lg focus:border-sky-500 focus:border-2 focus:outline-none 
-                                        w-full bg-slate-800 text-white placeholder-slate-500 "
+                                        w-full bg-slate-800 text-white placeholder-slate-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                         placeholder="Room No"
                                         type="number"
                                         onChange={handleRoomIdChange}
