@@ -26,7 +26,7 @@ const sdk2 = ThirdwebSDK.fromPrivateKey(
 const contract = await sdk.getContract(CONTRACT_ADDRESS);
 const contract2 = await sdk2.getContract(CONTRACT_ADDRESS);
 
-const data = [[2,true,1711964243],[2,false,1713964243]];
+const data = [[2,true,1711964243],[2,false,1713964243],[2,false,1715464243]];
 
 // Convert data to string
 const jsonData = JSON.stringify(data);
