@@ -38,7 +38,7 @@ const CollectionCard = ({setNoCollection,index}) => {
                         by &nbsp;
                     </div>
                     <div className='bg-slate-950 hover:bg-slate-800 cursor-pointer py-1 px-2 rounded-xl align-center flex'>
-                        <img src=''/>
+                        <img src='' alt='' className='avatar'/>
                         <div className='flex align-center font-[700]'>Alexander</div>
                     </div>
                 </div>

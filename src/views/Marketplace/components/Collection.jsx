@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import homestay from 'assets/image/homestay/homestay6.jpg';
+import homestayImg from 'assets/image/homestay/homestay6.jpg';
 import { DownOutlined, FilterOutlined, SearchOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Modal, Space, message } from 'antd';
+import HomestayNFTCard from './HomestayNFTCard';
 
 const Collection = ({setNoCollection,index}) => {
     const [mode,setMode] = useState("item");
@@ -81,7 +82,7 @@ const Collection = ({setNoCollection,index}) => {
     } 
     const Filter = () => {
         return (
-            <div className={`bg-slate-900 flex flex-col divide-y divide-slate-700 p-2 rounded-xl w-96 ${filterModal?"":"max-[1000px]:hidden"}`}>
+            <div className={`bg-slate-900 flex flex-col divide-y divide-slate-700 p-2 rounded-xl w-96 ${filterModal?"":"max-[1000px]:hidden"} h-fit`}>
                 <div className='p-4'>
                 Filters
                 </div>
@@ -216,7 +217,7 @@ const Collection = ({setNoCollection,index}) => {
             <div className='flex flex-row space-x-4'>
                 <div className="w-16 h-16 bg-white rounded-xl"
                 style={{
-                    backgroundImage: `url(${homestay})`,
+                    backgroundImage: `url(${homestayImg})`,
                     backgroundSize: `100% 100%`,
 
                 }}>
@@ -273,7 +274,7 @@ const Collection = ({setNoCollection,index}) => {
         </div>
         <div className='flex flex-row justify-between space-x-6'>
             {!filterModal&&<Filter className="!max-[1000px]:hidden"/>}
-            <div className='nft-cards p-4 w-full'>
+            <div className='nft-cards w-full space-y-4'>
                 <div className='flex flex-row justify-between space-x-4 items-center'>
                     <div className='flex items-center w-full'>
                         <input className='w-full flex-start justify-left py-2 px-12 bg-slate-900 border-1 focus:border-slate-800 focus:border-1 focus:outline-none rounded-xl '
@@ -307,7 +308,13 @@ const Collection = ({setNoCollection,index}) => {
                         </Button>
                     </Dropdown>
                     </div>
-                    
+                </div>
+                <div className='p-2 rounded-xl grid min-[1000px]:grid-cols-4 min-[600px]:grid-cols-3 min-[500px]:grid-cols-2 grid-cols-1 gap-4'>
+                    {Array.from({ length: 12 }, (_, index) => (
+                    <div key={index} className='border border-blue-600 bg-slate-900 rounded-xl'>
+                        <HomestayNFTCard />
+                    </div>
+                    ))}
                 </div>
             </div>
         </div>
