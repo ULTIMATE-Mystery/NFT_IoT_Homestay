@@ -2,7 +2,7 @@ import ApiBase from 'apis/config';
 
 class DeviceService extends ApiBase {
     getLatestValue = (feedName: string) => {
-        const url = `/topic/${feedName}/data/latest`;
+        const url = `/data/${feedName}/latest`;
         return this.get(url);
     };
     controlSwitch = (feedName: string, state: boolean) => {
@@ -13,7 +13,7 @@ class DeviceService extends ApiBase {
         return this.post(url, { body });
     };
     getChartData = (feedName: string, params: any) => {
-        const url = `/topic/${feedName}/data/chart`;
+        const url = `/data/${feedName}/chart`;
         return this.get(url, { params });
     };
     publishData = (feedName: string, payload: any) => {
