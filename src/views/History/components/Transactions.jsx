@@ -100,7 +100,7 @@ const Transactions = () => {
           <div class="basis-1/6 flex justify-center">Price</div>
         </div>
         <div>
-          {isLoading && <div className='w-full h-full py-40'>
+          {isLoading && <div className='py-40 flex justify-center w-fit mx-auto'>
                             <Loading/>
                         </div>}
           {currentData.length > 0 && (

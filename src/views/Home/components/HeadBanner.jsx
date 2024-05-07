@@ -49,7 +49,7 @@ const HeadBanner = () => {
 
     return (
         <div>
-            <div className="relative h-screen mx-20 mt-4">
+            <div className="relative h-screen mt-4">
                 {/* Background image */}
                 <img
                     src={backgroundImages[bgIndex]}
@@ -59,17 +59,18 @@ const HeadBanner = () => {
                 />
                 <div className="absolute top-0 left-0 w-full h-full bg-black opacity-40"></div>
                 {/* Content */}
-                <div className="flex flex-col items-center justify-center gap-y-8 h-full relative z-1 text-white">
-                    <div>
-                        <div className="text-xl text-center w-full">
+                <div className="flex flex-col items-center justify-center h-full relative z-1 text-white
+                min-[800px]:text-xl min-[600px]:text-base min-[400px]:text-sm text-[8px]">
+                    <div className='flex flex-col min-[1200px]:space-y-24 min-[1000px]:space-y-16 min-[800px]:space-y-10 min-[600px]:space-y-8 min-[400px]:space-y-4 space-y-2 '>
+                        <div className=" text-center w-full">
                             SHSC HOMESTAY TRAVELS
                         </div>
-                        <div className="mt-16 text-6xl font-[600] text-center w-full">
+                        <div className="min-[800px]:text-6xl min-[600px]:text-4xl min-[400px]:text-2xl text-base font-[600] text-center w-full">
                             <p className="w-2/3 mx-auto leading-normal">
                                 Let's embark on your dream journey
                             </p>
                         </div>
-                        <div className="text-xl text-center w-full mt-16 font-[400]">
+                        <div className="text-center w-full font-[400]">
                             <p>
                                 Discover inspiring destinations, create
                                 unforgettable memories
@@ -80,12 +81,6 @@ const HeadBanner = () => {
                             </p>
                         </div>
                     </div>
-                    {/* <input
-                        placeholder="Search place"
-                        className="mt-20 border-2 rounded-xl bg-black rounded-xl font-[1000] 
-            text-5xl bg-gradient-to-r from-sky-500 to-purple-500 text-transparent 
-            bg-clip-text p-2 w-full min-w-[400px] max-w-[600px]"
-                    /> */}
                 </div>
             </div>
         </div>

@@ -1,5 +1,5 @@
 export const formatDate = (timestamp) => {
-    const date = new Date(timestamp * 1000); // Multiply by 1000 to convert seconds to milliseconds
+    const date = new Date(Number(timestamp)); // Multiply by 1000 to convert seconds to milliseconds
     const options = {
       year: "numeric",
       month: "numeric",

@@ -2,30 +2,35 @@ import { useState } from 'react';
 import { useAddress, useContract } from '@thirdweb-dev/react';
 import Message from 'components/Message';
 import { CONTRACT_ADDRESS } from 'utils/constant';
+import {  DatePicker, Space  } from 'antd';
+import './Booking.scss';
+import { ConnectWallet } from "@thirdweb-dev/react";
+const { RangePicker } = DatePicker;
+
 
 const BookingCard = () => {
     const address = useAddress();
     const { contract } = useContract(CONTRACT_ADDRESS);
-    const [startDate, setStartDate] = useState('');
     const [startTime, setStartTime] = useState('');
-    const [endDate, setEndDate] = useState('');
     const [endTime, setEndTime] = useState('');
+
+    const [startTimestamp, setStartTimestamp] = useState('');
+    const [endTimestamp, setEndTimestamp] = useState('');
     const [roomId, setRoomId] = useState('');
 
-    const handleStartDateChange = e => {
-        setStartDate(e.target.value);
+    const onChange = (value, dateString) => {
+        const startDate = new Date(value[0]);
+        const endDate = new Date(value[1]);
+        setStartTime(value[0]);
+        setEndTime(value[1]);
+      
+        const startTimestamp = startDate.getTime();
+        const endTimestamp = endDate.getTime();
+        setStartTimestamp(startTimestamp);
+        setEndTimestamp(endTimestamp);
     };
-
-    const handleStartTimeChange = e => {
-        setStartTime(e.target.value);
-    };
-
-    const handleEndDateChange = e => {
-        setEndDate(e.target.value);
-    };
-
-    const handleEndTimeChange = e => {
-        setEndTime(e.target.value);
+    const onOk = (value) => {
+        console.log('onOk: ', value);
     };
 
     const handleRoomIdChange = e => {
@@ -34,28 +39,6 @@ const BookingCard = () => {
 
     const handleSubmit = async e => {
         e.preventDefault();
-
-        // Validate input here (you can use a library like moment.js for more advanced date-time handling)
-        // const nowDateTime = new Date(); // Current date and time
-        // const nowTimestamp = Math.floor(Date.now() / 1000); // Current timestamp in seconds
-
-        // Combine start date and time
-        const startDateTime = new Date(`${startDate}T${startTime}`);
-        const startTimestamp = Math.floor(startDateTime.getTime() / 1000); // Convert to seconds
-
-        // Combine end date and time
-        const endDateTime = new Date(`${endDate}T${endTime}`);
-        const endTimestamp = Math.floor(endDateTime.getTime() / 1000); // Convert to seconds
-        // Handle the captured date, time, and duration values as needed
-        // console.log('Current Date and Time:', nowDateTime);
-        // console.log('Current Timestamp:', nowTimestamp);
-        // console.log('Start Date:', startDateTime);
-        // console.log('Start Date Timestamp:', startTimestamp);
-        // console.log('End Date:', endDateTime);
-        // console.log('End Date Timestamp:', endTimestamp);
-        // console.log('Room ID:', roomId);
-
-        // Call the safeMint function with your contract
         if (contract) {
             try {
                 // Call the safeMint function
@@ -81,15 +64,15 @@ const BookingCard = () => {
     return (
         <>
         <div className=''>
-            {address && (
+            
                 <div
-                    className="flex p-25 mx-40 mr-40 rounded-xl bg-gradient-to-r from-teal-200 via-cyan-300 
+                    className="flex rounded-xl bg-gradient-to-r from-teal-200 via-cyan-300 
       via-purple-400 to-pink-400 text-base rounded-2xl mt-8 text-white"
                 >
                     <div className="m-[2px] bg-slate-950 rounded-xl w-full flex">
                         <div
                             to="/home"
-                            className="p-20 mr-0 w-full flex flex-col"
+                            className="min-[800px]:p-20 min-[750px]:p-10 min-[400px]:p-6 p-4 mr-0 w-full flex flex-col"
                         >
                             <div className="min-[1000px]:w-full flex justify-end min-[1000px]:space-x-4 max-[1000px]:space-y-3 mb-4 min-[1000px]:flex-row flex-col">
                                 <button class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-40 my-auto  rounded-md bg-sky-600 p-2 flex justify-center items-center font-extrabold">
@@ -109,74 +92,47 @@ const BookingCard = () => {
                             </div>
                             <form
                                 onSubmit={handleSubmit}
-                                className="flex flex-col "
-                            >   <div>
+                                className="flex flex-col space-y-6"
+                            >   <div className='flex flex-col'>
                                     <label className='text-2xl font-bold text-slate-500'>Homestay Name</label>
                                     <p className="text-4xl bg-gradient-to-r from-primary to-danger bg-clip-text
                                      text-transparent w-fit font-[1000]">
                                         Alexander Homestay
                                     </p>
                                 </div>
-                        
-                                <div className="flex flex-col mt-6">
-                                    <div className="flex min-[800px]:flex-row flex-col">
-                                        <label className="mr-4 my-auto text-2xl font-bold text-slate-500">
-                                            Room ID
-                                        </label>
-                                        <input
-                                            className=" border-2 border-slate-950 px-4 py-1.5 rounded-xl mr-4 focus:border-sky-500 focus:border-2 focus:outline-none 
-                                            w-fit bg-slate-800 text-white placeholder-slate-500 "
-                                            placeholder="Room No"
-                                            type="number"
-                                            onChange={handleRoomIdChange}
-                                        />
-                                        
-                                    </div>
-                                    
+                                <div className="flex min-[800px]:flex-row flex-col flex-basis">
+                                    <label className="my-auto text-2xl font-bold text-slate-500 basis-1/4">
+                                        Room ID
+                                    </label>
+                                    <input
+                                        className=" border-2 border-slate-950 px-6 py-3 rounded-lg focus:border-sky-500 focus:border-2 focus:outline-none 
+                                        w-full bg-slate-800 text-white placeholder-slate-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                        placeholder="Room No"
+                                        type="number"
+                                        onChange={handleRoomIdChange}
+                                    />
                                 </div>
-                                <div className='flex min-[1450px]:flex-row flex-col justify-between'>
-                                     <div className="mt-6 flex min-[900px]:flex-row flex-col min-[1450px]:mx-auto">
-                                        <label className="mt-4 mr-8 text-2xl font-bold text-slate-500">
-                                            Start Date
-                                        </label>
-                                        <input
-                                            type="time"
-                                            className="mt-2 mr-4 border border-slate-950 py-1.5 px-4 rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-slate-800 text-white"
-                                            placeholder="Select time start"
-                                            value={startTime}
-                                            onChange={handleStartTimeChange}
-                                        />
-                                        <input
-                                            type="date"
-                                            className="mt-2 border border-slate-950 py-1.5 px-4 rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-slate-800 text-white"
-                                            placeholder="Select date start"
-                                            value={startDate}
-                                            onChange={handleStartDateChange}
-                                        />
+                                <div className='flex min-[800px]:flex-row flex-col flex-basis'>
+                                    <div className='my-auto text-2xl font-bold text-slate-500 basis-1/4'>
+                                        Time
                                     </div>
-                                    <div className="mt-6 flex min-[900px]:flex-row flex-col min-[1450px]:mx-auto">
-                                        <label className="mt-4 mr-10 text-2xl font-bold text-slate-500">
-                                            End Date
-                                        </label>
-                                        <input
-                                            type="time"
-                                            className="mt-2 mr-4 border border-slate-950 py-1.5 px-4  rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-slate-800 text-white"
-                                            placeholder="Select time end"
-                                            value={endTime}
-                                            onChange={handleEndTimeChange}
+                                    <Space className='flex w-full' direction="vertical" size={12}>
+                                        <RangePicker
+                                        className=' bg-slate-800 border border-slate-950 py-3 px-6 w-full'
+                                        showTime={{
+                                            format: 'HH:mm',
+                                        }}
+                                        format="YYYY-MM-DD HH:mm"
+                                        value={[startTime,endTime]}
+                                        onChange={onChange}
+                                        onOk={onOk}
                                         />
-                                        <input
-                                            type="date"
-                                            className="mt-2 border border-slate-950 py-1.5 px-4  rounded-xl focus:border-sky-500 focus:border-2 focus:outline-none bg-slate-800 text-white"
-                                            placeholder="Select date end"
-                                            value={endDate}
-                                            onChange={handleEndDateChange}
-                                        />
-                                    </div>
+                                        {console.log(startTime,endTime)}
+                                    </Space> 
                                 </div>
                                 
-                                <div className="w-full flex justify-center mt-10">
-                                    <button
+                                <div className="w-full flex justify-center pt-8">
+                                    {address&&<button
                                         type="submit"
                                         className="rounded-xl text-white bg-gradient-to-r 
                                         from-blue-700 via-pink-400 via-purple-600 to-blue-600 
@@ -187,18 +143,30 @@ const BookingCard = () => {
                                         <p className="text-xl">
                                             Book now
                                         </p>
-                                    </button>
+                                    </button>}
+                                    {
+                                    !address && (
+                                        <ConnectWallet
+                                            btnTitle="Connect wallet" 
+                                            className='!rounded-xl !text-white !bg-gradient-to-r 
+                                            !from-blue-700 !via-pink-400 !via-purple-600 !to-blue-600 
+                                            !shadow-lg !hover:scale-110 !duration-200 !hover:drop-shadow-2xl 
+                                            !hover:shadow-[#7dd3fc] !hover:cursor-pointer !hover:bg-gradient-to-bl 
+                                            !font-bold !rounded-md !text-lg !py-4 !px-16 !text-center !flex !w-fit'
+                                        />
+                                    )
+                                    }
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-            )}
-            {!address && (
+            
+            {/* {!address && (
                 <div className="text-center">
                     You need to collect wallet first.
                 </div>
-            )}
+            )} */}
         </div>
         </>
     );

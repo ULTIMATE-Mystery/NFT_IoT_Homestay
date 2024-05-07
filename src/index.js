@@ -2,7 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.js";
 import reportWebVitals from "./reportWebVitals.js";
-import { ThirdwebProvider } from "@thirdweb-dev/react";
+import { ThirdwebProvider, coinbaseWallet, embeddedWallet, metamaskWallet, phantomWallet, rainbowWallet, trustWallet, walletConnect, zerionWallet } from "@thirdweb-dev/react";
 import "scss/styles.scss";
 // This is the chain your dApp will work on.
 // Change this to the chain your app is built for.
@@ -15,7 +15,29 @@ root.render(
   // <React.StrictMode>
   <ThirdwebProvider
     activeChain={activeChain}
-    clientId={process.env.REACT_APP_TEMPLATE_CLIENT_ID}
+    clientId={process.env.REACT_APP_CLIENT_ID}
+    supportedWallets={[
+      coinbaseWallet(),
+      metamaskWallet({
+        recommended: true,
+      }),
+      walletConnect(),
+      trustWallet(),
+      zerionWallet(),
+      rainbowWallet(),
+      phantomWallet(),
+      embeddedWallet(
+      {
+        auth:{
+          options: [
+            "email",
+            "google",
+            "facebook",
+          ]
+        }
+      }
+      )
+    ]}
   >
 
     <App />

@@ -11,24 +11,11 @@ import Calendar3 from 'icons/Calendar3';
 import Calendar2 from 'icons/Calendar2';
 import homestay4 from 'assets/image/homestay/homestay4.jpg';
 import { CONTRACT_ADDRESS } from 'utils/constant';
+import { formatDate } from "utils/function/formatDate";
 
 const BookedCard = ({tokenId,page}) => {
   const { contract } = useContract(CONTRACT_ADDRESS);
   const { data, isLoading } = useContractRead(contract, "getNFTInfo", [tokenId]);
-  const formatDate = (timestamp) => {
-    const date = new Date(timestamp * 1000); // Multiply by 1000 to convert seconds to milliseconds
-    const options = {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      hour12: false, // Use 24-hour format
-      timeZoneName: "short",
-    };
-    return date.toLocaleString("en-US", options);
-  };
 
   const parseBigNumber = (value) => {
     return value ? value.toString() : "";
@@ -117,7 +104,7 @@ const BookedCard = ({tokenId,page}) => {
             </div>
             <p className='flex w-full justify-center
             font-[1000] bg-gradient-to-r from-sky-500 to-purple-500 text-transparent 
-            bg-clip-text'>{formatDate(parseBigNumber(data[6]))}</p>
+            bg-clip-text'>{formatDate(parseBigNumber(data[6])*1000)}</p>
           </div>
           <div className='justify-center'>
             <div className='flex justify-center'>
