@@ -1,22 +1,11 @@
 import moment from 'moment';
 
 export const dateFormat = (
-    date: number | string | Date,
+    date: string | number,
     format: string = 'DD/MM/YYYY'
 ) => {
     try {
-        const momentDate = moment(date);
-        if (momentDate.isValid()) {
-            // Timestamp format
-            return momentDate.format(format);
-        } else if (typeof date === 'string') {
-            // Date string format
-            const parsedDate = new Date(date);
-            if (!isNaN(parsedDate.getTime())) {
-                return moment(parsedDate).format(format);
-            }
-        }
-        return '--';
+        return date ? moment(date).format(format) : '--';
     } catch (error) {
         return '--';
     }
