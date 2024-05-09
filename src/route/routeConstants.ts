@@ -7,7 +7,6 @@ const routeConstants = {
     DASHBOARD: '/dashboard',
     MARKETPLACE: '/marketplace',
     ABOUT_US: '/about-us',
-    MARKETPLACE_DETAIL: '/marketplace/:id',
 };
 
 export default routeConstants;

@@ -40,7 +40,7 @@ const DashboardChart: FC<DashboardChartProps> = ({
     const selectedOption = useCallback(() => {
         return options.find(option => option.feed === currentFeed);
     }, [options, currentFeed]);
-    const fetchChartData = async (feed: string, hours: number) => {
+    const fetchChartData = useCallback(async (feed: string, hours: number) => {
         try {
             const response = await deviceService.getChartData(feed, {
                 hours: hours,
@@ -59,13 +59,11 @@ const DashboardChart: FC<DashboardChartProps> = ({
             // console.log(chartData);
             setIsLoading(false);
         }
-    };
-    // useEffect(() => {
-    //     fetchChartData(defaultOption.feed, 1);
-    // }, [defaultOption.feed]);
+    }, []);
+
     useEffect(() => {
         fetchChartData(currentFeed, currentOpt);
-    }, [currentFeed, currentOpt]);
+    }, [fetchChartData, currentFeed, currentOpt]);
     // const checkAndUpdateChart = useCallback(async () => {
     //     const response = await deviceService.getLatestValue(currentFeed);
     //     if (!response) {
@@ -99,24 +97,23 @@ const DashboardChart: FC<DashboardChartProps> = ({
     // }, [fetchChartData, currentFeed, chartData, currentOpt]);
 
     useEffect(() => {
-        const handleReceiveData = (
-            receivedFeed: string,
-            receivedValue: string | number,
-            receivedTs: number
-        ) => {
+        socket.on('receive_data', (receivedFeed, receivedValue, receivedTs) => {
             if (receivedFeed === currentFeed) {
                 const newData = {
-                    value: receivedValue.toString(),
-                    createdAt: dateFormat(receivedTs, 'hh:mm A, MM/DD/YYYY'),
+                    value: receivedValue,
+                    createdAt: receivedTs,
                 };
                 setChartData(prevData => [...prevData, newData]);
             }
-        };
-        socket.on('receive_data', handleReceiveData);
-        return () => {
-            socket.off('receive_data', handleReceiveData);
-        };
+        });
     }, [currentFeed]);
+    // useEffect(() => {
+    //     const interval = setInterval(
+    //         checkAndUpdateChart,
+    //         DASHBOARD_UPDATE_PERIOD * 1000
+    //     );
+    //     return () => clearInterval(interval);
+    // }, [checkAndUpdateChart]);
 
     useEffect(() => {
         if (!chartData) {
@@ -132,6 +129,7 @@ const DashboardChart: FC<DashboardChartProps> = ({
             const labels = chartData.map(item =>
                 dateFormat(item.createdAt, 'hh:mm A, MM/DD/YYYY')
             );
+            // const data = chartData.map(item => item[0]);
             // Get all chartData.value from chartData object
             const data = chartData.map(item => Number(item.value));
             if (ctx) {
@@ -149,7 +147,6 @@ const DashboardChart: FC<DashboardChartProps> = ({
                                 borderColor: '#00ffff', // Line color
                                 backgroundColor: '#00ffff', // Line color
                                 //tension: 0.1,
-                                // maxBarThickness: 50,
                             },
                         ],
                     },
@@ -159,7 +156,6 @@ const DashboardChart: FC<DashboardChartProps> = ({
 
                         scales: {
                             x: {
-                                position: 'left',
                                 grid: {
                                     color: 'rgba(255, 255, 255, 0.15)',
                                     // offset: false,
@@ -209,7 +205,7 @@ const DashboardChart: FC<DashboardChartProps> = ({
                 chartInstanceRef.current = newChartInstance;
             }
         }
-    }, [isLoading, chartData, selectedOption]);
+    }, [isLoading, chartData, currentFeed, selectedOption]);
 
     return (
         <>
@@ -236,9 +232,7 @@ const DashboardChart: FC<DashboardChartProps> = ({
                         <Select
                             defaultValue="1"
                             style={{ width: 'max-content' }}
-                            onChange={value => {
-                                setCurrentOpt(Number(value));
-                            }}
+                            onChange={value => setCurrentOpt(Number(value))}
                             options={[
                                 { value: '1', label: 'Last hour' },
                                 { value: '3', label: 'Last 3 hours' },
