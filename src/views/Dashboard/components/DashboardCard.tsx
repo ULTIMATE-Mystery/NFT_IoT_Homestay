@@ -47,22 +47,15 @@ const DashboardCard: FC<DashboardCardProps> = ({ title, icon, feed, unit }) => {
     }, [fetchLatestData]);
 
     useEffect(() => {
-        const handleReceiveData = (
-            receivedFeed: string,
-            receivedValue: string | number,
-            receivedTs: number
-        ) => {
+        socket.on('receive_data', (receivedFeed, receivedValue, receivedTs) => {
             if (receivedFeed === feed) {
                 setDeviceData({
-                    value: receivedValue.toString(),
+                    value: receivedValue,
                     createdAt: receivedTs,
                 });
+                console.log(dateFormat(receivedTs, DEFAULT_DATE_TIME_FORMAT));
             }
-        };
-        socket.on('receive_data', handleReceiveData);
-        return () => {
-            socket.off('receive_data', handleReceiveData);
-        };
+        });
     }, [feed]);
 
     useEffect(() => {
