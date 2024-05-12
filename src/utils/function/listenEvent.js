@@ -3,10 +3,11 @@ import { CONTRACT_ADDRESS } from "../constants.js";
 import EthCrypto from 'eth-crypto';
 import CryptoJS from 'crypto-js';
 import dotenv from 'dotenv'
+
+import encryptWithPbK from './encryptWithPbK.js';
+import decryptWithPrK from './decryptWithPrK.js';
 dotenv.config({ path: "../../../.env" })
 
-import  encryptWithPbK from './encryptWithPbK.js';
-import decryptWithPrK from './decryptWithPrK.js';
 
 // Get private key and secret key from environment variables
 const clientId = process.env.CLIENT_ID;
@@ -26,7 +27,7 @@ const sdk2 = ThirdwebSDK.fromPrivateKey(
 const contract = await sdk.getContract(CONTRACT_ADDRESS);
 const contract2 = await sdk2.getContract(CONTRACT_ADDRESS);
 
-const data = [[2,true,1711964243],[2,false,1713964243],[2,false,1715464243]];
+const data = [[2, true, 1711964243], [2, false, 1713964243], [2, false, 1715464243]];
 
 // Convert data to string
 const jsonData = JSON.stringify(data);
@@ -47,8 +48,8 @@ contract.events.addEventListener("Checkout", async (event) => {
   const encryptedData = CryptoJS.AES.encrypt(jsonData, secretKey).toString();
   console.log('Encrypted data:', encryptedData);
   const res = await contract2.call("sendData", [
-    event.data.tokenId, 
-    encryptedData, 
+    event.data.tokenId,
+    encryptedData,
     sha256Data
   ])
   console.log(res);

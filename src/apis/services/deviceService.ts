@@ -6,7 +6,7 @@ class DeviceService extends ApiBase {
         return this.get(url);
     };
     controlSwitch = (feedName: string, state: boolean) => {
-        const url = `/topic/${feedName}/data/create`;
+        const url = `/data/${feedName}/create`;
         const body = {
             value: state ? '1' : '0',
         };
@@ -30,6 +30,14 @@ class DeviceService extends ApiBase {
         };
         return this.post(url, { body });
     };
+    getDeviceData = () => {
+        const url = '/device';
+        return this.get(url, {});
+    };
+    getRoomData = (roomId: number) => {
+        const url = `/room/${roomId}`;
+        return this.get(url, {});
+    }
     // getAllValues = (params: any) => {
     //     const url = `/plugins/telemetry/DEVICE/${DEVICE_ID.DHT22}/values/timeseries`;
     //     return this.get(url, { params });

@@ -1,13 +1,20 @@
 import { FC, memo } from 'react';
 import './index.scss';
+import routeConstants from 'route/routeConstants';
 interface IoTSidebarProps {
     open: boolean;
     onMaskClick: () => void;
 }
 const IoTSidebar: FC<IoTSidebarProps> = ({ open = false, onMaskClick }) => {
+    const thisPathname = window.location.pathname;
     return (
         <>
-            <div className={`iot-sidebar ${open ? 'open' : ''}`}>Sidebar</div>
+            <div className={`iot-sidebar ${open ? 'open' : ''}`}>
+                <div className="iot-sidebar-options">
+                    <div className={`iot-sidebar-options__item ${thisPathname === routeConstants.DASHBOARD ? 'active' : ''}`}>Dashboard</div>
+                    <div className="iot-sidebar-options__item"> Set timer</div>
+                </div>
+            </div>
             <div
                 className={`iot-sidebar-mask ${open ? 'open' : ''}`}
                 onClick={onMaskClick}

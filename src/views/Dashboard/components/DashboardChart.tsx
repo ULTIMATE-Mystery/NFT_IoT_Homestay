@@ -42,6 +42,7 @@ const DashboardChart: FC<DashboardChartProps> = ({
     }, [options, currentFeed]);
     const fetchChartData = useCallback(async (feed: string, hours: number) => {
         try {
+            setIsLoading(true);
             const response = await deviceService.getChartData(feed, {
                 hours: hours,
             });
@@ -132,6 +133,10 @@ const DashboardChart: FC<DashboardChartProps> = ({
             // const data = chartData.map(item => item[0]);
             // Get all chartData.value from chartData object
             const data = chartData.map(item => Number(item.value));
+            // Find the max value in data array
+            const maxData = (Math.round(Math.max(...data) /10) + 1) * 10;
+            // Calculate the nearest round number to maxData
+
             if (ctx) {
                 const newChartInstance = new Chart(ctx, {
                     type: 'bar',
@@ -171,6 +176,10 @@ const DashboardChart: FC<DashboardChartProps> = ({
                                         ticks
                                     ) {
                                         // Only show first and last timestamp
+                                        //check if screen width is less than 768px, not display timestamps
+                                        if (window.innerWidth < 480) {
+                                            return;
+                                        }
                                         if (
                                             index === 0 ||
                                             index === ticks.length - 1
@@ -182,7 +191,7 @@ const DashboardChart: FC<DashboardChartProps> = ({
                             },
                             y: {
                                 min: 0,
-                                max: 100,
+                                max: maxData,
                                 grid: {
                                     color: 'rgba(255, 255, 255, 0.15)',
                                 },
@@ -212,19 +221,23 @@ const DashboardChart: FC<DashboardChartProps> = ({
             <div className="dashboard-chart">
                 <div className="dashboard-chart__header">
                     <div className="dashboard-chart__header__title">
-                        <Select
-                            defaultValue={defaultOption.feed}
-                            style={{ width: 'max-content' }}
-                            options={options.map(item => ({
-                                value: item.feed,
-                                label: item.title,
-                            }))}
-                            onChange={value => {
-                                setCurrentFeed(value);
-                            }}
-                        />
+                        <div className="flex flex-col items-center gap-[6px]">
+                            <div className="dis-on-mobile">*Only max 100 data points are displayed</div>
+                            <Select
+                                defaultValue={defaultOption.feed}
+                                style={{ width: 'max-content' }}
+                                options={options.map(item => ({
+                                    value: item.feed,
+                                    label: item.title,
+                                }))}
+                                onChange={value => {
+                                    setCurrentFeed(value);
+                                    setChartData([]);
+                                }}
+                            />
+                        </div>
                         {/* {title} */}
-                        <Tooltip title="Only max 100 data points are displayed">
+                        <Tooltip title="Only max 100 data points are displayed" className='dashboard-chart__header__title__tooltip'>
                             <Info />
                         </Tooltip>
                     </div>
@@ -256,10 +269,15 @@ const DashboardChart: FC<DashboardChartProps> = ({
                         </div>
                     )
                 ) : (
-                    <Spin
-                        tip="Generating chart..."
-                        style={{ width: '100%', height: '400px' }}
-                    />
+                    <>
+                        <h3 style={{ textAlign: 'center', color: 'aqua', margin: '32px 0', fontSize: '18px' }}>Collecting chart data...</h3>
+                        <Spin
+                            tip="Generating chart..."
+                            style={{ width: '100%', height: '400px' }}
+                            size="large"
+                        />
+                        
+                    </>
                 )}
             </div>
         </>
