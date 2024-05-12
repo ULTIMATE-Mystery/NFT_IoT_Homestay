@@ -4,7 +4,6 @@ import { useAddress } from '@thirdweb-dev/react';
 import { Button, Form, Input, Modal, Steps } from 'antd';
 import roomService from 'apis/services/roomService';
 import { memo, FC, useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 interface RegisterModalProps {
     open: boolean;
@@ -19,7 +18,6 @@ interface RegisterModalProps {
 const RegisterModal: FC<RegisterModalProps> = ({ open, roomData }) => {
     const address = useAddress();
     const [isInstructionOpen, setIsInstructionOpen] = useState(false);
-    const [isCurrentStepValid, setIsCurrentStepValid] = useState(true);
     const [registerStatus, setRegisterStatus] = useState('LOAD'); // LOAD, SUCCESS, FAIL
     const [registeredWalletAddress, setRegisteredWalletAddress] = useState('');
     const [registerStep, setRegisterStep] = useState(-1);
@@ -44,14 +42,13 @@ const RegisterModal: FC<RegisterModalProps> = ({ open, roomData }) => {
         }
 
     }, [roomData.RoomID]);
-    
+  
 
     useEffect(() => {
         if (registerStep === 1) {
             handleFinish(1, { walletAddress: registeredWalletAddress });
         }
     }, [registerStep, registeredWalletAddress, handleFinish])
-    //const navigate = useNavigate();
     const [isShowingAddress, setIsShowingAddress] = useState(false);
     return (
         <Modal 
