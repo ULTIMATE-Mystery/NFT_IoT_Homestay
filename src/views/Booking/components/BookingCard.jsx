@@ -1,64 +1,130 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAddress, useContract } from '@thirdweb-dev/react';
-import Message from 'components/Message';
-import { CONTRACT_ADDRESS } from 'utils/constant';
-import {  DatePicker, Space  } from 'antd';
+import { DatePicker, Space, Select, Modal, Button } from 'antd';
 import './Booking.scss';
 import { ConnectWallet } from "@thirdweb-dev/react";
-const { RangePicker } = DatePicker;
+import Message from 'components/Message';
+import { CONTRACT_ADDRESS } from 'utils/constant';
+import WaterPlant from 'icons/WaterPlant';
+import Info from 'icons/Info';
+import Home from 'icons/Home';
+import Calendar3 from 'icons/Calendar3';
+import Calendar2 from 'icons/Calendar2';
+import homestay1 from 'assets/image/homestay/homestay1.jpg';
 
+const { RangePicker } = DatePicker;
+const { Option } = Select;
 
 const BookingCard = () => {
     const address = useAddress();
     const { contract } = useContract(CONTRACT_ADDRESS);
-    const [startTime, setStartTime] = useState('');
-    const [endTime, setEndTime] = useState('');
-
+    const [startTime, setStartTime] = useState(null);
+    const [endTime, setEndTime] = useState(null);
     const [startTimestamp, setStartTimestamp] = useState('');
     const [endTimestamp, setEndTimestamp] = useState('');
-    const [roomId, setRoomId] = useState('');
+    const [selectedRoom, setSelectedRoom] = useState(undefined);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    // Simulated room data
+    const roomData = [
+        {
+            "RoomID": 1,
+            "RoomName": "Room 101",
+            "RoomStatus": "BOOKED",
+            "AccessKey": null,
+            "RoomDescription": "This room is elegantly furnished with handmade furniture include luxury en-suite facilities with complimentary amenities pack, flat screen LCD TV, tea/coffee making facilities, fan, hairdryer and the finest pure white linen and towels.",
+            "createdAt": "2024-05-10T03:13:38.000Z",
+            "updatedAt": "2024-05-12T11:53:34.000Z"
+        },
+        {
+            "RoomID": 2,
+            "RoomName": "Room 201",
+            "RoomStatus": "AVAILABLE",
+            "AccessKey": null,
+            "RoomDescription": "As our smallest budget rooms, the Compact bedrooms are suited for single occupancy or short-stay double occupancy as they have limited space and storage.",
+            "createdAt": "2024-05-10T03:14:44.000Z",
+            "updatedAt": "2024-05-10T03:14:44.000Z"
+        },
+        {
+            "RoomID": 3,
+            "RoomName": "Room 202",
+            "RoomStatus": "BOOKED",
+            "AccessKey": null,
+            "RoomDescription": "Compact rooms suitable for single or short-stay double occupancy.",
+            "createdAt": "2024-05-10T13:35:08.000Z",
+            "updatedAt": "2024-05-10T13:35:08.000Z"
+        },
+        {
+            "RoomID": 4,
+            "RoomName": "Room 203",
+            "RoomStatus": "UNAVAILABLE",
+            "AccessKey": null,
+            "RoomDescription": "Compact rooms suitable for single or short-stay double occupancy.",
+            "createdAt": "2024-05-10T13:39:27.000Z",
+            "updatedAt": "2024-05-10T13:39:27.000Z"
+        }
+    ];
+
+    const handleRoomChange = (value) => {
+        const room = roomData.find(r => r.RoomID.toString() === value);
+        setSelectedRoom(room);
+    };
+
+    const showRoomDetails = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleOk = () => {
+        setIsModalVisible(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        // Check if a room is selected
+        if (!selectedRoom) {
+            Message.sendError('Please select a room first!');
+            return;
+        }
+    
+        // Check room availability
+        if (selectedRoom.RoomStatus === 'UNAVAILABLE' || selectedRoom.RoomStatus === 'BOOKED') {
+            Message.sendError(`Cannot book! Reason: Room is ${selectedRoom.RoomStatus.toLowerCase()}`);
+            return;
+        }
+    
+        // Proceed if the contract is loaded and the room is available
+        if (contract) {
+            try {
+                await contract.call('safeMint', [selectedRoom.RoomID, 1, startTimestamp, endTimestamp]);
+                Message.sendSuccess('Successfully booked!');
+            } catch (error) {
+                console.error('Error calling safeMint:', error);
+                Message.sendError('Oops! Your booking was not successful! Maybe check your bookings parameters and try again.');
+            }
+        } else {
+            console.error('Contract not loaded or not connected to Web3');
+            Message.sendError('Contract not loaded or not connected to Web3.');
+        }
+    };
 
     const onChange = (value, dateString) => {
         const startDate = new Date(value[0]);
         const endDate = new Date(value[1]);
         setStartTime(value[0]);
         setEndTime(value[1]);
-      
-        const startTimestamp = startDate.getTime();
-        const endTimestamp = endDate.getTime();
-        setStartTimestamp(startTimestamp);
-        setEndTimestamp(endTimestamp);
+
+        setStartTimestamp(startDate.getTime());
+        setEndTimestamp(endDate.getTime());
     };
+
     const onOk = (value) => {
         console.log('onOk: ', value);
-    };
-
-    const handleRoomIdChange = e => {
-        setRoomId(e.target.value);
-    };
-
-    const handleSubmit = async e => {
-        e.preventDefault();
-        if (contract) {
-            try {
-                // Call the safeMint function
-                await contract.call('safeMint', [
-                    roomId,
-                    1,
-                    startTimestamp,
-                    endTimestamp,
-                ]);
-
-                // Handle the response from the contract here
-                Message.sendSuccess('Successfully booked!');
-            } catch (error) {
-                console.error('Error calling safeMint:', error);
-                Message.sendError('Oops! Your booking was not successful! Maybe check your bookings parameters and try again');
-            }
-        } else {
-            console.error('Contract not loaded or not connected to Web3');
-            Message.sendError('Contract not loaded or not connected to Web3');
-        }
     };
 
     return (
@@ -100,17 +166,98 @@ const BookingCard = () => {
                                         Alexander Homestay
                                     </p>
                                 </div>
-                                <div className="flex min-[800px]:flex-row flex-col flex-basis">
+                                <div className="flex min-[800px]:flex-row flex-col flex-basis items-center">
                                     <label className="my-auto text-2xl font-bold text-slate-500 basis-1/4">
-                                        Room ID
+                                        Select Room
                                     </label>
-                                    <input
-                                        className=" border-2 border-slate-950 px-6 py-3 rounded-lg focus:border-sky-500 focus:border-2 focus:outline-none 
-                                        w-full bg-slate-800 text-white placeholder-slate-500 "
-                                        placeholder="Room No"
-                                        type="number"
-                                        onChange={handleRoomIdChange}
-                                    />
+                                    <Select
+                    placeholder="Select a room"
+                    onChange={handleRoomChange}
+                    value={selectedRoom ? selectedRoom.RoomID.toString() : undefined} // This ensures the selected room is correctly highlighted
+                    className="rounded-lg w-[70%] mr-[4%]">
+                    {roomData.map(room => (
+                        <Option key={room.RoomID} value={room.RoomID.toString()}>
+                            <div className="flex items-center">
+                                <span className={`h-3 w-3 rounded-full ${
+                                    room.RoomStatus === "AVAILABLE" ? "bg-green-500" :
+                                    room.RoomStatus === "BOOKED" ? "bg-red-500" :
+                                    "bg-gray-500"} mr-2`}></span>
+                                {`${room.RoomName} - ${room.RoomStatus}`}
+                            </div>
+                        </Option>
+                    ))}
+                </Select>
+                                <button type="button" disabled={!selectedRoom} class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-64 my-auto  rounded-md bg-sky-600 p-2 flex justify-center items-center font-extrabold" onClick={showRoomDetails}>
+                                        <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-950"></div>
+                                        <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-900"></div>
+                                        <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
+                                        <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
+                                        <p class="z-10">Room Details</p>
+                                </button>
+                                {/* Modal for room details */}
+                                <Modal
+  title={null}
+  visible={isModalVisible}
+  footer={null}
+  onCancel={handleCancel}
+  className="bg-white text-gray-800 rounded-lg overflow-hidden mx-auto max-w-6xl shadow-2xl"
+  width={1150}
+  centered
+>
+  {isLoading ? (
+    <div className="flex justify-center items-center h-96">
+      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+    </div>
+  ) : selectedRoom && (
+    <div className="flex rounded-lg overflow-hidden">
+      <div className="w-1/2">
+        <img
+          src={homestay1}
+          alt="Room image"
+          className="w-full h-full object-cover rounded-l-lg"
+        />
+      </div>
+      <div className="w-1/2 p-8 bg-white rounded-r-lg">
+        <h3 className="text-3xl font-semibold text-gray-900 mb-6">
+          {selectedRoom.RoomName}
+        </h3>
+        <div className="grid grid-cols-1 gap-y-4 text-lg text-gray-700 mb-10 overflow-auto">
+          <p className="text-justify">
+            <WaterPlant className="inline-block w-6 h-6 mr-2 text-green-500" />
+            <span className="font-bold text-gray-900">Room ID:</span> {selectedRoom.RoomID}
+          </p>
+          <p className="text-justify flex items-center">
+            <Info className="inline-block w-6 h-6 mr-2 text-blue-500" />
+            <span className="font-bold text-gray-900" style={{ marginRight: '8px' }}>Status:</span> 
+            {selectedRoom.RoomStatus}
+            <span className={`inline-block w-3 h-3 ml-2 rounded-full ${selectedRoom.RoomStatus === 'AVAILABLE' ? 'bg-green-500' : selectedRoom.RoomStatus === 'BOOKED' ? 'bg-red-500' : 'bg-gray-500'}`} />
+          </p>
+          <p className="text-justify overflow-visible">
+            <Home className="inline-block w-6 h-6 mr-2 text-yellow-500" />
+            <span className="font-bold text-gray-900">Description:</span> {selectedRoom.RoomDescription}
+          </p>
+          <p className="text-justify">
+            <Calendar3 className="inline-block w-6 h-6 mr-2 text-pink-500" />
+            <span className="font-bold text-gray-900">Created At:</span> {new Date(selectedRoom.createdAt).toLocaleString()}
+          </p>
+          <p className="text-justify">
+            <Calendar2 className="inline-block w-6 h-6 mr-2 text-purple-500" />
+            <span className="font-bold text-gray-900">Updated At:</span> {new Date(selectedRoom.updatedAt).toLocaleString()}
+          </p>
+        </div>
+        <div className="mt-5 px-[-16] py-[-8] flex justify-end">
+          <Button
+            onClick={handleCancel}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-1 px-4 rounded-full shadow-md transition-colors duration-300"
+          >
+            OK
+          </Button>
+        </div>
+      </div>
+    </div>
+  )}
+</Modal>
+
                                 </div>
                                 <div className='flex min-[800px]:flex-row flex-col flex-basis'>
                                     <div className='my-auto text-2xl font-bold text-slate-500 basis-1/4'>
@@ -118,7 +265,7 @@ const BookingCard = () => {
                                     </div>
                                     <Space className='flex w-full' direction="vertical" size={12}>
                                         <RangePicker
-                                        className=' bg-slate-800 border border-slate-950 py-3 px-6 w-full'
+                                        className=' bg-slate-800 border border-slate-950 py-2.5 px-6 w-full'
                                         showTime={{
                                             format: 'HH:mm',
                                         }}
