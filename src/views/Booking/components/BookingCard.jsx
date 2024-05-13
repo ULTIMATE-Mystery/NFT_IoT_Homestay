@@ -6,6 +6,7 @@ import { ConnectWallet } from "@thirdweb-dev/react";
 import Message from 'components/Message';
 import { CONTRACT_ADDRESS } from 'utils/constant';
 import WaterPlant from 'icons/WaterPlant';
+import deviceService from 'apis/services/deviceService';
 import Info from 'icons/Info';
 import Home from 'icons/Home';
 import Calendar3 from 'icons/Calendar3';
@@ -25,46 +26,25 @@ const BookingCard = () => {
     const [selectedRoom, setSelectedRoom] = useState(undefined);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [roomData, setRoomData] = useState([]);
 
-    // Simulated room data
-    const roomData = [
-        {
-            "RoomID": 1,
-            "RoomName": "Room 101",
-            "RoomStatus": "BOOKED",
-            "AccessKey": null,
-            "RoomDescription": "This room is elegantly furnished with handmade furniture include luxury en-suite facilities with complimentary amenities pack, flat screen LCD TV, tea/coffee making facilities, fan, hairdryer and the finest pure white linen and towels.",
-            "createdAt": "2024-05-10T03:13:38.000Z",
-            "updatedAt": "2024-05-12T11:53:34.000Z"
-        },
-        {
-            "RoomID": 2,
-            "RoomName": "Room 201",
-            "RoomStatus": "AVAILABLE",
-            "AccessKey": null,
-            "RoomDescription": "As our smallest budget rooms, the Compact bedrooms are suited for single occupancy or short-stay double occupancy as they have limited space and storage.",
-            "createdAt": "2024-05-10T03:14:44.000Z",
-            "updatedAt": "2024-05-10T03:14:44.000Z"
-        },
-        {
-            "RoomID": 3,
-            "RoomName": "Room 202",
-            "RoomStatus": "BOOKED",
-            "AccessKey": null,
-            "RoomDescription": "Compact rooms suitable for single or short-stay double occupancy.",
-            "createdAt": "2024-05-10T13:35:08.000Z",
-            "updatedAt": "2024-05-10T13:35:08.000Z"
-        },
-        {
-            "RoomID": 4,
-            "RoomName": "Room 203",
-            "RoomStatus": "UNAVAILABLE",
-            "AccessKey": null,
-            "RoomDescription": "Compact rooms suitable for single or short-stay double occupancy.",
-            "createdAt": "2024-05-10T13:39:27.000Z",
-            "updatedAt": "2024-05-10T13:39:27.000Z"
+    const fetchRoomData = useCallback(async () => {
+        try {
+            const response = await deviceService.getRoom();
+            if (response?.data) {
+                setRoomData(response.data);
+            } else {
+                console.error('No data property in response:', response);
+                setRoomData([]); // Setting to empty if no data found
+            }
+        } catch (error) {
+            console.error('Failed to fetch room data:', error);
         }
-    ];
+    }, []);
+
+    useEffect(() => {
+        fetchRoomData();
+    }, [fetchRoomData]);
 
     const handleRoomChange = (value) => {
         const room = roomData.find(r => r.RoomID.toString() === value);
