@@ -8,12 +8,10 @@ import Message from 'components/Message';
 import Loading from 'components/Loading';
 
 const UserDashboard = ({ mode, setMode }) => {
-  // State to manage modals
   const [isModalCheckoutOpened, setModalCheckoutOpened] = useState(false);
   const [isModalReviewLogOpened, setModalReviewLogOpened] = useState(false);
   const [isModalConfirmOpened, setModalConfirmOpened] = useState(false);
 
-  // State for contract and checkout process
   const [contractId, selectContractId] = useState(-1);
   const [lastSuccessfulContractId, setLastSuccessfulContractId] = useState(
     Number(localStorage.getItem('lastSuccessfulContractId')) || -1
@@ -57,7 +55,7 @@ const UserDashboard = ({ mode, setMode }) => {
       Message.sendError('Cannot check out!');
     } finally {
       setIsLoading(false);
-      setModalConfirmOpened(false); // Ensure the modal is closed after the operation
+      setModalConfirmOpened(false);
     }
   };
 
@@ -99,25 +97,41 @@ const UserDashboard = ({ mode, setMode }) => {
           <div className="flex items-center space-x-3">
             <div className="font-bold text-slate-400 text-700">{contractId > -1 ? `NFT ID: ${contractId}` : 'No contract selected'}</div>
             <button onClick={() => { if (!isLoading) setModalCheckoutOpened(true); }}
-              class="w-fit border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-36 my-auto  rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold"
+              className="w-fit border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-36 my-auto  rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold"
               disabled={isLoading}>
-                <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
-              <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
-              <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
-              <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-600"></div>
-              <p class="z-10">{contractId===-1?"Select contract":"Change contract"}</p>
+                <div className="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
+              <div className="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
+              <div className="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
+              <div className="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-600"></div>
+              <p className="z-10">{contractId===-1?"Select contract":"Change contract"}</p>
             </button>
           </div>
           
           {isModalCheckoutOpened && (
             <Modal
-              open={isModalCheckoutOpened} onCancel={() => setModalCheckoutOpened(false)}
-              onOk={() => setModalCheckoutOpened(false)} width={1200}>
-              <Booked isButtonClicked={isModalCheckoutOpened}
-                page={"management"}
-                contractId={contractId}
-                selectContract={selectContract}
-                setModalCheckoutOpened={setModalCheckoutOpened} />
+              open={isModalCheckoutOpened} 
+              onCancel={() => setModalCheckoutOpened(false)}
+              footer={null} 
+              width={1200} 
+              centered
+              style={{ maxHeight: '95vh', overflowY: 'auto', padding: 0 }}
+              className="custom-modal"
+            >
+              <div className="relative pt-6">
+                {isLoading ? (
+                  <div className="flex items-center justify-center h-full">
+                    <Loading />
+                  </div>
+                ) : (
+                  <Booked 
+                    isButtonClicked={isModalCheckoutOpened}
+                    page={"management"}
+                    contractId={contractId}
+                    selectContract={selectContract}
+                    setModalCheckoutOpened={setModalCheckoutOpened} 
+                  />
+                )}
+              </div>
             </Modal>
           )}
         </div>
@@ -132,63 +146,71 @@ const UserDashboard = ({ mode, setMode }) => {
             {isLoading ? 'Checking Out...' : 'Check Out'}
           </button>
           {isModalConfirmOpened && (
-  <Modal
-    open={isModalConfirmOpened}
-    onCancel={() => setModalConfirmOpened(false)}
-    footer={null}
-    width={500}
-    centered
-  >
-    <div className='w-full text-center p-5'>
-      <h3 className='text-xl font-semibold mb-5'>Are you sure you want to check out?</h3>
-      <div>
-        <button onClick={() => {
-          handleCheckout(); // Call the handleCheckout function
-          setModalConfirmOpened(false); // Then close the modal
-        }}
-        className='mr-4 px-6 py-2 text-white font-semibold bg-green-500 hover:bg-green-600 rounded shadow hover:shadow-lg'>
-          Confirm
-        </button>
-        <button onClick={() => setModalConfirmOpened(false)}
-          className='px-6 py-2 text-white font-semibold bg-red-500 hover:bg-red-600 rounded shadow hover:shadow-lg'>
-          Cancel
-        </button>
-      </div>
-    </div>
-  </Modal>
-)}
+            <Modal
+              open={isModalConfirmOpened}
+              onCancel={() => setModalConfirmOpened(false)}
+              footer={null}
+              width={500}
+              centered
+            >
+              <div className='w-full text-center p-5'>
+                <h3 className='text-xl font-semibold mb-5'>Are you sure you want to check out?</h3>
+                <div>
+                  <button onClick={() => {
+                    handleCheckout(); // Call the handleCheckout function
+                    setModalConfirmOpened(false); // Then close the modal
+                  }}
+                  className='mr-4 px-6 py-2 text-white font-semibold bg-green-500 hover:bg-green-600 rounded shadow hover:shadow-lg'>
+                    Confirm
+                  </button>
+                  <button onClick={() => setModalConfirmOpened(false)}
+                    className='px-6 py-2 text-white font-semibold bg-red-500 hover:bg-red-600 rounded shadow hover:shadow-lg'>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </Modal>
+          )}
         </div>
         <div className='flex flex-row space-x-10 w-full justify-between'>
           <div className='text-xl text-slate-400 h-full align-center flex my-auto'>
             After checking out successfully, you can review the room logs here.
           </div>
           <div className="flex items-center space-x-3">
-  <div className="font-bold text-slate-400 text-700">{lastSuccessfulContractId > -1 ? `NFT ID: ${lastSuccessfulContractId}` : 'No room reviewed'}</div>
-  <button onClick={() => { if (!isLoading) setModalReviewLogOpened(true); }}
-    disabled={!checkoutSuccessful && lastSuccessfulContractId === -1 || isLoading}
-    className={`border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50 overflow-hidden h-[44px] w-32 my-auto rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold ${!checkoutSuccessful && lastSuccessfulContractId === -1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
-      <div className="absolute right-32 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
-      <div className="absolute right-2 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150 duration-500 bg-sky-800"></div>
-      <div className="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150 duration-500 bg-sky-700"></div>
-      <div className="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150 duration-500 bg-sky-600"></div>
-    <p className="z-10">Review Logs</p>
-  </button>
-</div>
+            <div className="font-bold text-slate-400 text-700">{lastSuccessfulContractId > -1 ? `NFT ID: ${lastSuccessfulContractId}` : 'No room reviewed'}</div>
+            <button onClick={() => { if (!isLoading) setModalReviewLogOpened(true); }}
+              disabled={!checkoutSuccessful && lastSuccessfulContractId === -1 || isLoading}
+              className={`border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50 overflow-hidden h-[44px] w-32 my-auto rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold ${!checkoutSuccessful && lastSuccessfulContractId === -1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                <div className="absolute right-32 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
+                <div className="absolute right-2 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150 duration-500 bg-sky-800"></div>
+                <div className="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150 duration-500 bg-sky-700"></div>
+                <div className="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150 duration-500 bg-sky-600"></div>
+                <p className="z-10">Review Logs</p>
+            </button>
+          </div>
           {isModalReviewLogOpened && (
             <Modal
               footer={null}
               open={isModalReviewLogOpened}
               onCancel={() => setModalReviewLogOpened(false)}
-              onOk={() => setModalReviewLogOpened(false)}
               width={1200}
               centered
               style={{ maxHeight: '95vh', overflowY: 'auto', padding: 0 }}
+              className="custom-modal"
             >
-              {lastSuccessfulContractId !== -1 ? (
-                <LogCheckout isButtonClicked={isModalReviewLogOpened} contractId={lastSuccessfulContractId} />
-              ) : (
-                <div>No contract selected.</div>
-              )}
+              <div className="relative pt-4">
+                {isLoading ? (
+                  <div className="flex items-center justify-center h-full">
+                    <Loading />
+                  </div>
+                ) : (
+                  lastSuccessfulContractId !== -1 ? (
+                    <LogCheckout isButtonClicked={isModalReviewLogOpened} contractId={lastSuccessfulContractId} />
+                  ) : (
+                    <div>No contract selected.</div>
+                  )
+                )}
+              </div>
             </Modal>
           )}
         </div>
