@@ -1,8 +1,11 @@
 type Token @entity {
   id: ID!
-  approved: Boolean!
+  roomId: BigInt
+  provider: Bytes
+  renter: Bytes
+  approved: Boolean
   tokenId: BigInt!
-  owner: Bytes! # address
-  creator: Bytes! # address
-  price: BigInt!
+  owner: Bytes # address
+  creator: Bytes # address
+  price: BigInt
 }

@@ -1,2 +1,2 @@
 export const shortenAddress = (address) => address?
-  `${address.slice(0, 8)}...${address.slice(address.length - 6)}`:'undefined';
+  `${address.slice(0, 6)}...${address.slice(address.length - 4)}`:'undefined';

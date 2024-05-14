@@ -8,9 +8,9 @@ dataSources:
     name: Contract
     network: chapel
     source:
-      address: "0xcd38852b2b2A99235aAD35AB04512F5fA734B90a"
+      address: "0x432F042613703374B2183D64931ae7F4734DF11A"
       abi: Contract
-      startBlock: 0
+      startBlock: 40265409
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -27,4 +27,6 @@ dataSources:
           handler: handleMint
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+        - event: ListNFT(indexed address,uint256,uint256)
+          handler: handleListNFT
       file: ./src/contract.ts

@@ -5,6 +5,7 @@ import { CONTRACT_ADDRESS } from 'utils/constant';
 import {  DatePicker, Space  } from 'antd';
 import './Booking.scss';
 import { ConnectWallet } from "@thirdweb-dev/react";
+import { parseBigNumber } from 'utils/function/parseBigNumber';
 const { RangePicker } = DatePicker;
 
 
@@ -41,15 +42,24 @@ const BookingCard = () => {
         e.preventDefault();
         if (contract) {
             try {
+                const amountUsd = await contract.call('calculateRentAmount', [
+                    Math.floor(endTimestamp/1000)-Math.ceil(startTimestamp/1000),
+                ]);
+                //amount bnb by wei
+                const amountBnb = await contract.call('usdToBnb', [
+                    amountUsd,
+                ]);
+                console.log('amountBnb',parseBigNumber(amountBnb));
                 // Call the safeMint function
                 await contract.call('safeMint', [
                     roomId,
-                    1,
-                    startTimestamp,
-                    endTimestamp,
-                ]);
-
-                // Handle the response from the contract here
+                    0,
+                    Math.floor(startTimestamp/1000),
+                    Math.ceil(endTimestamp/1000),
+                ],{
+                    value: amountBnb,
+                });
+                
                 Message.sendSuccess('Successfully booked!');
             } catch (error) {
                 console.error('Error calling safeMint:', error);
