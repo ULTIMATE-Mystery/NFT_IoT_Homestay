@@ -1,43 +1,51 @@
-import React, { useState, useEffect } from "react";
-import { SearchOutlined, ExportOutlined } from "@ant-design/icons";
+import React, { useState, useEffect, useRef } from "react";
+import { SearchOutlined, ClearOutlined } from "@ant-design/icons";
 import Filter from "icons/Filter";
-import TransactionCard from "./TransactionCard";
 import LeftArrow from "icons/LeftArrow";
 import RightArrow from "icons/RightArrow";
-import { formatDate } from 'utils/function/formatDate';
-import { parseBigNumber } from 'utils/function/parseBigNumber';
-import GetAllContractsHomestay from "../GetAllContractsHomestay";
+import { useContractsData } from "./ContractsData";
 import Loading from "components/Loading";
+import { shortenAddress } from "utils/shortenAddress";
+import { formatDate } from "utils/function/formatDate";
 
 const Transactions = () => {
-  const { data, isLoading } = GetAllContractsHomestay();
+  const { data, isLoading } = useContractsData();
   const [mode, setMode] = useState(0);
-  const [filters, setFilters] = useState({
-    timestampStart: "",
-    timestampEnd: "",
-    roomId: "",
-    minPrice: "",
-    maxPrice: "",
-  });
-  const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
-  const [filteredData, setFilteredData] = useState(data);
-
   const itemsPerPage = 5; // Number of transactions per page
   const [currentPage, setCurrentPage] = useState(1);
+  const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
+  const [filterInputs, setFilterInputs] = useState({
+    timestampStart: '',
+    timestampEnd: '',
+    roomId: '',
+    minPrice: '',
+    maxPrice: ''
+  });
+  const [filters, setFilters] = useState({
+    timestampStart: '',
+    timestampEnd: '',
+    roomId: '',
+    minPrice: '',
+    maxPrice: ''
+  });
+  const [filteredData, setFilteredData] = useState([]);
+  const [filtersApplied, setFiltersApplied] = useState(false);
 
   useEffect(() => {
-    setFilteredData(data);
-  }, [data]);
+    if (data) {
+      applyFilters();
+    }
+  }, [data, filters]);
 
   // Calculate the index range for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
   // Slice the data to display only the rows for the current page
-  const currentData = filteredData ? filteredData.slice(startIndex, endIndex) : [];
+  const currentData = filteredData.slice(startIndex, endIndex);
 
   // Calculate the total number of pages
-  const totalPages = Math.ceil((filteredData ? filteredData.length : 0) / itemsPerPage);
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const handlePageChange = (newPage) => {
     // Ensure the new page is within bounds
@@ -54,159 +62,183 @@ const Transactions = () => {
     setCurrentPage(clampedPage);
   };
 
-  const handleFilterChange = (key, value) => {
-    setFilters((prevFilters) => ({
+  const toggleFilterModal = () => {
+    setIsFilterModalVisible(!isFilterModalVisible);
+  };
+
+  const handleFilterChange = (filterName, value) => {
+    setFilterInputs(prevFilters => ({
       ...prevFilters,
-      [key]: value,
+      [filterName]: value
     }));
   };
 
-  const handleFilterButtonClick = () => {
-    setIsFilterModalVisible(true);
-  };
-
-  const handleFilterModalClose = () => {
-    setIsFilterModalVisible(false);
-  };
-
-  const toggleFilterModal = () => {
-    setIsFilterModalVisible((prevState) => !prevState);
-  };
-
   const applyFilters = () => {
-    let filtered = data || []; // Initialize filtered as an empty array if data is null or undefined
-  
-    // Timestamp filter
-    if ((filters.timestampStart || filters.timestampEnd) && !(!filters.timestampStart && !filters.timestampEnd)) {
-      filtered = filtered.filter((item) => {
-        const timestamp = new Date(item.timestamp);
-        if (filters.timestampStart && !filters.timestampEnd) {
-          const startDate = new Date(filters.timestampStart);
-          return timestamp >= startDate;
-} else if (!filters.timestampStart && filters.timestampEnd) {
-          const endDate = new Date(filters.timestampEnd);
-          return timestamp <= endDate;
-        } else if (filters.timestampStart && filters.timestampEnd) {
-          const startDate = new Date(filters.timestampStart);
-          const endDate = new Date(filters.timestampEnd);
-          return timestamp >= startDate && timestamp <= endDate;
-        }
-      });
+    let filtered = data;
+
+    if (filters.timestampStart) {
+      const startDate = new Date(filters.timestampStart).getTime();
+      filtered = filtered.filter(item => item.createTimestamp >= startDate);
     }
-  
-    // Room ID filter
+
+    if (filters.timestampEnd) {
+      const endDate = new Date(filters.timestampEnd).getTime();
+      filtered = filtered.filter(item => item.createTimestamp <= endDate);
+    }
+
     if (filters.roomId) {
-      const roomIds = filters.roomId.split(',').map(id => parseInt(id, 10));
-      filtered = filtered.filter((item) => roomIds.includes(item.roomId));
+      filtered = filtered.filter(item => item.roomId.toString() === filters.roomId);
     }
-  
-    // Price filter
-    if ((filters.minPrice || filters.maxPrice) && !(!filters.minPrice && !filters.maxPrice)) {
-      filtered = filtered.filter((item) => {
-        const price = parseFloat(item.price);
-        if (filters.minPrice && !filters.maxPrice) {
-          const minPrice = parseFloat(filters.minPrice);
-          return price >= minPrice;
-        } else if (!filters.minPrice && filters.maxPrice) {
-          const maxPrice = parseFloat(filters.maxPrice);
-          return price <= maxPrice;
-        } else if (filters.minPrice && filters.maxPrice) {
-          const minPrice = parseFloat(filters.minPrice);
-          const maxPrice = parseFloat(filters.maxPrice);
-          return price >= minPrice && price <= maxPrice;
-        }
-      });
+
+    if (filters.minPrice) {
+      filtered = filtered.filter(item => item.rentAmount >= parseFloat(filters.minPrice));
     }
-  
-    setFilteredData(filtered.length > 0 ? filtered : null);
-    setIsFilterModalVisible(false);
+
+    if (filters.maxPrice) {
+      filtered = filtered.filter(item => item.rentAmount <= parseFloat(filters.maxPrice));
+    }
+
+    setFilteredData(filtered);
   };
-  
+
+  const handleApplyFilters = () => {
+    setFilters(filterInputs);
+    setFiltersApplied(true);
+    setIsFilterModalVisible(false);
+    setCurrentPage(1);
+  };
+
+  const handleClearFilters = () => {
+    setFilters({
+      timestampStart: '',
+      timestampEnd: '',
+      roomId: '',
+      minPrice: '',
+      maxPrice: ''
+    });
+    setFilteredData(data);
+    if (filtersApplied) {
+      setCurrentPage(1);
+      setFiltersApplied(false);
+    }
+  };
+
+  const handleResetFilters = () => {
+    setFilterInputs({
+      timestampStart: '',
+      timestampEnd: '',
+      roomId: '',
+      minPrice: '',
+      maxPrice: ''
+    });
+  };
+
+  // Close modal when clicking outside
+  const modalRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setIsFilterModalVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
-      {/*Transaction history body */}
       <div className="w-full flex-row space-y-12">
-        {/*Search and filter*/}
-        <div className="w-full flex justify-between space-x-6">
-          {/*Search*/}
-          <div className="w-full flex flex-start p-2 bg-slate-800 rounded-lg">
-            <div className="w-full flex flex-cols w-full justify-between space-x-2">
-              <SearchOutlined />
-              <input
-                type="text"
-                placeholder="Search for transactions..."
-                className="bg-slate-800 flex w-full outline-none"
-              />
-            </div>
+        <div className="w-full flex justify-between items-center space-x-6">
+          <div className="w-full flex items-center p-2 bg-slate-800 rounded-lg">
+            <SearchOutlined className="mr-2" />
+            <input
+              type="text"
+              placeholder="Search for transactions..."
+              className="bg-slate-800 flex-grow outline-none"
+            />
           </div>
-          {/*Filter*/}
-          <button
-            className="border border-white rounded-lg flex flex-end p-2 justify-between space-x-2"
-            onClick={handleFilterButtonClick}
-          >
-            <Filter />
-            <p>Filter</p>
-          </button>
-          {/*Export*/}
-          <button className="border border-white rounded-lg flex flex-end p-2 justify-between space-x-2">
-            <ExportOutlined />
-            <p>Export</p>
-          </button>
+          <div className="flex space-x-2">
+            <button className="border border-white rounded-lg flex items-center p-2 space-x-2" onClick={toggleFilterModal}>
+              <Filter />
+              <p>Filter</p>
+            </button>
+            <button className="border border-white rounded-lg flex items-center p-2 space-x-2 w-[133px]" onClick={handleClearFilters}>
+              <ClearOutlined />
+              <p>Clear Filters</p>
+            </button>
+          </div>
         </div>
-        {/*Mode*/}
         <div className="flex space-x-4">
           <button
-            className={`${!mode ? "bg-slate-600" : "bg-slate-800"} p-3 rounded-lg`}
+            className={`${
+              !mode ? "bg-slate-600" : "bg-slate-800"
+            } p-3 rounded-lg`}
             onClick={() => setMode(0)}
           >
             All transactions
           </button>
           <button
-className={`${!mode ? "bg-slate-800" : "bg-slate-600"} p-3 rounded-lg`}
+            className={`${
+              !mode ? "bg-slate-800" : "bg-slate-600"
+            } p-3 rounded-lg`}
             onClick={() => setMode(1)}
           >
             Analytics
           </button>
         </div>
-        {/*Transactions card*/}
         {!mode ? (
           <div>
             <div className="w-full flex flex-row text-slate-500 p-4">
-              <div className="basis-1/12 flex justify-center">Nft ID</div>
-              <div className="basis-1/4 flex justify-center">Transaction hash</div>
-              <div className="basis-1/6 flex justify-center">Timestamp</div>
-              <div className="basis-1/4 flex justify-center flex justify-center">
-                From
-              </div>
-              <div className="basis-1/12 flex justify-center">Room ID</div>
-              <div className="basis-1/6 flex justify-center">Price</div>
+              <div className="basis-1/12 flex justify-center">NFT ID</div>
+              <div className="basis-1/3 flex justify-center">Time created</div>
+              <div className="basis-1/5 flex justify-center">Renter</div>
+              <div className="basis-1/5 flex justify-center">Room ID</div>
+              <div className="basis-1/5 flex justify-center">Price</div>
             </div>
             <div>
               {isLoading && (
-                <div className="w-full h-full py-40 flex justify-center">
+                <div className="py-40 flex justify-center w-fit mx-auto">
                   <Loading />
                 </div>
               )}
-              {filteredData && currentData.length > 0 && (
+              {currentData.length > 0 && (
                 <>
                   {currentData.map((data, index) => (
-                    <TransactionCard key={index} tokenId={parseInt(data)} filters={filters} />
+                    <div
+                      key={index}
+                      className="w-full flex flex-row bg-slate-800 mb-2 align-items-center align-center p-4 rounded-lg"
+                    >
+                      <div className="basis-1/12 flex justify-center">
+                        {data.tokenId}
+                      </div>
+                      <div className="basis-1/3 flex justify-center">
+                        {formatDate(data.createTimestamp)}
+                      </div>
+                      <div className="basis-1/5 flex justify-center">
+                        {shortenAddress(data.renter)}
+                      </div>
+                      <div className="basis-1/5 flex justify-center">
+                        {data.roomId}
+                      </div>
+                      <div className="basis-1/5 flex justify-center">
+                        {data.rentAmount} VNĐ
+                      </div>
+                    </div>
                   ))}
                 </>
               )}
-              {!isLoading && filteredData === null && (
-                <div>
-                  <div className="justify-center flex">
-                    <div className="text-4xl p-20 bg-gradient-to-r from-blue-700 via-sky-400 to-purple-600 bg-clip-text text-transparent w-fit mx-auto">
-                      No contracts data
-                    </div>
+              {!isLoading && currentData.length === 0 && (
+                <div className="justify-center flex">
+                  <div className="text-4xl p-20 bg-gradient-to-r from-blue-700 via-sky-400 to-purple-600 bg-clip-text text-transparent w-fit mx-auto">
+                    No contracts data match filtered.
                   </div>
                 </div>
               )}
             </div>
-
-            {/* Pagination Controls */}
             <div className="mt-4 mr-1 flex justify-end items-center">
               <div className="flex items-center space-x-2 ">
                 <button
@@ -223,14 +255,13 @@ className={`${!mode ? "bg-slate-800" : "bg-slate-600"} p-3 rounded-lg`}
                 >
                   <LeftArrow />
                 </button>
-                {/* Editable page number input with rounded square corners */}
                 <input
                   type="number"
                   value={currentPage}
                   onChange={handleInputChange}
                   className="w-14 text-white bg-slate-900 text-center border border-slate-700 rounded-md focus:outline-none"
                   min="1"
-max={totalPages}
+                  max={totalPages}
                 />
                 <span className="text-slate-500 dark:text-slate-300">
                   of {totalPages}
@@ -258,8 +289,14 @@ max={totalPages}
 
         {/* Filter Modal */}
         {isFilterModalVisible && (
-          <div className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-lg">
+          <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 transition-opacity duration-300 ease-in-out">
+            <div ref={modalRef} className="relative bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-lg transform transition-transform duration-300 ease-in-out">
+              <button
+                onClick={() => setIsFilterModalVisible(false)}
+                className="absolute top-0 right-0 m-3 text-white bg-transparent hover:bg-gray-700 focus:outline-none focus:bg-gray-700 rounded"
+              >
+                <span className="text-2xl">&times;</span> {/* Using '×' as the close icon */}
+              </button>
               <h2 className="text-3xl font-bold mb-8 text-white text-center">
                 Filter Options
               </h2>
@@ -274,7 +311,7 @@ max={totalPages}
                       <label className="text-white text-sm block mb-1">Start Date</label>
                       <input
                         type="date"
-                        value={filters.timestampStart}
+                        value={filterInputs.timestampStart}
                         onChange={(e) =>
                           handleFilterChange("timestampStart", e.target.value)
                         }
@@ -285,7 +322,7 @@ max={totalPages}
                       <label className="text-white text-sm block mb-1">End Date</label>
                       <input
                         type="date"
-                        value={filters.timestampEnd}
+                        value={filterInputs.timestampEnd}
                         onChange={(e) =>
                           handleFilterChange("timestampEnd", e.target.value)
                         }
@@ -297,19 +334,14 @@ max={totalPages}
 
                 <div>
                   <label className="uppercase text-gray-400 text-sm font-bold block mb-2">
-Room ID
+                    Room ID
                   </label>
                   <input
                     type="text"
-                    value={filters.roomId}
+                    value={filterInputs.roomId}
                     onChange={(e) => handleFilterChange("roomId", e.target.value)}
                     className="bg-gray-700 text-white rounded-lg w-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    list="roomIdOptions"
                   />
-                  <datalist id="roomIdOptions">
-                    <option value="1">Room 1</option>
-                    <option value="2">Room 2</option>
-                  </datalist>
                 </div>
 
                 <div>
@@ -321,7 +353,7 @@ Room ID
                       <label className="text-white text-sm block mb-1">Min Price</label>
                       <input
                         type="number"
-                        value={filters.minPrice}
+                        value={filterInputs.minPrice}
                         onChange={(e) => handleFilterChange("minPrice", e.target.value)}
                         className="bg-gray-700 text-white rounded-lg w-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
@@ -330,7 +362,7 @@ Room ID
                       <label className="text-white text-sm block mb-1">Max Price</label>
                       <input
                         type="number"
-                        value={filters.maxPrice}
+                        value={filterInputs.maxPrice}
                         onChange={(e) => handleFilterChange("maxPrice", e.target.value)}
                         className="bg-gray-700 text-white rounded-lg w-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
@@ -341,10 +373,16 @@ Room ID
 
               <div className="mt-10 text-center">
                 <button
-                  onClick={applyFilters}
+                  onClick={handleApplyFilters}
                   className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition duration-150 ease-in-out"
                 >
                   Apply Filters
+                </button>
+                <button
+                  onClick={handleResetFilters}
+                  className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition duration-150 ease-in-out ml-4"
+                >
+                  Reset Filters
                 </button>
               </div>
             </div>
