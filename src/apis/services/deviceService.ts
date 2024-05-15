@@ -23,13 +23,7 @@ class DeviceService extends ApiBase {
         };
         return this.post(url, { body });
     };
-    scanRFID = () => {
-        const url = '/room/scan-rfid';
-        const body = {
-            roomId: 1,
-        };
-        return this.post(url, { body });
-    };
+
     getDeviceData = () => {
         const url = '/device';
         return this.get(url, {});

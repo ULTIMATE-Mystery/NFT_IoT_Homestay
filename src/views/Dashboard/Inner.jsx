@@ -15,6 +15,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAddress } from '@thirdweb-dev/react';
 import Message from 'components/Message';
 import Loading from 'components/Loading';
+import socket from 'utils/socket';
+import deviceService from '../../apis/services/deviceService';
 
 const Inner = memo(({ roomId }) => {
     const chartOptions = useMemo(() => {
@@ -49,6 +51,11 @@ const Inner = memo(({ roomId }) => {
         //     navigate('/');
         //     Message.sendError('You need to connect wallet first!');
         // }
+        //console.log('roomData?.RoomOwner', response?.data?.RoomOwner, address);
+        if (address !== response?.data?.RoomOwner) {
+            navigate('/');
+            Message.sendError('You do not have permission to access this room!');
+        }
         if (response?.data?.RoomStatus === 'BOOKED' && response?.data?.AccessKey === null) {
             setIsModalOpen(true);
         } else {
@@ -72,7 +79,7 @@ const Inner = memo(({ roomId }) => {
                 timeoutId = setTimeout(() => {
                     fetchRoomData();
                     setIsLoading(false);
-                }, 5000); // 5000 milliseconds = 5 seconds
+                }, 3000); // 5000 milliseconds = 5 seconds
             }
             loadingTimeoutId = setTimeout(() => {
                 setIsLoading(false);
@@ -80,7 +87,7 @@ const Inner = memo(({ roomId }) => {
                     navigate('/');
                     Message.sendError('You need to connect wallet first!');
                 }
-            }, 5000);
+            }, 3000);
 
         };
       
@@ -91,8 +98,43 @@ const Inner = memo(({ roomId }) => {
           clearTimeout(timeoutId);
           clearTimeout(loadingTimeoutId);
         };
-    }, [fetchRoomData, address, navigate]);
-      
+    }, [fetchRoomData, address, navigate, roomData?.roomOwner]);
+
+    const [switchStatus, setSwitchStatus] = useState([false, false, false, false]);
+    const [isFinishLoading, setIsFinishLoading] = useState(false);
+    const getLatestSwitchStatus = useCallback(async () => {
+        setIsFinishLoading(false);
+        for (let i = 1; i <= 4; i++) {
+            const response = await deviceService.getLatestValue('socket-' + i.toString());
+            setSwitchStatus((prev) => {
+                const newSwitchStatus = [...prev];
+                newSwitchStatus[i - 1] = response?.data?.value === '1' ? true : false;
+                return newSwitchStatus;
+            });
+        }
+        setIsFinishLoading(true);
+        
+    }, []);
+    useEffect(() => {
+        getLatestSwitchStatus();
+    }, [getLatestSwitchStatus]);
+    useEffect(() => {
+        socket.on('receive_data', (receivedFeed, receivedValue, receivedTs) => {
+
+            if (receivedFeed === 'socket-1' || receivedFeed === 'socket-2' || receivedFeed === 'socket-3' || receivedFeed === 'socket-4') {
+                setIsFinishLoading(false);
+                const index = parseInt(receivedFeed.split('-')[1]) - 1;
+                setSwitchStatus((prev) => {
+                    const newSwitchStatus = [...prev];
+                    newSwitchStatus[index] = receivedValue ? true : false;
+                    return newSwitchStatus;
+                });
+                setIsFinishLoading(true);
+                console.log('Receive at: ', Date.now());
+
+            }
+        });
+    }, []);  
     return (
         !isLoading ? (
         !isModalOpen ? (
@@ -113,7 +155,7 @@ const Inner = memo(({ roomId }) => {
                 title="Power usage"
                 feed="power-usage"
                 icon={<Lightning size={24} />}
-                unit="W"
+                unit="kWh"
             />
             {/* <DashboardSwitch
                 title="Electric socket #1"
@@ -125,8 +167,8 @@ const Inner = memo(({ roomId }) => {
                 checkedText="ON"
                 uncheckedText="OFF"
             /> */}
-            <RelaySwitch />
-            <RFID title="Door access" />
+            <RelaySwitch switchStatus={switchStatus} isFinishLoading={isFinishLoading}/>
+            <RFID title="Door access" roomId={roomId} address={address} />
             <DashboardChart
                 defaultOption={chartOptions[0]}
                 options={chartOptions}
@@ -137,7 +179,7 @@ const Inner = memo(({ roomId }) => {
             <RegisterModal open={isModalOpen} roomData={roomData} />
         )
     ) : (
-        <div className="flex items-center justify-center h-screen">
+        <div className="flex items-center justify-center" style={{color: 'rgba(0,0,0,0.5)', height: 'calc(100vh - 48px)'}}>
             <Loading />
         </div>
     ));

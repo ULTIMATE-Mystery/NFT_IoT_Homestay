@@ -16,8 +16,15 @@ class RoomService extends ApiBase {
             ownerId: ownerId,
         };
         return this.put(url, { body });
-    
     }
+    scanRfid = (roomId: number, value: string) => {
+        const url = '/room/rfid/scan';
+        const body = {
+            roomId: roomId,
+            value: value,
+        };
+        return this.put(url, { body });
+    };
 }
 
 const roomService = new RoomService();

@@ -106,6 +106,7 @@ const DashboardChart: FC<DashboardChartProps> = ({
                 };
                 setChartData(prevData => [...prevData, newData]);
             }
+            
         });
     }, [currentFeed]);
     // useEffect(() => {
@@ -232,6 +233,7 @@ const DashboardChart: FC<DashboardChartProps> = ({
                                 }))}
                                 onChange={value => {
                                     setCurrentFeed(value);
+                                    console.log('Feed:', value);
                                     setChartData([]);
                                 }}
                             />

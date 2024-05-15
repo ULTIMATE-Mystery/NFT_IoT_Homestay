@@ -1,4 +1,3 @@
-
 import { CheckCircleOutlined, CloseCircleOutlined, LoadingOutlined, WalletOutlined } from '@ant-design/icons';
 import { useAddress } from '@thirdweb-dev/react';
 import { Button, Form, Input, Modal, Steps } from 'antd';
@@ -56,14 +55,13 @@ const RegisterModal: FC<RegisterModalProps> = ({ open, roomData }) => {
             centered
             //okText={registerStep < 0 ? "Start register" : registerStep === 2 ? "Finish" : "Next"}
             cancelText="Go back"
+            closeIcon={null}
+            keyboard={false}
             footer={[
                 <Button 
                     key="back" 
                     disabled={(registerStatus === 'LOAD' && registerStep === 1) || registerStep === -1}
                     onClick={() => {
-                        // if (registerStep === 0) {
-                        //     setIsCurrentStepValid(true);
-                        // }
                         setRegisterStep(Math.max(registerStep - 1, -1))
                     }}
                 >
@@ -127,11 +125,11 @@ const RegisterModal: FC<RegisterModalProps> = ({ open, roomData }) => {
             ]}
         >
         <div style={{fontSize: '18px', fontWeight: 600, marginBottom: '8px'}}>
-            ACCESS KEY REQUIRED FOR {roomData?.RoomName.toUpperCase()}
+            ACCESS PERMISSION REQUIRED FOR {roomData?.RoomName.toUpperCase()}
         </div>
         {registerStep < 0 ? (
             <>
-                <p>If you have booked this room, please register your access key to use the dashboard.</p>
+                <p>If you have booked this room, please register your access permission to use the dashboard.</p>
                 <div 
                     style={{color: 'blue', cursor: 'pointer', margin: '6px 0'}} 
                     className="hover:underline" 
@@ -141,8 +139,8 @@ const RegisterModal: FC<RegisterModalProps> = ({ open, roomData }) => {
                 </div>
                 
                 <div style={{ display: isInstructionOpen ? 'block' : 'none', transition: 'display 1s'}}>
-                    <div>1. Enter your wallet address on the input and click "Confirm address" button.</div>
-                    <div>2. Click on "Write to card" button and start moving your RFID card near the reader (If you have not got the card, please contact the receptionist where you checked-in).</div> 
+                    <div>1. Check your wallet address on the input and click "Next" button.</div>
+                    <div>2. Start moving your RFID card near the reader (If you have not got the card, please contact the receptionist where you checked-in).</div> 
                     <div>3. After writing success, click on "Finish" button. Now you can access our smart dashboard feature. Enjoy your trip!</div>
                 </div>
             </>
@@ -166,7 +164,7 @@ const RegisterModal: FC<RegisterModalProps> = ({ open, roomData }) => {
                 />
                 {registerStep === 0 && (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                        <div>Please enter the wallet address that you have used to book this room.
+                        <div>This is the wallet address that you have used to book this room.
                             <div 
                                 onClick={() => {
                                     setRegisteredWalletAddress(address || '');
@@ -193,6 +191,7 @@ const RegisterModal: FC<RegisterModalProps> = ({ open, roomData }) => {
                                 size="large" 
                                 required 
                                 autoFocus 
+                                readOnly
                                 prefix={<WalletOutlined />}
                                 //defaultValue={registeredWalletAddress}
                                 //value={registeredWalletAddress}
@@ -228,6 +227,14 @@ const RegisterModal: FC<RegisterModalProps> = ({ open, roomData }) => {
 
                     </div>
                 )}
+                {
+                    registerStep === 2 && (
+                        <div className="flex flex-col items-center gap-[8px]">
+                            <CheckCircleOutlined style={{color: 'green', fontSize: '40px'}} />
+                            <div style={{color: 'green'}}>Register success! Click on Finish button to see the dashboard.</div>
+                        </div>
+                    )
+                }
             </>
         )}
     </Modal>

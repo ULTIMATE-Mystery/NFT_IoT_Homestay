@@ -96,9 +96,13 @@ $bg-color: #1f263c;
 .relay-switch-wrapper {
     @include d-flex(row, center, center);
     flex-wrap: wrap;
+    
     > div {
         width: 50%;
         @include d-flex(column, center, center);
+        margin: 8px 0;
+        gap: 4px;
+        
     }
 }
 

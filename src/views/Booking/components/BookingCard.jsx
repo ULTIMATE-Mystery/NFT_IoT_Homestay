@@ -42,6 +42,7 @@ const BookingCard = () => {
         if (contract) {
             try {
                 // Call the safeMint function
+                console.time('safeMint');
                 await contract.call('safeMint', [
                     roomId,
                     1,
@@ -51,6 +52,8 @@ const BookingCard = () => {
 
                 // Handle the response from the contract here
                 Message.sendSuccess('Successfully booked!');
+                console.timeEnd('safeMint');
+                
             } catch (error) {
                 console.error('Error calling safeMint:', error);
                 Message.sendError('Oops! Your booking was not successful! Maybe check your bookings parameters and try again');
