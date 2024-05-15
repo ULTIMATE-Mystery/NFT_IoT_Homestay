@@ -47,7 +47,7 @@ const Inner = memo(({ lightStatus }) => {
                 icon={<Lightning size={24} />}
                 unit="W"
             />
-            <DashboardSwitch
+            {/* <DashboardSwitch
                 title="Room light"
                 icon={<Bulb size={24} />}
                 feed="light"
@@ -56,7 +56,7 @@ const Inner = memo(({ lightStatus }) => {
                 lastChanged={lightStatus.lastChanged}
                 checkedText="ON"
                 uncheckedText="OFF"
-            />
+            /> */}
             <RFID title="Door access" />
             <DashboardChart
                 // feed="temperature"

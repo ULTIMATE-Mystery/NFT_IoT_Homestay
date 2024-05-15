@@ -42,7 +42,8 @@ const Dashboard = memo(() => {
 
     return (
         <IoTLayout title="Dashboard">
-            {!isLoading && <Inner lightStatus={lightStatus} />}
+            {/* {!isLoading && <Inner lightStatus={lightStatus} />} */}
+            <Inner lightStatus={lightStatus}/>
         </IoTLayout>
     );
 });
