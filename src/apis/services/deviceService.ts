@@ -6,7 +6,7 @@ class DeviceService extends ApiBase {
         return this.get(url);
     };
     controlSwitch = (feedName: string, state: boolean) => {
-        const url = `/topic/${feedName}/data/create`;
+        const url = `/data/${feedName}/create`;
         const body = {
             value: state ? '1' : '0',
         };
@@ -23,13 +23,15 @@ class DeviceService extends ApiBase {
         };
         return this.post(url, { body });
     };
-    scanRFID = () => {
-        const url = '/room/scan-rfid';
-        const body = {
-            roomId: 1,
-        };
-        return this.post(url, { body });
+
+    getDeviceData = () => {
+        const url = '/device';
+        return this.get(url, {});
     };
+    getRoomData = (roomId: number) => {
+        const url = `/room/${roomId}`;
+        return this.get(url, {});
+    }
     getRoom = () => {
         const url ='/room';
         return this.get(url, {});

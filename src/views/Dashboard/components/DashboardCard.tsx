@@ -53,7 +53,7 @@ const DashboardCard: FC<DashboardCardProps> = ({ title, icon, feed, unit }) => {
                     value: receivedValue,
                     createdAt: receivedTs,
                 });
-                console.log(dateFormat(receivedTs, DEFAULT_DATE_TIME_FORMAT));
+                //console.log(dateFormat(receivedTs, DEFAULT_DATE_TIME_FORMAT));
             }
         });
     }, [feed]);

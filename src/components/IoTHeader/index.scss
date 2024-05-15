@@ -73,3 +73,23 @@ $sidebar-width: 240px;
     opacity: 0.33;
     display: block;
 }
+
+.iot-sidebar-options {
+    @include d-flex(column);
+    padding: 16px;
+    gap: 16px;
+    width: 100%;
+    &__item{
+        width: 100%;
+        padding: 12px;
+        &.active {
+            background-color: $color--text-disabled;
+            border-radius: 6px;
+        }
+        &:hover {
+            cursor: pointer;
+            background-color: $color--text-disabled;
+            border-radius: 6px;
+        }
+    }
+}

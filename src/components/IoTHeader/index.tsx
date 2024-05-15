@@ -18,12 +18,12 @@ const IoTHeader: FC = () => {
                         >
                             <Menu />
                         </div>
-                        <div className="text-xl">SDSC Smart Homestay</div>
+                        <div className="iot-header-title">SDSC Smart Homestay</div>
                     </div>
-                    <div className="iot-header__group">
+                    {/* <div className="iot-header__group">
                         <UserIcon2 />
                         Minh Phuc Vien
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <IoTSidebar

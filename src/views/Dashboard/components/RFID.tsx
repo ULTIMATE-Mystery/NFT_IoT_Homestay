@@ -1,23 +1,58 @@
 import { FC, memo, useCallback, useState, useEffect } from 'react';
 import { Button, Modal } from 'antd';
 import deviceService from 'apis/services/deviceService';
+import socket from 'utils/socket';
+import roomService from 'apis/services/roomService';
+import { useParams } from 'react-router-dom';
 interface RFIDProps {
     title?: string;
     icon?: any;
+    roomId: number,
+    address: string,
 }
 
-const RFID: FC<RFIDProps> = ({ title = '', icon = <></> }) => {
+const RFID: FC<RFIDProps> = ({ title = '', icon = <></>, roomId, address }) => {
     const [currentState, setCurrentState] = useState(-1);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [displayText, setDisplayText] = useState('None');
+    const [rfidStatus, setRfidStatus] = useState(false);
+
     const scanRFID = useCallback(async () => {
         try {
-            const response = await deviceService.scanRFID();
+            const response = await roomService.scanRfid(roomId, address);
             setCurrentState(response?.data);
+            if (response?.data?.result) {
+                setRfidStatus(!rfidStatus);
+            }
+ 
+        } catch (error) {
+            console.log(error);
+        }
+    }, [roomId, address, rfidStatus]);
+
+    const checkLatestRFID = useCallback(async () => {
+        try {
+            const response = await deviceService.getLatestValue('room-access');
+            setRfidStatus(response?.data.value);
         } catch (error) {
             console.log(error);
         }
     }, []);
+
+    useEffect(() => {
+        checkLatestRFID();
+    }, [checkLatestRFID]);
+
+    useEffect(() => {
+        socket.on('receive_data', (receivedFeed, receivedValue, receivedTs) => {
+            if (receivedFeed === 'room-access') {
+                if (receivedValue) {
+                    setRfidStatus(!rfidStatus);
+                }
+                //console.log(dateFormat(receivedTs, DEFAULT_DATE_TIME_FORMAT));
+            }
+        });
+    }, [rfidStatus]);
     // const checkRFIDScanningProgress = useCallback(async () => {
     //     try {
     //         const response = await deviceService.getLatestValue('room-access');
@@ -33,14 +68,20 @@ const RFID: FC<RFIDProps> = ({ title = '', icon = <></> }) => {
     // });
 
     useEffect(() => {
-        if (currentState === 1) {
-            setDisplayText('Correct card! Please enter!');
-        } else if (currentState === 0) {
-            setDisplayText('Wrong card! Please try again!');
-        } else {
-            setDisplayText('No card scanned!');
+        // if (currentState === 1) {
+        //     setDisplayText('Correct card! Please enter!');
+        // } else if (currentState === 0) {
+        //     setDisplayText('Wrong card! Please try again!');
+        // } else {
+        //     setDisplayText('No card scanned!');
+        // }
+        if (rfidStatus) {
+            setDisplayText('Door unlocked!');
         }
-    }, [currentState]);
+        else { 
+            setDisplayText('Door locked!');
+        }
+    }, [rfidStatus]);
     return (
         <div className="dashboard-card">
             <div className="dashboard-card__title">

@@ -45,6 +45,8 @@ const BookingCard = memo(() => {
             try {
                 await contract.call('safeMint', [roomData[selectedRoom]?.RoomID, 10000, startTimestamp, endTimestamp]);
                 Message.sendSuccess('Successfully booked!');
+                console.timeEnd('safeMint');
+                
             } catch (error) {
                 console.error('Error calling safeMint:', error);
                 Message.sendError('Oops! Your booking was not successful! Maybe check your bookings parameters and try again.');
