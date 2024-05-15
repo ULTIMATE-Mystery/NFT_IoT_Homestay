@@ -176,67 +176,67 @@ const BookingCard = () => {
                                 </button>
                                 {/* Modal for room details */}
                                 <Modal
-  title={null}
-  visible={isModalVisible}
-  footer={null}
-  onCancel={handleCancel}
-  className="bg-white text-gray-800 rounded-lg overflow-hidden mx-auto max-w-6xl shadow-2xl"
-  width={1150}
-  centered
->
-  {isLoading ? (
-    <div className="flex justify-center items-center h-96">
-      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
-    </div>
-  ) : selectedRoom && (
-    <div className="flex rounded-lg overflow-hidden">
-      <div className="w-1/2">
-        <img
-          src={homestay1}
-          alt="Room image"
-          className="w-full h-full object-cover rounded-l-lg"
-        />
-      </div>
-      <div className="w-1/2 p-8 bg-white rounded-r-lg">
-        <h3 className="text-3xl font-semibold text-gray-900 mb-6">
-          {selectedRoom.RoomName}
-        </h3>
-        <div className="grid grid-cols-1 gap-y-4 text-lg text-gray-700 mb-10 overflow-auto">
-          <p className="text-justify">
-            <WaterPlant className="inline-block w-6 h-6 mr-2 text-green-500" />
-            <span className="font-bold text-gray-900">Room ID:</span> {selectedRoom.RoomID}
-          </p>
-          <p className="text-justify flex items-center">
-            <Info className="inline-block w-6 h-6 mr-2 text-blue-500" />
-            <span className="font-bold text-gray-900" style={{ marginRight: '8px' }}>Status:</span> 
-            {selectedRoom.RoomStatus}
-            <span className={`inline-block w-3 h-3 ml-2 rounded-full ${selectedRoom.RoomStatus === 'AVAILABLE' ? 'bg-green-500' : selectedRoom.RoomStatus === 'BOOKED' ? 'bg-red-500' : 'bg-gray-500'}`} />
-          </p>
-          <p className="text-justify overflow-visible">
-            <Home className="inline-block w-6 h-6 mr-2 text-yellow-500" />
-            <span className="font-bold text-gray-900">Description:</span> {selectedRoom.RoomDescription}
-          </p>
-          <p className="text-justify">
-            <Calendar3 className="inline-block w-6 h-6 mr-2 text-pink-500" />
-            <span className="font-bold text-gray-900">Created At:</span> {new Date(selectedRoom.createdAt).toLocaleString()}
-          </p>
-          <p className="text-justify">
-            <Calendar2 className="inline-block w-6 h-6 mr-2 text-purple-500" />
-            <span className="font-bold text-gray-900">Updated At:</span> {new Date(selectedRoom.updatedAt).toLocaleString()}
-          </p>
-        </div>
-        <div className="mt-5 px-[-16] py-[-8] flex justify-end">
-          <Button
-            onClick={handleCancel}
-            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-1 px-4 rounded-full shadow-md transition-colors duration-300"
-          >
-            OK
-          </Button>
-        </div>
-      </div>
-    </div>
-  )}
-</Modal>
+                                    title={null}
+                                    open={isModalVisible}
+                                    footer={null}
+                                    onCancel={handleCancel}
+                                    className="bg-white text-gray-800 rounded-lg overflow-hidden mx-auto max-w-6xl shadow-2xl"
+                                    width={1150}
+                                    centered
+                                >
+                                    {isLoading ? (
+                                        <div className="flex justify-center items-center h-96">
+                                        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+                                        </div>
+                                    ) : selectedRoom && (
+                                        <div className="flex rounded-lg overflow-hidden">
+                                        <div className="w-1/2">
+                                            <img
+                                            src={homestay1}
+                                            alt="Room background"
+                                            className="w-full h-full object-cover rounded-l-lg"
+                                            />
+                                        </div>
+                                        <div className="w-1/2 p-8 bg-white rounded-r-lg">
+                                            <h3 className="text-3xl font-semibold text-gray-900 mb-6">
+                                            {selectedRoom.RoomName}
+                                            </h3>
+                                            <div className="grid grid-cols-1 gap-y-4 text-lg text-gray-700 mb-10 overflow-auto">
+                                            <p className="text-justify">
+                                                <WaterPlant className="inline-block w-6 h-6 mr-2 text-green-500" />
+                                                <span className="font-bold text-gray-900">Room ID:</span> {selectedRoom.RoomID}
+                                            </p>
+                                            <p className="text-justify flex items-center">
+                                                <Info className="inline-block w-6 h-6 mr-2 text-blue-500" />
+                                                <span className="font-bold text-gray-900" style={{ marginRight: '8px' }}>Status:</span> 
+                                                {selectedRoom.RoomStatus}
+                                                <span className={`inline-block w-3 h-3 ml-2 rounded-full ${selectedRoom.RoomStatus === 'AVAILABLE' ? 'bg-green-500' : selectedRoom.RoomStatus === 'BOOKED' ? 'bg-red-500' : 'bg-gray-500'}`} />
+                                            </p>
+                                            <p className="text-justify overflow-visible">
+                                                <Home className="inline-block w-6 h-6 mr-2 text-yellow-500" />
+                                                <span className="font-bold text-gray-900">Description:</span> {selectedRoom.RoomDescription}
+                                            </p>
+                                            <p className="text-justify">
+                                                <Calendar3 className="inline-block w-6 h-6 mr-2 text-pink-500" />
+                                                <span className="font-bold text-gray-900">Created At:</span> {new Date(selectedRoom.createdAt).toLocaleString()}
+                                            </p>
+                                            <p className="text-justify">
+                                                <Calendar2 className="inline-block w-6 h-6 mr-2 text-purple-500" />
+                                                <span className="font-bold text-gray-900">Updated At:</span> {new Date(selectedRoom.updatedAt).toLocaleString()}
+                                            </p>
+                                            </div>
+                                            <div className="mt-5 px-[-16] py-[-8] flex justify-end">
+                                            <Button
+                                                onClick={handleCancel}
+                                                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-1 px-4 rounded-full shadow-md transition-colors duration-300"
+                                            >
+                                                OK
+                                            </Button>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    )}
+                                    </Modal>
 
                                 </div>
                                 <div className='flex min-[800px]:flex-row flex-col flex-basis'>
