@@ -30,6 +30,10 @@ class DeviceService extends ApiBase {
         };
         return this.post(url, { body });
     };
+    getRoom = () => {
+        const url ='/room';
+        return this.get(url, {});
+    }
     // getAllValues = (params: any) => {
     //     const url = `/plugins/telemetry/DEVICE/${DEVICE_ID.DHT22}/values/timeseries`;
     //     return this.get(url, { params });
