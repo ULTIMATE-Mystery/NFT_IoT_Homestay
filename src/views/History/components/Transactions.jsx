@@ -9,7 +9,7 @@ import { shortenAddress } from "utils/shortenAddress";
 import { formatDate } from "utils/function/formatDate";
 
 const Transactions = () => {
-  const { data, isLoading } = useContractsData();
+  const { data, isLoading: isDataLoading } = useContractsData();
   const [mode, setMode] = useState(0);
   const itemsPerPage = 5; // Number of transactions per page
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,6 +30,7 @@ const Transactions = () => {
   });
   const [filteredData, setFilteredData] = useState([]);
   const [filtersApplied, setFiltersApplied] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     if (data) {
@@ -74,6 +75,7 @@ const Transactions = () => {
   };
 
   const applyFilters = () => {
+    setLoading(true);
     let filtered = data;
 
     if (filters.timestampStart) {
@@ -99,16 +101,24 @@ const Transactions = () => {
     }
 
     setFilteredData(filtered);
+    setLoading(false);
   };
 
   const handleApplyFilters = () => {
     setFilters(filterInputs);
     setFiltersApplied(true);
     setIsFilterModalVisible(false);
-    setCurrentPage(1);
+    if (Object.values(filterInputs).some(value => value !== '')) {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        setCurrentPage(1);
+      }, 500); // simulate loading time
+    }
   };
 
   const handleClearFilters = () => {
+    const hasFilters = Object.values(filters).some(value => value !== '');
     setFilters({
       timestampStart: '',
       timestampEnd: '',
@@ -117,9 +127,15 @@ const Transactions = () => {
       maxPrice: ''
     });
     setFilteredData(data);
-    if (filtersApplied) {
-      setCurrentPage(1);
-      setFiltersApplied(false);
+    if (hasFilters) {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        if (filtersApplied) {
+          setCurrentPage(1);
+          setFiltersApplied(false);
+        }
+      }, 500); // simulate loading time
     }
   };
 
@@ -200,12 +216,11 @@ const Transactions = () => {
               <div className="basis-1/5 flex justify-center">Price</div>
             </div>
             <div>
-              {isLoading && (
+              {isDataLoading || isLoading ? (
                 <div className="py-40 flex justify-center w-fit mx-auto">
                   <Loading />
                 </div>
-              )}
-              {currentData.length > 0 && (
+              ) : currentData.length > 0 ? (
                 <>
                   {currentData.map((data, index) => (
                     <div
@@ -230,11 +245,10 @@ const Transactions = () => {
                     </div>
                   ))}
                 </>
-              )}
-              {!isLoading && currentData.length === 0 && (
+              ) : (
                 <div className="justify-center flex">
                   <div className="text-4xl p-20 bg-gradient-to-r from-blue-700 via-sky-400 to-purple-600 bg-clip-text text-transparent w-fit mx-auto">
-                    No contracts data match filtered.
+                    No transactions match the current filters
                   </div>
                 </div>
               )}
