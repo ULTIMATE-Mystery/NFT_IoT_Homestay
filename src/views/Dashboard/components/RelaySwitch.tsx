@@ -36,7 +36,7 @@ const RelaySwitch: FC<RelaySwitchProps> = ({
                     <div>
                         <span style={{fontSize: 14}}>Socket #1</span>
                         <Switch
-                            value={switchStatus[0]}
+                            checked={switchStatus[0]}
                             onChange={status => handleControlSwitch(1, status)}
                             checkedChildren="ON"
                             unCheckedChildren="OFF"
@@ -45,7 +45,7 @@ const RelaySwitch: FC<RelaySwitchProps> = ({
                     <div>
                         <span style={{fontSize: 14}}>Socket #2</span>
                         <Switch
-                            value={switchStatus[1]}
+                            checked={switchStatus[1]}
                             onChange={status => handleControlSwitch(2, status)}
                             checkedChildren="ON"
                             unCheckedChildren="OFF"
@@ -54,7 +54,7 @@ const RelaySwitch: FC<RelaySwitchProps> = ({
                     <div>
                         <span style={{fontSize: 14}}>Socket #3</span>
                         <Switch
-                            value={switchStatus[2]}
+                            checked={switchStatus[2]}
                             onChange={status => handleControlSwitch(3, status)}
                             checkedChildren="ON"
                             unCheckedChildren="OFF"
@@ -63,7 +63,7 @@ const RelaySwitch: FC<RelaySwitchProps> = ({
                     <div>
                         <span style={{fontSize: 14}}>Socket #4</span>
                         <Switch
-                            value={switchStatus[3]}
+                            checked={switchStatus[3]}
                             onChange={status => handleControlSwitch(4, status)}
                             checkedChildren="ON"
                             unCheckedChildren="OFF"
