@@ -8,7 +8,8 @@ import { Modal } from 'antd';
 import BookedCard from './BookedCard';
 import homestay4 from 'assets/image/homestay/homestay4.jpg';
 import { CONTRACT_ADDRESS, MARKETPLACE_ADDRESS } from 'utils/constant';
-
+import { useQuery, gql } from '@apollo/client';
+import { hexToBigInt } from 'thirdweb';
 
 
 const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened}) => {
@@ -33,9 +34,25 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened}) 
     ]);
     setApprovedForAll(IsApprovedForAll);
   }
+  const prefix = `"0x${tokenId}"`;
+  const GET_TOKENS = gql`
+    {
+        tokens(where: {id: ${prefix}}) {
+          id
+          roomId
+          provider
+          renter
+          creator
+          price
+        }
+      }
+  `;
+  const { loading, error, data:queryData } = useQuery(GET_TOKENS);
+    console.log(queryData);
   useEffect(()=>{
     getApprovedForAll();
   },[])
+
   return (
     <>{!isLoading && data &&(
       <div>
@@ -71,7 +88,7 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened}) 
       <Modal open={isViewClicked} onCancel={()=>setIsViewClicked(false)} 
       onOk={()=>setIsViewClicked(false)} width={1200}
       closable={false}>
-        <BookedCard tokenId={tokenId} page={page} isApprovedForAll={isApprovedForAll}>
+        <BookedCard tokenId={tokenId} page={page} isApprovedForAll={isApprovedForAll} queryData={queryData}>
         </BookedCard>
         </Modal>
       )}

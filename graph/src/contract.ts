@@ -17,7 +17,7 @@ import {
 } from "../generated/schema"
 
 export function handleApprovalForAll(event: ApprovalForAllEvent): void {
-
+  
 }
 
 
@@ -44,4 +44,20 @@ export function handleListNFT(event: ListNFTEvent): void {
     let token = Token.load(event.params.tokenId.toHexString());
     token!.price = event.params.price;
     token!.save();
+}
+export function handleBuyNFT(event: BuyNFTEvent): void {
+  let token = Token.load(event.params.tokenId.toHexString());
+  token!.price = event.params.price;
+  token!.owner = event.params.from;
+  token!.save();
+}
+export function handleUnlistNFT(event: UnlistNFTEvent): void {
+  let token = Token.load(event.params.tokenId.toHexString());
+  token!.price = null;
+  token!.save();
+}
+export function handleUpdateListingNFTPrice(event: UpdateListingNFTPriceEvent): void {
+  let token = Token.load(event.params.tokenId.toHexString());
+  token!.price = event.params.price;
+  token!.save();
 }
