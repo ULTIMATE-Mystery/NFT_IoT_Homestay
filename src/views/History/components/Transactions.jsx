@@ -240,7 +240,7 @@ const Transactions = () => {
                         {data.roomId}
                       </div>
                       <div className="basis-1/5 flex justify-center">
-                        {data.rentAmount} $
+                        ${data.rentAmount}
                       </div>
                     </div>
                   ))}
