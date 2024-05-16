@@ -240,7 +240,7 @@ const Transactions = () => {
                         {data.roomId}
                       </div>
                       <div className="basis-1/5 flex justify-center">
-                        {data.rentAmount} VNĐ
+                        {data.rentAmount} $
                       </div>
                     </div>
                   ))}
@@ -300,9 +300,10 @@ const Transactions = () => {
         ) : (
           <div></div>
         )}
-
-        {/* Filter Modal */}
-        {isFilterModalVisible && (
+      </div>
+      <div className="">
+         {/* Filter Modal */}
+         {isFilterModalVisible && (
           <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 transition-opacity duration-300 ease-in-out">
             <div ref={modalRef} className="relative bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-lg transform transition-transform duration-300 ease-in-out">
               <button
