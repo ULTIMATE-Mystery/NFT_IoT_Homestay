@@ -1,4 +1,4 @@
-import { memo, useState, useCallback, useEffect } from 'react';
+import { memo } from 'react';
 import IoTLayout from 'layouts/IoT';
 import Inner from './Inner';
 import { useParams } from 'react-router-dom';

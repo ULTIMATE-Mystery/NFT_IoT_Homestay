@@ -2,7 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Spin, Switch } from 'antd';
 import deviceService from 'apis/services/deviceService';
 import Plug from 'icons/Plug';
-import { memo, FC, useCallback, useState, useEffect } from 'react';
+import { memo, FC, useCallback } from 'react';
 
 interface RelaySwitchProps {
     //feed: string;

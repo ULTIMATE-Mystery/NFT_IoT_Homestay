@@ -34,7 +34,7 @@ const SmallCard = ({ tokenId, page, contractId, select, setModalCheckoutOpened }
             <div className="flex flex-col gap-2">
               <span className="text-xl font-bold text-white">Alex Homestay</span>
               <p className="text-sm text-slate-400">Room ID: {parseBigNumber(data[2])}</p>
-              <span className="text-lg font-bold text-green-600">{parseBigNumber(data[3])} VNĐ</span>
+              <span className="text-lg font-bold text-green-600">{parseBigNumber(data[3])} $</span>
               <button
                 className="hover:bg-sky-900 text-gray-50 bg-blue-950 py-2 rounded-md text-slate-300"
                 onClick={() => setIsClicked(true)}
