@@ -23,6 +23,7 @@ const Inner = memo(() => {
     useEffect(()=>{
         setMode(mode);
     },[mode])
+    
     return (
         <HomeLayout title="Management">
             {address === undefined ? (

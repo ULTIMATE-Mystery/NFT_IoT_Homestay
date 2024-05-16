@@ -1,60 +1,18 @@
-
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
 
-// const data = [
-//   {
-//     name: 'Page A',
-//     uv: 4000,
-//     pv: 2400,
-//     amt: 2400,
-//   },
-//   {
-//     name: 'Page B',
-//     uv: 3000,
-//     pv: 1398,
-//     amt: 2210,
-//   },
-//   {
-//     name: 'Page C',
-//     uv: 2000,
-//     pv: 9800,
-//     amt: 2290,
-//   },
-//   {
-//     name: 'Page D',
-//     uv: 2780,
-//     pv: 3908,
-//     amt: 2000,
-//   },
-//   {
-//     name: 'Page E',
-//     uv: 1890,
-//     pv: 4800,
-//     amt: 2181,
-//   },
-//   {
-//     name: 'Page F',
-//     uv: 2390,
-//     pv: 3800,
-//     amt: 2500,
-//   },
-//   {
-//     name: 'Page G',
-//     uv: 3490,
-//     pv: 4300,
-//     amt: 2100,
-//   },
-// ];
+const TotalCard = ({ data }) => {
+  const isLoading = data[1] === 'Loading...';
 
-
-const TotalCard = ({data}) => {
   return (
-    <div className='w-full h-full p-4 border border-slate-600 rounded-md p-2 flex flex-row justify-between'>
-        <div className="flex-col flex space-y-4 justify-between">
-          <div className='text-2xl'>{data[0]}</div>
-          <div className='text-3xl font-bold'>{data[1]}</div>
-          <button className='text-left text-blue-600'>View all</button>
+    <div className='w-full h-full p-4 border border-slate-600 rounded-md flex flex-row justify-between'>
+      <div className={`flex-col flex space-y-4 justify-between ${isLoading ? 'items-center justify-center' : ''}`}>
+        <div className='text-2xl'>{data[0]}</div>
+        <div className={`text-3xl font-bold ${isLoading ? 'flex justify-center items-center h-full' : ''}`}>
+          {data[1]}
         </div>
+        {!isLoading && <button className='text-left text-blue-600'>View all</button>}
+      </div>
+      {!isLoading && (
         <div className="flex-col flex justify-between">
           <div className='flex my-auto w-full'>
             <ResponsiveContainer width="100%" height="100%">
@@ -64,12 +22,13 @@ const TotalCard = ({data}) => {
             </ResponsiveContainer>
           </div>
           <div className='text-right justify-right flex flex-col'>
-            <div className={`font-bold text-xl ${data[2]>0?"text-green-600":"text-red-600"}`}>{data[2]}%</div>
+            <div className={`font-bold text-xl ${data[2] > 0 ? "text-green-600" : "text-red-600"}`}>{data[2]}%</div>
             <div>this month</div>
           </div>
         </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default TotalCard
+export default TotalCard;

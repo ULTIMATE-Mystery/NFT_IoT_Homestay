@@ -1,35 +1,41 @@
-import React, { PureComponent } from 'react';
-import { PieChart, Pie, Cell } from 'recharts';
+import React from 'react';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
-const data = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group D', value: 200 },
-];
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
-class SDPieChart extends PureComponent {
-  render() {
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
     return (
-      <PieChart width={300} height={300}>
+      <div className="custom-tooltip">
+        <p>{`Days Rented: ${payload[0].value}`}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
+
+const SDPieChart = ({ data, colors }) => {
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <PieChart>
         <Pie
           data={data}
-          cx={150}
-          cy={150}
+          cx="50%"
+          cy="50%"
           innerRadius={90}
           outerRadius={110}
           fill="#8884d8"
           paddingAngle={5}
           dataKey="value"
+          nameKey="name"
         >
           {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
           ))}
         </Pie>
+        <Tooltip content={<CustomTooltip />} />
       </PieChart>
-    );
-  }
+    </ResponsiveContainer>
+  );
 }
 
 export default SDPieChart;
