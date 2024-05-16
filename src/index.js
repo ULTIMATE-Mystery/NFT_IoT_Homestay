@@ -4,11 +4,15 @@ import App from "./App.js";
 import reportWebVitals from "./reportWebVitals.js";
 import { ThirdwebProvider, coinbaseWallet, embeddedWallet, metamaskWallet, phantomWallet, rainbowWallet, trustWallet, walletConnect, zerionWallet } from "@thirdweb-dev/react";
 import "scss/styles.scss";
+import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
 // This is the chain your dApp will work on.
 // Change this to the chain your app is built for.
 // You can also import additional chains from `@thirdweb-dev/chains` and pass them directly.
 const activeChain = "binance-testnet";
-
+const client = new ApolloClient({
+  uri: 'https://api.studio.thegraph.com/query/47492/homestaybooking/version/latest',
+  cache: new InMemoryCache(),
+});
 const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(
@@ -40,7 +44,9 @@ root.render(
     ]}
   >
 
-    <App />
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
   </ThirdwebProvider>
   // </React.StrictMode>
 );

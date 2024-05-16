@@ -183,11 +183,10 @@ className={`${!mode ? "bg-slate-800" : "bg-slate-600"} p-3 rounded-lg`}
               <div className="basis-1/6 flex justify-center">Price</div>
             </div>
             <div>
-              {isLoading && (
-                <div className="w-full h-full py-40 flex justify-center">
-                  <Loading />
-                </div>
-              )}
+              {isLoading && 
+              <div className='py-40 flex justify-center w-fit mx-auto'>
+                <Loading/>
+              </div>}
               {filteredData && currentData.length > 0 && (
                 <>
                   {currentData.map((data, index) => (
