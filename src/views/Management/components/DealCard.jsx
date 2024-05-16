@@ -3,7 +3,7 @@ import christmastree2 from 'assets/image/avatar/christmasTree2.png';  // Ensure 
 
 const DealCard = ({ renter, rentAmount }) => {
   const formattedAddress = renter ? `${renter.substring(0, 5)}...${renter.substring(renter.length - 4)}` : 'Loading...';
-  const displayAmount = rentAmount ? `${rentAmount} VNĐ` : 'Loading...';
+  const displayAmount = rentAmount ? `$${rentAmount}` : 'Loading...';
   const isLoading = formattedAddress === 'Loading...' || displayAmount === 'Loading...';
 
   return (

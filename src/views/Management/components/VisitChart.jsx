@@ -7,7 +7,7 @@ const CustomTooltip = ({ active, payload }) => {
     return (
       <div className="custom-tooltip">
         <p>{`Renter: ${payload[0].payload.name}`}</p>
-        <p>{`Rent Amount: ${payload[0].value} VNĐ`}</p>
+        <p>{`Rent Amount: $${payload[0].value}`}</p>
       </div>
     );
   }

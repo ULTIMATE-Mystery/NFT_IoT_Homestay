@@ -12,7 +12,7 @@ const OwnerDashboard = ({ mode, setMode }) => {
   const { totalRent, isLoading, totalUsers, totalContracts, totalTimeBooked, topDeals, percentageChanges } = useManagementData();
   const dataTotalCard = [
     ["Total Users", isLoading ? 'Loading...' : totalUsers, percentageChanges.users],
-    ["Total Revenue", isLoading ? 'Loading...' : `${totalRent} VNĐ`, percentageChanges.revenue],
+    ["Total Revenue", isLoading ? 'Loading...' : `$${totalRent}`, percentageChanges.revenue],
     ["Total Contracts", isLoading ? 'Loading...' : totalContracts, percentageChanges.contracts],
     ["Total Time Booked", isLoading ? 'Loading...' : `${totalTimeBooked} days`, percentageChanges.timeBooked],
   ];

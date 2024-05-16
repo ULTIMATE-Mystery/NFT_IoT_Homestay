@@ -81,7 +81,7 @@ const BookedCard = ({tokenId,page}) => {
               </div>
               <p className='flex justify-center
               font-[1000] bg-gradient-to-r from-sky-500 to-purple-500 text-transparent 
-              bg-clip-text'>{parseBigNumber(data[3])} VNĐ</p>
+              bg-clip-text'>${parseBigNumber(data[3])}</p>
             </div>
           </div>
           <div className='justify-center'>

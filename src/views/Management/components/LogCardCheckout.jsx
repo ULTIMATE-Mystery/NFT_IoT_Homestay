@@ -63,7 +63,7 @@ const LogCardCheckout = ({ tokenId }) => {
             const device = deviceData.find(d => Number(d.DeviceCode) === Number(parseBigNumber(item[0])));
             return (
               <div key={index} className='flex flex-cols justify-center w-full mb-4 border-b text-[13px] font-bold text-slate-600 py-2'>
-                <div className='basis-1/4 flex justify-center text-slate-500'>{device ? device.DeviceName : 'Unknown Device'}</div>
+                <div className='basis-2/4 flex justify-center text-slate-500'>{device ? device.DeviceName : 'Unknown Device'}</div>
                 <div className={`basis-1/4 flex justify-center ${parseBigNumber(item[1]) ? 'text-lime-400' : 'text-red-300'}`}>
                   {!parseBigNumber(item[1]) ? 'OFF' : parseBigNumber(item[1]) !== true ? parseBigNumber(item[1]) : 'ON'}
                 </div>

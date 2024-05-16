@@ -6,7 +6,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div className="custom-tooltip">
-        <p className="intro">{`Revenue: ${payload[0].value} VNĐ`}</p>
+        <p className="intro">{`Revenue: $${payload[0].value}`}</p>
       </div>
     );
   }
