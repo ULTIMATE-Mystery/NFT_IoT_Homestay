@@ -10,7 +10,6 @@ const Booked = ({ isButtonClicked,page,contractId,selectContract,setModalCheckou
     const select = (id)=>{
         selectContract(id);
     }
-    const [assetStatus, setAssetStatus] = useState("myasset");
     return (
         <>
             <div className="flex rounded-xl text-base mt-8 relative">
