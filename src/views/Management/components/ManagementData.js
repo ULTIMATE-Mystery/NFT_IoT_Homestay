@@ -58,8 +58,8 @@ export function useManagementData() {
                 const totalRent = rentDetails.reduce((acc, { rentAmount }) => acc + rentAmount, 0);
                 const totalUsers = new Set(rentDetails.map(({ renter }) => renter)).size;
                 const totalContracts = nftIds.length;
-                const totalTimeBookedMilliseconds = rentDetails.reduce((acc, { startTimestamp, endTimestamp }) => acc + (endTimestamp - startTimestamp), 0);
-                const totalTimeBookedDays = Math.round(totalTimeBookedMilliseconds / 86400000);
+                const totalTimeBookedSeconds = rentDetails.reduce((acc, { startTimestamp, endTimestamp }) => acc + (endTimestamp - startTimestamp), 0);
+                const totalTimeBookedDays = Math.round(totalTimeBookedSeconds / 86400);
 
                 // Current month and previous month details
                 const currentMonth = moment().startOf('month');
@@ -80,8 +80,8 @@ export function useManagementData() {
                 const currentMonthTimeBooked = currentMonthRentDetails.reduce((acc, { startTimestamp, endTimestamp }) => acc + (endTimestamp - startTimestamp), 0);
                 const previousMonthTimeBooked = previousMonthRentDetails.reduce((acc, { startTimestamp, endTimestamp }) => acc + (endTimestamp - startTimestamp), 0);
 
-                const currentMonthTimeBookedDays = Math.round(currentMonthTimeBooked / 86400000);
-                const previousMonthTimeBookedDays = Math.round(previousMonthTimeBooked / 86400000);
+                const currentMonthTimeBookedDays = Math.round(currentMonthTimeBooked / 86400);
+                const previousMonthTimeBookedDays = Math.round(previousMonthTimeBooked / 86400);
 
                 setTotalRent(totalRent);
                 setTotalUsers(totalUsers);
@@ -122,7 +122,7 @@ export function useManagementData() {
                 const renterDistArray = Object.values(renterDist)
                     .sort((a, b) => b.value - a.value)
                     .slice(0, 3)
-                    .map(item => ({ ...item, value: Math.round(item.value / 86400000) })); // Convert milliseconds to days
+                    .map(item => ({ ...item, value: Math.round(item.value / 86400) })); // Convert seconds to days
 
                 setRenterDistribution(renterDistArray);
 
@@ -162,7 +162,7 @@ export function useManagementData() {
 
         if (contract && address) {
             loadNFTData();
-            intervalId = setInterval(loadNFTData, 60000); // Refresh data every 60 seconds
+            intervalId = setInterval(loadNFTData, 300000); // Refresh data every 5 mins
         }
 
         return () => {

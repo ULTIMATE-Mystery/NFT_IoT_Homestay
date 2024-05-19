@@ -72,20 +72,24 @@ const UserDashboard = ({ mode, setMode }) => {
     <div className={`mt-4 mx-20 flex flex-col md:flex-row md:space-x-4 border-slate-800 border rounded-md bg-slate-900 ${isLoading ? 'relative loading-overlay' : ''}`}>
       {isLoading && (
         <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <Loading/>
+          <Loading />
         </div>
       )}
       <div className='w-full p-10 justify-between space-y-12'>
-        <div className='w-full flex justify-end'>
+        <div className='w-full flex justify-between'>
           <button onClick={() => { if (!isLoading) setMode("owner"); }}
             className="w-fit px-6 py-3 text-white font-semibold bg-gradient-to-r from-indigo-700 via-purple-500 to-pink-600 rounded-lg shadow-lg hover:scale-105 duration-200 hover:drop-shadow-2xl hover:shadow-[#7dd3fc] hover:cursor-pointer"
             disabled={isLoading}>
             Switch to owner's dashboard
           </button>
           <button onClick={clearLogs}
-            className="ml-4 px-4 py-2 bg-red-500 text-white font-semibold bg-gradient-to-r from-indigo-700 via-red-500 to via-red-500 rounded-lg shadow-lg hover:scale-105 duration-200 hover:drop-shadow-2xl hover:shadow-[#7dd3fc] hover:cursor-pointer">
-            Clear Room Data Logs
-          </button>
+            className={`w-fit border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-36 my-auto  rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold ${!checkoutSuccessful && lastSuccessfulContractId === -1 || isLoading ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={isLoading}>
+            <div className="absolute right-32 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
+            <div className="absolute right-2 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150 duration-500 bg-sky-800"></div>
+            <div className="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150 duration-500 bg-sky-700"></div>
+            <div className="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150 duration-500 bg-sky-600"></div>
+            <p className="z-10">Clear Room Log Data</p>
+        </button>
         </div>
         <div className='text-4xl font-bold text-slate-400'>
           Check out
@@ -97,8 +101,7 @@ const UserDashboard = ({ mode, setMode }) => {
           <div className="flex items-center space-x-3">
             <div className="font-bold text-slate-400 text-700">{contractId > -1 ? `NFT ID: ${contractId}` : 'No contract selected'}</div>
             <button onClick={() => { if (!isLoading) setModalCheckoutOpened(true); }}
-              className="w-fit border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-36 my-auto  rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold"
-              disabled={isLoading}>
+               className={`w-fit border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-36 my-auto  rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={isLoading}>
                 <div className="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
               <div className="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
               <div className="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
@@ -160,11 +163,13 @@ const UserDashboard = ({ mode, setMode }) => {
                     handleCheckout(); // Call the handleCheckout function
                     setModalConfirmOpened(false); // Then close the modal
                   }}
-                  className='mr-4 px-6 py-2 text-white font-semibold bg-green-500 hover:bg-green-600 rounded shadow hover:shadow-lg'>
+                  className='mr-4 px-6 py-2 w-fit text-white font-semibold bg-gradient-to-r from-blue-800 via-pink-400 via-purple-600 to-blue-600 shadow-lg hover:scale-110 duration-200 hover:drop-shadow-2xl hover:shadow-[#7dd3fc] hover:cursor-pointer
+                  hover:bg-gradient-to-bl font-bold rounded-md shadow-lg hover:scale-105 duration-200 hover:drop-shadow-2xl hover:shadow-[#7dd3fc] hover:cursor-pointer'>
                     Confirm
                   </button>
                   <button onClick={() => setModalConfirmOpened(false)}
-                    className='px-6 py-2 text-white font-semibold bg-red-500 hover:bg-red-600 rounded shadow hover:shadow-lg'>
+                    className='px-6 py-2 w-fit text-white font-semibold bg-gradient-to-r from-red-500 via-pink-400 via-red-600 to-pink-500 shadow-lg hover:scale-110 duration-200 hover:drop-shadow-2xl hover:shadow-[#7dd3fc] hover:cursor-pointer
+                    hover:bg-gradient-to-bl font-bold rounded-md shadow-lg hover:scale-105 duration-200 hover:drop-shadow-2xl hover:shadow-[#7dd3fc] hover:cursor-pointer'>
                     Cancel
                   </button>
                 </div>
@@ -174,18 +179,18 @@ const UserDashboard = ({ mode, setMode }) => {
         </div>
         <div className='flex flex-row space-x-10 w-full justify-between'>
           <div className='text-xl text-slate-400 h-full align-center flex my-auto'>
-            After checking out successfully, you can review the room logs here.
+          After successfully checking out, you can review the room log here.
           </div>
           <div className="flex items-center space-x-3">
             <div className="font-bold text-slate-400 text-700">{lastSuccessfulContractId > -1 ? `NFT ID: ${lastSuccessfulContractId}` : 'No room reviewed'}</div>
             <button onClick={() => { if (!isLoading) setModalReviewLogOpened(true); }}
               disabled={!checkoutSuccessful && lastSuccessfulContractId === -1 || isLoading}
-              className={`border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50 overflow-hidden h-[44px] w-32 my-auto rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold ${!checkoutSuccessful && lastSuccessfulContractId === -1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
+              className={`border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50 overflow-hidden h-[44px] w-32 my-auto rounded-md bg-sky-200 p-2 flex justify-center items-center font-extrabold ${!checkoutSuccessful && lastSuccessfulContractId === -1 || isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
                 <div className="absolute right-32 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-900"></div>
                 <div className="absolute right-2 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150 duration-500 bg-sky-800"></div>
                 <div className="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150 duration-500 bg-sky-700"></div>
                 <div className="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150 duration-500 bg-sky-600"></div>
-                <p className="z-10">Review Logs</p>
+                <p className="z-10">Review Log</p>
             </button>
           </div>
           {isModalReviewLogOpened && (
