@@ -27,7 +27,7 @@ const ProfitChart = () => {
   }
 
   return (
-    <div className='w-full h-[200px] py-4'>
+    <div className='w-full h-[250px] py-4'>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={roomRentals}>
           <Tooltip content={<CustomTooltip />} />
