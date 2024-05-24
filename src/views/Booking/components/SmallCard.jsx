@@ -12,9 +12,10 @@ import { useQuery, gql } from '@apollo/client';
 import { hexToBigInt } from 'thirdweb';
 
 
-const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened}) => {
+const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,price,roomId}) => {
   const { contract } = useContract(CONTRACT_ADDRESS);
-  const { data, isLoading } = useContractRead(contract, "getNFTInfo", [tokenId]);
+  // const { data, isLoading } = useContractRead(contract, "getNFTInfo", [tokenId]);
+  const [dataToken,setDataToken] = useState();
   const [isViewClicked,setIsViewClicked] = useState(false);
   const parseBigNumber = (value) => {
     return value ? value.toString() : "";
@@ -24,11 +25,10 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened}) 
     select(tokenId);
     setModalCheckoutOpened(false);
   }
-
-  const [isApprovedForAll,setApprovedForAll] = useState(false);
   const address = useAddress();
+  const [isApprovedForAll,setApprovedForAll] = useState(false);
   const getApprovedForAll = async () => {
-    const IsApprovedForAll = await contract.call("isApprovedForAll",[
+  const IsApprovedForAll = await contract.call("isApprovedForAll",[
       address,
       MARKETPLACE_ADDRESS
     ]);
@@ -44,14 +44,18 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened}) 
           renter
           creator
           price
+          owner
         }
       }
   `;
-  const { loading, error, data:queryData } = useQuery(GET_TOKENS);
-    console.log(queryData);
-  useEffect(()=>{
-    getApprovedForAll();
-  },[])
+  const { loading:isLoading, error, data } = useQuery(GET_TOKENS);
+  useEffect(() => {
+    if (contract && address) {
+      getApprovedForAll();
+    }
+    if (data) setDataToken(data);
+  }, [contract, address, data]);
+  console.log(tokenId,dataToken)
 
   return (
     <>{!isLoading && data &&(
@@ -69,9 +73,9 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened}) 
         <div class="flex flex-row justify-between">
           <div class="flex flex-col">
             <span class="text-xl font-bold text-white">Alex Homestay </span>
-            <p class="text-sm text-slate-400">Room ID: {parseBigNumber(data[2])}</p>
+            <p class="text-sm text-slate-400">Room ID: {roomId}</p>
           </div>
-          <span class="pt-0.5 font-bold  text-green-600">{parseBigNumber(data[3])}$</span>
+          <span class="pt-0.5 font-bold  text-green-600">{price?price:"0 "}$</span>
         </div>
         {/* <button class="hover:bg-sky-900 text-gray-50 bg-blue-950 py-2 rounded-md text-slate-300"
         onClick={()=>setIsViewClicked(true)}>
@@ -88,7 +92,7 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened}) 
       <Modal open={isViewClicked} onCancel={()=>setIsViewClicked(false)} 
       onOk={()=>setIsViewClicked(false)} width={1200}
       closable={false}>
-        <BookedCard tokenId={tokenId} page={page} isApprovedForAll={isApprovedForAll} queryData={queryData}>
+        <BookedCard tokenId={tokenId} page={page} isApprovedForAll={isApprovedForAll} queryData={data}>
         </BookedCard>
         </Modal>
       )}

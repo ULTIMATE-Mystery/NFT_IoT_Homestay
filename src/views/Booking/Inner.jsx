@@ -19,6 +19,7 @@ const Inner = memo(() => {
     const isButtonClicked = true;
     const address = useAddress();
     const { loading, error, data } = useQuery(GET_TOKENS);
+    // console.log(data)
 
     return (
         <>
