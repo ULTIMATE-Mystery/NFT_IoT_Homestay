@@ -14,7 +14,9 @@ const Booked = ({ isButtonClicked,page,contractId,selectContract,setModalCheckou
     const [tokens,setTokens] = useState([]);
     const GET_TOKENS = gql`
         {
-            tokens(where: {owner: ${formatAddress}}) {
+            tokens(where: {
+                owner: ${formatAddress}
+            }) {
             id
             roomId
             provider
@@ -28,7 +30,10 @@ const Booked = ({ isButtonClicked,page,contractId,selectContract,setModalCheckou
     `;
     const GET_LISTINGS = gql`
         {
-            tokens(where: {owner: ${formatMarketplaceAddress}}) {
+            tokens(where: {
+                owner: ${formatMarketplaceAddress}
+                renter: ${formatAddress}
+            }) {
                 id
                 roomId
                 provider
