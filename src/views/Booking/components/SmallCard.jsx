@@ -63,6 +63,10 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
   };
   
   useEffect(() => {
+    if (contract && address) {
+      getApprovedForAll();
+    }
+    if (data) setDataToken(data);
     const fetchConvertedPrice = async () => {
       if (data) {
         try {
@@ -74,7 +78,7 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
       }
     };
     fetchConvertedPrice();
-  }, [data, price]);
+  }, [data, price, contract, address]);
   
   console.log(tokenId,dataToken)
 
@@ -82,17 +86,32 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
     <>
       {!isLoading && data && (
         <div>
-          <div className="w-60 h-100 bg-slate-900 p-3 flex flex-col gap-1 rounded-2xl border border-sky-500 border-1 drop-shadow-lg" onClick={() => setIsViewClicked(true)}>
-            <div className="h-48 rounded-xl overflow-hidden">
-              <img src={homestay4} alt="Background" className="w-full h-full object-cover" />
+          <div className=" mx-auto justify-center w-60 h-100 bg-stone-950 flex flex-col rounded-2xl border border-slate-600 hover:border-sky-300 border-2 drop-shadow-lg shadow-lg" onClick={() => setIsViewClicked(true)}>
+            <div className="h-[250px] rounded-t-2xl overflow-hidden p-[2px]">
+              <img src={homestay4} alt="Background" className="w-full h-full object-cover rounded-t-lg" />
             </div>
-            <div className="flex flex-col gap-4 pb-4">
-              <div className="flex flex-row justify-between">
-                <div className="flex flex-col">
-                  <span className="text-xl font-bold text-white">Alex Homestay </span>
-                  <p className="text-sm text-slate-400">Room ID: {roomId}</p>
+            <div className={`${page === "management" ? "text-white" : ""} flex flex-col py-2 px-6 font-bold`}>
+              <div className="flex flex-row justify-between mb-2">
+                <div className="flex flex-col w-full">
+                  <div className="flex flex-row justify-between w-full">
+                    <div>
+                      <p className=' text-slate-400 '>Homestay</p>
+                      <div className='text-lg flex justify-start'>Alex</div>
+                    </div>
+                    <div className=''>
+                      <p className=' text-slate-400 '>Contract Id </p>
+                      <div className='text-lg flex justify-start'>{tokenId}</div>
+                    </div>
+                  </div>
                 </div>
-                <span className="pt-0.5 font-bold text-green-600">{convertedPrice ? `${convertedPrice} $` : "0 $"}</span>
+              </div>
+              {/* <div className='flex flex-row justify-between'>
+                      <p className='text-slate-400 w-full'>NFT Id </p>
+                      <div className='text-lg flex justify-end w-full'>{tokenId}</div>
+              </div> */}
+              <div className='flex flex-row justify-between'>
+                <p className='text-slate-400 w-full'>Price</p>
+                <div className="text-lg flex justify-end w-full text-green-600">{convertedPrice ? `${convertedPrice} $` : "0 $"}</div>
               </div>
               <button className={`${page === "booking" ? "hidden" : ""} hover:bg-sky-900 text-gray-50 bg-blue-950 py-2 rounded-md text-slate-300`} onClick={handleSelectContract}>
                 Select
