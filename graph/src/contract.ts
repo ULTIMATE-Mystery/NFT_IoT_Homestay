@@ -55,6 +55,7 @@ export function handleBuyNFT(event: BuyNFTEvent): void {
 export function handleUnlistNFT(event: UnlistNFTEvent): void {
   let token = Token.load(event.params.tokenId.toHexString());
   token!.price = null;
+  token!.owner = event.params.from;
   token!.save();
 }
 export function handleUpdateListingNFTPrice(event: UpdateListingNFTPriceEvent): void {
