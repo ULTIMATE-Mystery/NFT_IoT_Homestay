@@ -30,17 +30,17 @@ const OwnerDashboard = ({ mode, setMode }) => {
           </div>
         </div>
         <div className="order-3 md:order-2 basis-1/2 mb-4 flex flex-col space-y-4">
-          <div className="md:flex md:flex-col md:space-y-4 border border-slate-600 rounded-md p-4 space-y-4 h-full">
-            <div className='flex flex-col md:flex-row justify-between space-y-2 md:space-y-0 md:space-x-2 h-full'>
+          <div className="md:flex md:flex-col md:space-y-4 border border-slate-600 rounded-md p-4 space-y-4 h-fit">
+            <div className='flex flex-col md:flex-row justify-between space-y-2 md:space-y-0 md:space-x-2 h-fit xl:h-[221px]'>
               <TotalCard data={dataTotalCard[0]} />
               <TotalCard data={dataTotalCard[1]} />
             </div>
-            <div className='flex flex-col md:flex-row justify-between space-y-2 md:space-y-0 md:space-x-2 h-full'>
+            <div className='flex flex-col md:flex-row justify-between space-y-2 md:space-y-0 md:space-x-2 h-fit xl:h-[221px]'>
               <TotalCard data={dataTotalCard[2]} />
               <TotalCard data={dataTotalCard[3]} />
             </div>
           </div>
-          <div className="basis-1/2 2xl:max-h-[700px] lg:max-h-[600px] md:max-h-[450px] max-h-[300px] border border-slate-600 rounded-md p-4 overflow-hidden">
+          <div className="basis-1/2 2xl:max-h-[1200px] lg:max-h-[1000px] md:max-h-[800px] max-h-[300px] border border-slate-600 rounded-md p-4 overflow-hidden">
             <p className='text-2xl md:text-xl'>
               Revenue Analytics
             </p>
@@ -56,7 +56,7 @@ const OwnerDashboard = ({ mode, setMode }) => {
           <div className="basis-2/4 border border-slate-600 rounded-md p-4">
             <SourceDistributionCard />
           </div>
-          <div className="basis-1/4 max-h-[250px] border border-slate-600 rounded-md p-4">
+          <div className="basis-1/4 max-h-[206px] border border-slate-600 rounded-md p-4">
             <p>Top Rentals per Room</p>
             <ProfitChart />
           </div>
