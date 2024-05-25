@@ -46,6 +46,7 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData}) => {
     });
     
   }
+  console.log(queryData)
 
   const onClickListNft = async (tokenId,price) => {
      // e.preventDefault();
