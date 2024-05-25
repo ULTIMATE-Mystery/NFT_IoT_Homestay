@@ -47,9 +47,9 @@ const Booked = ({ isButtonClicked,page,contractId,selectContract,setModalCheckou
         `;
     const { loading:isLoading, error, data:queryData } = useQuery(GET_TOKENS);
     const { loading:isLoadingListings, error:errorListings, data:dataListings } = useQuery(GET_LISTINGS);
-    if (queryData) console.log(queryData.tokens[0].tokenId)
+    if (queryData) console.log(queryData.tokens)
     useEffect(()=>{
-    if (assetsStatus=="myassets") {
+    if (assetsStatus=="myassets"||page==="management") {
         if (queryData) 
             setTokens(queryData.tokens);
     }
@@ -58,7 +58,7 @@ const Booked = ({ isButtonClicked,page,contractId,selectContract,setModalCheckou
             setTokens(dataListings.tokens);
     }
        
-    },[assetsStatus,queryData,dataListings])
+    },[assetsStatus,queryData,dataListings,isLoading, isLoadingListings])
     const select = (id)=>{
         selectContract(id);
     }
@@ -81,6 +81,7 @@ const Booked = ({ isButtonClicked,page,contractId,selectContract,setModalCheckou
                                     setModalCheckoutOpened={setModalCheckoutOpened}
                                     price={data.price}
                                     roomId={data.roomId}
+                                    
                                 ></SmallCard>
                             ))}
                         </>

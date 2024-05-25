@@ -36,7 +36,12 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
     ]);
     setApprovedForAll(IsApprovedForAll);
   }
-  const prefix = `"0x${tokenId}"`;
+  const toHexString = (num) => {
+    return `"0x${parseInt(num).toString(16)}"`;
+  };
+
+  const prefix = toHexString(tokenId);
+  // const prefix = `"0x${tokenId}"`;
   const GET_TOKENS = gql`
     {
         tokens(where: {id: ${prefix}}) {
@@ -78,9 +83,9 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
       }
     };
     fetchConvertedPrice();
-  }, [data, price, contract, address]);
+  }, [data, price, contract, address, isLoading]);
   
-  console.log(tokenId,dataToken)
+  console.log(tokenId,prefix,dataToken)
 
   return (
     <>
@@ -113,7 +118,7 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
                 <p className='text-slate-400 w-full'>Price</p>
                 <div className="text-lg flex justify-end w-full text-green-600">{convertedPrice ? `${convertedPrice} $` : "0 $"}</div>
               </div>
-              <button className={`${page === "booking" ? "hidden" : ""} hover:bg-sky-900 text-gray-50 bg-blue-950 py-2 rounded-md text-slate-300`} onClick={handleSelectContract}>
+              <button className={`${page === "booking" ? "hidden" : ""} hover:bg-sky-800 text-slate-300 bg-blue-950 py-2 rounded-md w-full`} onClick={handleSelectContract}>
                 Select
               </button>
             </div>
