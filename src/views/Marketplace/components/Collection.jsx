@@ -1,8 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import homestayImg from 'assets/image/homestay/homestay6.jpg';
 import { DownOutlined, FilterOutlined, SearchOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Modal, Space, message } from 'antd';
 import HomestayNFTCard from './HomestayNFTCard';
+import { useAddress } from '@thirdweb-dev/react';
+import { MARKETPLACE_ADDRESS } from 'utils/constant';
+import { useQuery, gql } from '@apollo/client';
+import Loading from 'components/Loading';
+import SmallCard from 'views/Booking/components/SmallCard';
+
 
 const Collection = ({setNoCollection,index}) => {
     const [mode,setMode] = useState("item");
@@ -23,6 +29,25 @@ const Collection = ({setNoCollection,index}) => {
         Alexander: false,
         LayGarden: false,
     });
+    const [tokens,setTokens] = useState([]);
+    const address = useAddress();
+    const formatMarketplaceAddress = `"${MARKETPLACE_ADDRESS}"`;
+    const GET_LISTINGS = gql`
+        {
+            tokens(where: {owner: ${formatMarketplaceAddress}}) {
+                id
+                roomId
+                provider
+                renter
+                creator
+                price
+                owner
+                tokenId
+            }
+            }
+        `;
+
+    const { loading:isLoadingListings, error:errorListings, data:dataListings } = useQuery(GET_LISTINGS);
     const handleMenuClick = (e) => {
         message.info('Click on menu item.');
         console.log('click', e);
@@ -80,6 +105,14 @@ const Collection = ({setNoCollection,index}) => {
             [field]: !prev[field],
         }));
     } 
+    useEffect(()=>{
+
+    if (dataListings)
+        setTokens(dataListings.tokens);
+        
+           
+    },[dataListings])
+        
     const Filter = () => {
         return (
             <div className={`bg-slate-900 flex flex-col divide-y divide-slate-700 p-2 rounded-xl w-96 ${filterModal?"":"max-[1000px]:hidden"} h-fit`}>
@@ -204,7 +237,7 @@ const Collection = ({setNoCollection,index}) => {
         );
     }
   return (
-    <div className='mt-10 mb-10 text-white min-[1200px]:mx-40 min-[800px]:mx-20 min-[600px]:mx-10 min-[400px]:mx-4 mx-2 flex flex-col space-y-8'>
+    <div className='mt-10 mb-10 text-white min-[1400px]:mx-40 min-[1200px]:mx-20 min-[1100px]:mx-10 min-[400px]:mx-4 mx-2 flex flex-col space-y-8'>
         <div className='flex flex-row'>
             <div className='text-slate-400 cursor-pointer' 
                 onClick={()=>setNoCollection(-1)}>
@@ -309,13 +342,50 @@ const Collection = ({setNoCollection,index}) => {
                     </Dropdown>
                     </div>
                 </div>
-                <div className='p-2 rounded-xl grid min-[1000px]:grid-cols-4 min-[600px]:grid-cols-3 min-[500px]:grid-cols-2 grid-cols-1 gap-4'>
+                {/* <div className='p-2 rounded-xl grid min-[1000px]:grid-cols-4 min-[600px]:grid-cols-3 min-[500px]:grid-cols-2 grid-cols-1 gap-4'>
                     {Array.from({ length: 12 }, (_, index) => (
                     <div key={index} className='border border-blue-600 bg-slate-900 rounded-xl'>
                         <HomestayNFTCard />
                     </div>
                     ))}
+                </div> */}
+                <>
+            <div className="flex rounded-xl text-base mt-8 relative w-full">
+                <div className={`p-2 rounded-xl grid min-[2000px]:grid-cols-5 min-[1800px]:grid-cols-4 min-[900px]:grid-cols-3 min-[600px]:grid-cols-2 grid-cols-1 gap-4 w-full`}>
+                    {isLoadingListings && <div className='absolute py-40 flex justify-center'>
+                                        <Loading/>
+                                    </div>}
+                    {tokens && !isLoadingListings && (
+                        <>
+                                {tokens.map((data, index) => (
+                                    <SmallCard
+                                        key={index}
+                                        tokenId={data.tokenId}
+                                        page={"booking"}
+                                        
+                                
+                                        price={data.price}
+                                        roomId={data.roomId}
+                                    ></SmallCard>
+                                ))}
+                            </>
+                        )}
+                    </div>
                 </div>
+                {address && !isLoadingListings && tokens.length === 0 && 
+                        <div className='justify-center flex w-full'>
+                            <div className="text-4xl p-20 bg-gradient-to-r from-blue-700 via-sky-400 to-purple-600 bg-clip-text text-transparent w-fit mx-auto">
+                                No contracts were created.
+                            </div>  
+                        </div>}
+                {!address &&(
+                    <div className='justify-center flex w-full'>
+                        <div className="text-4xl p-20 bg-gradient-to-r from-blue-700 via-sky-400 to-purple-600 bg-clip-text text-transparent w-fit mx-auto">
+                            You need to connect wallet first.
+                        </div>  
+                    </div>)
+                }
+            </>
             </div>
         </div>
     </div>
