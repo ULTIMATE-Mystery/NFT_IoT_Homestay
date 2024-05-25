@@ -4,8 +4,8 @@ import React from 'react'
 const SelHSCard = ({mode,setMode}) => {
   return (
     <div className='w-full flex flex-col justify-between py-3'>
-        <div className='text-2xl font-bold'>Select homestay</div>
-        <Select className='w-full'
+        <div className='text-2xl font-bold mb-4'>Select homestay</div>
+        <Select className='w-full mb-5'
             defaultValue={'Alexander Homestay'}
             options={[
                 {

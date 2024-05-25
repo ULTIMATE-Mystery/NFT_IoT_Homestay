@@ -14,6 +14,20 @@ function calculatePercentageChange(current, previous) {
     return Math.round(((current - previous) / previous) * 100);
 }
 
+const parseRentDetails = (rentDetails) => {
+    const groupedData = rentDetails.reduce((acc, { rentAmount, createTimestamp }) => {
+        const monthYear = moment(createTimestamp).format('MMMM YYYY');
+        const date = moment(createTimestamp).format('YYYY-MM-DD');
+        if (!acc[monthYear]) {
+            acc[monthYear] = { monthYear, dates: [] };
+        }
+        acc[monthYear].dates.push({ date, rentAmount });
+        return acc;
+    }, {});
+
+    return Object.values(groupedData).sort((a, b) => moment(a.monthYear, 'MMMM YYYY').unix() - moment(b.monthYear, 'MMMM YYYY').unix());
+};
+
 export function useManagementData() {
     const [totalRent, setTotalRent] = useState(0);
     const [totalUsers, setTotalUsers] = useState(0);
@@ -98,16 +112,7 @@ export function useManagementData() {
                 const sortedDeals = rentDetails.sort((a, b) => b.rentAmount - a.rentAmount).slice(0, 7);
                 setTopDeals(sortedDeals);
 
-                const groupedData = rentDetails.reduce((acc, { rentAmount, createTimestamp }) => {
-                    const monthYear = moment(createTimestamp).format('MMMM YYYY');
-                    if (!acc[monthYear]) {
-                        acc[monthYear] = { monthYear, rentAmount: 0 };
-                    }
-                    acc[monthYear].rentAmount += rentAmount;
-                    return acc;
-                }, {});
-
-                const sortedGroupedData = Object.values(groupedData).sort((a, b) => moment(a.monthYear, 'MMMM YYYY').unix() - moment(b.monthYear, 'MMMM YYYY').unix());
+                const sortedGroupedData = parseRentDetails(rentDetails);
                 setRentData(sortedGroupedData);
 
                 const renterDist = rentDetails.reduce((acc, { renter, startTimestamp, endTimestamp }) => {

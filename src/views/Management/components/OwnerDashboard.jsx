@@ -19,42 +19,44 @@ const OwnerDashboard = ({ mode, setMode }) => {
 
   return (
     <>
-      <div className='mt-4 mx-20 flex flex-col md:flex-row md:space-x-4 justify-center'>
-        <div className="md:basis-1/4 mb-4 flex flex-col space-y-4">
-          <div className="md:basis-3/4 w-full border border-slate-600 rounded-md p-4">
+      <div className='mt-4 mx-4 md:mx-20 flex flex-col md:flex-row md:space-x-4 justify-center'>
+        <div className="order-2 md:order-1 md:basis-1/4 mb-4 flex flex-col space-y-4">
+          <div className="basis-3/4 w-full border border-slate-600 rounded-md p-4">
             <TopDealCard topDeals={topDeals} />
           </div>
-          <div className="md:basis-1/4 max-h-[200px] border border-slate-600 rounded-md p-4">
+          <div className="basis-1/4 max-h-[200px] border border-slate-600 rounded-md p-4">
             <p>Top Renters by Rent Amount</p>
             <VisitChart />
           </div>
         </div>
-        <div className="md:basis-1/2 mb-4 flex flex-col space-y-4">
-          <div className="md:basis-1/2 border border-slate-600 rounded-md p-4 space-y-4 flex flex-col justify-between h-full">
-            <div className='flex flex-row justify-between space-x-2 h-full'>
+        <div className="order-3 md:order-2 basis-1/2 mb-4 flex flex-col space-y-4">
+          <div className="md:flex md:flex-col md:space-y-4 border border-slate-600 rounded-md p-4 space-y-4 h-full">
+            <div className='flex flex-col md:flex-row justify-between space-y-2 md:space-y-0 md:space-x-2 h-full'>
               <TotalCard data={dataTotalCard[0]} />
               <TotalCard data={dataTotalCard[1]} />
             </div>
-            <div className='flex flex-row justify-between space-x-2 h-full'>
+            <div className='flex flex-col md:flex-row justify-between space-y-2 md:space-y-0 md:space-x-2 h-full'>
               <TotalCard data={dataTotalCard[2]} />
               <TotalCard data={dataTotalCard[3]} />
             </div>
           </div>
-          <div className="md:basis-1/2 2xl:max-h-[700px] lg:max-h-[600px] md:max-h-[450px] max-h-[300px] border border-slate-600 rounded-md p-4">
+          <div className="basis-1/2 2xl:max-h-[700px] lg:max-h-[600px] md:max-h-[450px] max-h-[300px] border border-slate-600 rounded-md p-4 overflow-hidden">
             <p className='text-2xl md:text-xl'>
-            Revenue Analytics
+              Revenue Analytics
             </p>
-            <RevenueChart />
+            <div className="h-[300px] w-full md:h-full overflow-auto pb-6 md:pb-0">
+              <RevenueChart />
+            </div>
           </div>
         </div>
-        <div className="md:basis-1/4 mb-4 flex flex-col space-y-4">
-          <div className="md:basis-1/4 border border-slate-600 rounded-md p-4 flex w-full">
+        <div className="order-1 md:order-3 md:basis-1/4 mb-4 flex flex-col space-y-4">
+          <div className="basis-1/4 border border-slate-600 rounded-md p-4 flex w-full">
             <SelHSCard mode={mode} setMode={setMode} />
           </div>
-          <div className="md:basis-2/4 border border-slate-600 rounded-md p-4">
+          <div className="basis-2/4 border border-slate-600 rounded-md p-4">
             <SourceDistributionCard />
           </div>
-          <div className="md:basis-1/4 max-h-[200px] border border-slate-600 rounded-md p-4">
+          <div className="basis-1/4 max-h-[250px] border border-slate-600 rounded-md p-4">
             <p>Top Rentals per Room</p>
             <ProfitChart />
           </div>

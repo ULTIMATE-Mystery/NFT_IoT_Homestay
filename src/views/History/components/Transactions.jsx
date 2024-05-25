@@ -167,32 +167,32 @@ const Transactions = () => {
 
   return (
     <>
-      <div className="w-full flex-row space-y-12">
-        <div className="w-full flex justify-between items-center space-x-6">
+      <div className="w-full flex flex-col space-y-4 md:space-y-12">
+        <div className="w-full flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-6">
           <div className="w-full flex items-center p-2 bg-slate-800 rounded-lg">
-            <SearchOutlined className="mr-2" />
+            <SearchOutlined className="mr-2 text-white" />
             <input
               type="text"
               placeholder="Search for transactions..."
-              className="bg-slate-800 flex-grow outline-none"
+              className="bg-slate-800 flex-grow outline-none text-white"
             />
           </div>
           <div className="flex space-x-2">
-            <button className="border border-white rounded-lg flex items-center p-2 space-x-2" onClick={toggleFilterModal}>
+            <button className="border border-white rounded-lg flex items-center p-2 space-x-2 text-white" onClick={toggleFilterModal}>
               <Filter />
               <p>Filter</p>
             </button>
-            <button className="border border-white rounded-lg flex items-center p-2 space-x-2 w-[133px]" onClick={handleClearFilters}>
+            <button className="border border-white rounded-lg flex items-center p-2 space-x-2 w-[133px] text-white" onClick={handleClearFilters}>
               <ClearOutlined />
               <p>Clear Filters</p>
             </button>
           </div>
         </div>
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 justify-center md:justify-start">
           <button
             className={`${
               !mode ? "bg-slate-600" : "bg-slate-800"
-            } p-3 rounded-lg`}
+            } p-3 rounded-lg text-white`}
             onClick={() => setMode(0)}
           >
             All transactions
@@ -200,7 +200,7 @@ const Transactions = () => {
           <button
             className={`${
               !mode ? "bg-slate-800" : "bg-slate-600"
-            } p-3 rounded-lg`}
+            } p-3 rounded-lg text-white`}
             onClick={() => setMode(1)}
           >
             Analytics
@@ -208,12 +208,17 @@ const Transactions = () => {
         </div>
         {!mode ? (
           <div>
-            <div className="w-full flex flex-row text-slate-500 p-4">
-              <div className="basis-1/12 flex justify-center">NFT ID</div>
+            <div className="hidden md:flex w-full flex-row text-slate-500 p-4">
+              <div className="basis-1/6 flex justify-center">NFT ID</div>
               <div className="basis-1/3 flex justify-center">Time created</div>
-              <div className="basis-1/5 flex justify-center">Renter</div>
+              <div className="basis-1/3 flex justify-center">Renter</div>
               <div className="basis-1/5 flex justify-center">Room ID</div>
-              <div className="basis-1/5 flex justify-center">Price</div>
+              <div className="basis-1/6 flex justify-center">Price</div>
+            </div>
+            <div className="w-full md:hidden flex flex-row text-slate-500 p-4">
+              <div className="basis-1/4 flex justify-center">NFT ID</div>
+              <div className="basis-1/2 flex justify-center">Renter</div>
+              <div className="basis-1/4 flex justify-center">Price</div>
             </div>
             <div>
               {isDataLoading || isLoading ? (
@@ -227,19 +232,17 @@ const Transactions = () => {
                       key={index}
                       className="w-full flex flex-row bg-slate-800 mb-2 align-items-center align-center p-4 rounded-lg"
                     >
-                      <div className="basis-1/12 flex justify-center">
-                        {data.tokenId}
-                      </div>
-                      <div className="basis-1/3 flex justify-center">
+                      <div className="basis-1/4 flex justify-center md:basis-1/4">{data.tokenId}</div>
+                      <div className="basis-1/2 flex justify-center hidden md:flex">
                         {formatDate(data.createTimestamp)}
                       </div>
-                      <div className="basis-1/5 flex justify-center">
+                      <div className="basis-1/2 flex justify-center md:basis-1/2">
                         {shortenAddress(data.renter)}
                       </div>
-                      <div className="basis-1/5 flex justify-center">
+                      <div className="basis-1/3 flex justify-center hidden md:flex md:basis-1/3">
                         {data.roomId}
                       </div>
-                      <div className="basis-1/5 flex justify-center">
+                      <div className="basis-1/4 flex justify-center md:basis-1/4">
                         ${data.rentAmount}
                       </div>
                     </div>
@@ -253,8 +256,8 @@ const Transactions = () => {
                 </div>
               )}
             </div>
-            <div className="mt-4 mr-1 flex justify-end items-center">
-              <div className="flex items-center space-x-2 ">
+            <div className="mt-4 mr-1 flex justify-center md:justify-end items-center">
+              <div className="flex items-center space-x-2">
                 <button
                   onClick={() => handlePageChange(1)}
                   disabled={currentPage === 1}
@@ -305,7 +308,7 @@ const Transactions = () => {
          {/* Filter Modal */}
          {isFilterModalVisible && (
           <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 transition-opacity duration-300 ease-in-out">
-            <div ref={modalRef} className="relative bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-lg transform transition-transform duration-300 ease-in-out">
+            <div ref={modalRef} className="relative bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-sm md:max-w-lg transform transition-transform duration-300 ease-in-out">
               <button
                 onClick={() => setIsFilterModalVisible(false)}
                 className="absolute top-0 right-0 m-3 text-white bg-transparent hover:bg-gray-700 focus:outline-none focus:bg-gray-700 rounded"
@@ -319,7 +322,7 @@ const Transactions = () => {
               <div className="space-y-8">
                 <div>
                   <div className="uppercase text-gray-400 text-sm font-bold mb-2">
-                    Timestamp
+                   Time created
                   </div>
                   <div className="flex space-x-4">
                     <div className="w-1/2">
@@ -386,7 +389,7 @@ const Transactions = () => {
                 </div>
               </div>
 
-              <div className="mt-10 text-center">
+              <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mt-10 justify-center">
                 <button
                   onClick={handleApplyFilters}
                   className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition duration-150 ease-in-out"
@@ -395,7 +398,7 @@ const Transactions = () => {
                 </button>
                 <button
                   onClick={handleResetFilters}
-                  className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition duration-150 ease-in-out ml-4"
+                  className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition duration-150 ease-in-out"
                 >
                   Reset Filters
                 </button>
