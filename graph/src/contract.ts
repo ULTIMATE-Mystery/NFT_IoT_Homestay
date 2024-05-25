@@ -26,6 +26,7 @@ export function handleMint(event: MintEvent): void {
   token!.tokenId = event.params.tokenId;
   token!.provider = event.params.provider;
   token!.renter = event.params.renter;
+  token!.roomId = event.params.roomId;
   token!.save();
 }
 

@@ -2,11 +2,58 @@ import SmallCard from './SmallCard';
 import GetBookedContracts from '../GetBookedContracts';
 import Loading from 'components/Loading';
 import { useAddress } from '@thirdweb-dev/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useQuery, gql } from '@apollo/client';
+import { MARKETPLACE_ADDRESS } from 'utils/constant';
 
-const Booked = ({ isButtonClicked,page,contractId,selectContract,setModalCheckoutOpened}) => {
+
+const Booked = ({ isButtonClicked,page,contractId,selectContract,setModalCheckoutOpened, assetsStatus}) => {
     const address = useAddress();
-    const { data, isLoading } = GetBookedContracts();
+    const formatAddress = `"0x${address}"`;
+    const formatMarketplaceAddress = `"${MARKETPLACE_ADDRESS}"`;
+    const [tokens,setTokens] = useState([]);
+    const GET_TOKENS = gql`
+        {
+            tokens(where: {owner: ${formatAddress}}) {
+            id
+            roomId
+            provider
+            renter
+            creator
+            price
+            owner
+            tokenId
+            }
+        }
+    `;
+    const GET_LISTINGS = gql`
+        {
+            tokens(where: {owner: ${formatMarketplaceAddress}}) {
+                id
+                roomId
+                provider
+                renter
+                creator
+                price
+                owner
+                tokenId
+            }
+            }
+        `;
+    const { loading:isLoading, error, data:queryData } = useQuery(GET_TOKENS);
+    const { loading:isLoadingListings, error:errorListings, data:dataListings } = useQuery(GET_LISTINGS);
+    if (queryData) console.log(queryData.tokens[0].tokenId)
+    useEffect(()=>{
+    if (assetsStatus=="myassets") {
+        if (queryData) 
+            setTokens(queryData.tokens);
+    }
+    else {
+        if (dataListings)
+            setTokens(dataListings.tokens);
+    }
+       
+    },[assetsStatus,queryData,dataListings])
     const select = (id)=>{
         selectContract(id);
     }
@@ -17,23 +64,25 @@ const Booked = ({ isButtonClicked,page,contractId,selectContract,setModalCheckou
                     {isLoading && <div className='absolute py-40 flex justify-center'>
                                         <Loading/>
                                     </div>}
-                    {isButtonClicked && data && !isLoading && (
+                    {isButtonClicked && tokens && !isLoading && (
                         <>
-                            {data.map((data, index) => (
+                            {tokens.map((data, index) => (
                                 <SmallCard
                                     key={index}
-                                    tokenId={data}
+                                    tokenId={data.tokenId}
                                     page={page}
                                     contractId={contractId}
                                     select={select}
                                     setModalCheckoutOpened={setModalCheckoutOpened}
+                                    price={data.price}
+                                    roomId={data.roomId}
                                 ></SmallCard>
                             ))}
                         </>
                     )}
                 </div>
             </div>
-            {address && !isLoading && data.length === 0 && 
+            {address && !isLoading && tokens.length === 0 && 
                     <div className='justify-center flex w-full'>
                         <div className="text-4xl p-20 bg-gradient-to-r from-blue-700 via-sky-400 to-purple-600 bg-clip-text text-transparent w-fit mx-auto">
                             No contracts were created.
