@@ -33,6 +33,7 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice}) =>
   const [isUnlistNFTLoading,setUnlistNFTLoading] = useState(-2);
   const [isChangePriceLoading,setChangePriceLoading] = useState(-3);
   const [isBuyNFTLoading,setBuyNFTLoading] = useState(-4);
+  const [isApprovedForAllLoading,setApprovedForAllLoading] = useState(-5);
   const onListPriceChange = (e) => {
     setInputListPrice(e.target.value);
   }
@@ -43,21 +44,49 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice}) =>
   const parseBigNumber = (value) => {
     return value ? value.toString() : "";
   };
-  const onClickSetApprovedForAll = async () => {
-    await contract.call("setApprovalForAll",[MARKETPLACE_ADDRESS,true]);
-    contract.events.listenToAllEvents((event) => {
-      console.log(event.eventName) // the name of the emitted event
-      console.log(event.data) // event payload
-      window.location.reload();
-    });
+  // const onClickSetApprovedForAll = async () => {
+  //   await contract.call("setApprovalForAll",[MARKETPLACE_ADDRESS,true]);
+  //   contract.events.listenToAllEvents((event) => {
+  //     console.log(event.eventName) // the name of the emitted event
+  //     console.log(event.data) // event payload
+  //     window.location.reload();
+  //   });
     
-    // // or listen to a particular event type
-    //   contract.events.addEventListener("isApprovedForAll", (event) => {
-    //   console.log(event);
-    // });
+  //   // // or listen to a particular event type
+  //   //   contract.events.addEventListener("isApprovedForAll", (event) => {
+  //   //   console.log(event);
+  //   // });
     
-  }
+  // }
   console.log(queryData)
+  const onClickSetApprovedForAll = async () => {
+      // e.preventDefault();
+      if (contract) {
+          try {
+              setApprovedForAllLoading(true);
+              // Call the approved for all NFT function
+              const {data:dataApproved,isLoading: isLoadingApproved} = await contract.call("setApprovalForAll",
+              [
+                MARKETPLACE_ADDRESS,
+                true
+              ]);
+                setApprovedForAllLoading(isLoadingApproved);
+                // // or listen to a particular event type
+                // marketplaceContract.events.addEventListener("ApprovedForAll", (event) => {
+                // console.log(event);
+                // });
+              
+              Message.sendSuccess('Successfully approved for all NFT!');
+              
+          } catch (error) {
+              console.error('Error calling approvedForAll:', error);
+              Message.sendError('ApprovedForAll was not successful');
+          }
+      } else {
+          console.error('Contract not loaded or not connected to Web3');
+          Message.sendError('Contract not loaded or not connected to Web3');
+      }
+  };
 
   const onClickListNft = async (tokenId,price) => {
      // e.preventDefault();
@@ -81,10 +110,10 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice}) =>
               // if (isLoadingListNFT) 
               //   setListNFTLoading(true);
                 setListNFTLoading(isLoadingListNFT);
-                // or listen to a particular event type
-                marketplaceContract.events.addEventListener("ListNFT", (event) => {
-                console.log(event);
-                });
+                // // or listen to a particular event type
+                // marketplaceContract.events.addEventListener("ListNFT", (event) => {
+                // console.log(event);
+                // });
               
               Message.sendSuccess('Successfully list NFT!');
               
@@ -145,10 +174,10 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice}) =>
                 ]
               );
                 setUnlistNFTLoading(isLoadingUnlistNFT);
-                // or listen to a particular event type
-                marketplaceContract.events.addEventListener("UnlistNFT", (event) => {
-                console.log(event);
-                });
+                // // or listen to a particular event type
+                // marketplaceContract.events.addEventListener("UnlistNFT", (event) => {
+                // console.log(event);
+                // });
               
               Message.sendSuccess('Successfully unlist NFT!');
               
@@ -177,10 +206,10 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice}) =>
                }
               );
               setBuyNFTLoading(isLoadingBuyNFT);
-              // or listen to a particular event type
-              marketplaceContract.events.addEventListener("BuyNFT", (event) => {
-              console.log(event);
-              });             
+              // // or listen to a particular event type
+              // marketplaceContract.events.addEventListener("BuyNFT", (event) => {
+              // console.log(event);
+              // });             
              Message.sendSuccess('Successfully buy NFT!');             
          } catch (error) {
              console.error('Error calling buy NFT:', error);
@@ -193,11 +222,15 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice}) =>
  };
   console.log(isListNFTLoading)
   useEffect(()=>{
-    if (isListNFTLoading==undefined||isUnlistNFTLoading==undefined||isChangePriceLoading==undefined||isBuyNFTLoading==undefined) 
+    if (isListNFTLoading==undefined||
+      isUnlistNFTLoading==undefined||
+      isChangePriceLoading==undefined||
+      isBuyNFTLoading==undefined||
+      isApprovedForAllLoading==undefined) 
       setTimeout(()=>{
         window.location.reload();
       },3000)
-  },[isListNFTLoading,isUnlistNFTLoading,isChangePriceLoading])
+  },[isListNFTLoading,isUnlistNFTLoading,isChangePriceLoading,isBuyNFTLoading,isApprovedForAllLoading])
   // console.log(MARKETPLACE_ADDRESS.toLowerCase()==queryData.tokens[0].owner)
   
   return (
@@ -297,8 +330,11 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice}) =>
             </p>
           </div>
           </div>
-          {queryData&&
-          
+          {queryData&& !(isListNFTLoading == true 
+          || isUnlistNFTLoading == true 
+          || isChangePriceLoading == true 
+          || isBuyNFTLoading == true
+          || isApprovedForAllLoading == true) &&
           <div className="p-4 flex w-full justify-center mt-2">
             {isApprovedForAll&&queryData?(
               queryData.tokens[0].owner == MARKETPLACE_ADDRESS.toLowerCase() ? (
@@ -332,10 +368,10 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice}) =>
                 </div>)
               )
             :
-            <button className="w-full rounded-xl py-4 px-10 bg-slate-300 hover:bg-slate-400"
-            onClick={onClickSetApprovedForAll}>
-              Set Approved For All
-            </button>
+            <div className="flex rounded-xl justify-center"
+            onClick={()=>onClickSetApprovedForAll()}>
+              <ButtonNFT content={"Set Approved For All"}/>
+            </div>
             }
           </div>
           }
@@ -384,7 +420,25 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice}) =>
               </button>}
             </div>
           </Modal>
-          {isListNFTLoading == true || isUnlistNFTLoading == true || isChangePriceLoading == true || isBuyNFTLoading == true && <Loader/>}
+          {/* <Modal open={isListNFTLoading == true 
+          || isUnlistNFTLoading == true 
+          || isChangePriceLoading == true 
+          || isBuyNFTLoading == true || true} centered
+          closeIcon={undefined} footer={null} closable={false} className="bg-transparent"
+            
+          >
+            <div className="justify-center flex">
+              <Loader/>
+            </div>
+          </Modal> */}
+          {(isListNFTLoading == true 
+          || isUnlistNFTLoading == true 
+          || isChangePriceLoading == true 
+          || isBuyNFTLoading == true
+          || isApprovedForAllLoading == true)
+          && <div className="justify-center flex">
+              <Loader/>
+            </div>}
           <Modal open={isModalChangePrice} centered 
             onCancel={()=>setModalChangePrice(false)}
           >
