@@ -1,14 +1,14 @@
 /*works janky on mobile :<*/
 .container {
     position: relative;
-    width: 190px;
-    height: 254px;
+    width: 230px;
+    height: 314px;
     transition: 200ms;
   }
   
   .container:active {
-    width: 180px;
-    height: 245px;
+    width: 220px;
+    height: 305px;
   }
   
   #card {
@@ -28,6 +28,7 @@
     color: rgb(134, 110, 221);
     text-align: center;
     width: 100%;
+    padding-top: 50px;
   }
   
   .title {
@@ -46,7 +47,7 @@
   }
 
   .tracker:hover ~ #card .image{
-    opacity:  0.6!important;
+    opacity:  0.5!important;
   }
   
   #prompt {

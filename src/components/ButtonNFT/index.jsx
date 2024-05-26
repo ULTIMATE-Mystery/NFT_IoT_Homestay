@@ -5,7 +5,7 @@ import React from 'react'
 const ButtonNFT = ({ content, className }) => {
   return (
     <div>
-      <button className={`c-button c-button--gooey ${className}`}> {content}
+      <button className={`c-button c-button--gooey !rounded-xl ${className}`}> {content}
         <div className="c-button__blobs">
           <div></div>
           <div></div>
