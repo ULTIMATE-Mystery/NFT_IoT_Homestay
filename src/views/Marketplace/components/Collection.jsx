@@ -352,9 +352,10 @@ const Collection = ({setNoCollection,index}) => {
                 <>
             <div className="flex rounded-xl text-base mt-8 relative w-full">
                 <div className={`p-2 rounded-xl grid min-[2000px]:grid-cols-5 min-[1800px]:grid-cols-4 min-[900px]:grid-cols-3 min-[600px]:grid-cols-2 grid-cols-1 gap-4 w-full`}>
-                    {isLoadingListings && <div className='py-20 justify-center w-full '>
-                                        <Loading/>
-                                    </div>}
+                    {isLoadingListings 
+                    && <div className='py-20 justify-center w-full absolute top-20'>
+                            <Loading/>
+                        </div>}
                     {tokens && !isLoadingListings && (
                         <>
                                 {tokens.map((data, index) => (
@@ -375,7 +376,7 @@ const Collection = ({setNoCollection,index}) => {
                 {address && !isLoadingListings && tokens.length === 0 && 
                         <div className='justify-center flex w-full'>
                             <div className="text-4xl p-20 bg-gradient-to-r from-blue-700 via-sky-400 to-purple-600 bg-clip-text text-transparent w-fit mx-auto">
-                                No contracts were created.
+                                No NFT stay contract were listed.
                             </div>  
                         </div>}
                 {!address &&(
