@@ -34,7 +34,10 @@ const Collection = ({setNoCollection,index}) => {
     const formatMarketplaceAddress = `"${MARKETPLACE_ADDRESS}"`;
     const GET_LISTINGS = gql`
         {
-            tokens(where: {owner: ${formatMarketplaceAddress}}) {
+            tokens(
+                where: {owner: ${formatMarketplaceAddress}},
+                orderBy: tokenId
+            ) {
                 id
                 roomId
                 provider
@@ -237,7 +240,7 @@ const Collection = ({setNoCollection,index}) => {
         );
     }
   return (
-    <div className='mt-10 mb-10 text-white min-[1400px]:mx-40 min-[1200px]:mx-20 min-[1100px]:mx-10 min-[400px]:mx-4 mx-2 flex flex-col space-y-8'>
+    <div className='mt-10 mb-10 text-white min-[1400px]:mx-40 min-[1200px]:mx-20 min-[1100px]:mx-10 min-[400px]:mx-4 mx-2 flex flex-col space-y-8 mb-20'>
         <div className='flex flex-row'>
             <div className='text-slate-400 cursor-pointer' 
                 onClick={()=>setNoCollection(-1)}>
@@ -351,7 +354,7 @@ const Collection = ({setNoCollection,index}) => {
                 </div> */}
                 <>
             <div className="flex rounded-xl text-base mt-8 relative w-full">
-                <div className={`p-2 rounded-xl grid min-[2000px]:grid-cols-5 min-[1800px]:grid-cols-4 min-[900px]:grid-cols-3 min-[600px]:grid-cols-2 grid-cols-1 gap-4 w-full`}>
+                <div className={`p-2 rounded-xl grid min-[2000px]:grid-cols-5 min-[1800px]:grid-cols-4 min-[900px]:grid-cols-3 min-[600px]:grid-cols-2 grid-cols-1 gap-20 w-full`}>
                     {isLoadingListings 
                     && <div className='py-20 justify-center w-full absolute top-20'>
                             <Loading/>

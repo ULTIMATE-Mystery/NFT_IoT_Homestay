@@ -141,45 +141,6 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
             </Modal>
         )}
     </div>
-        // <div>
-        //   <div className=" mx-auto justify-center w-60 h-100 bg-stone-950 flex flex-col rounded-2xl border border-slate-600 hover:border-sky-300 border-2 drop-shadow-lg shadow-lg" onClick={() => setIsViewClicked(true)}>
-        //     <div className="h-[250px] rounded-t-2xl overflow-hidden p-[2px]">
-        //       <img src={homestay4} alt="Background" className="w-full h-full object-cover rounded-t-lg" />
-        //     </div>
-        //     <div className={`${page === "management" ? "text-white" : ""} flex flex-col py-2 px-6 font-bold`}>
-        //       <div className="flex flex-row justify-between mb-2">
-        //         <div className="flex flex-col w-full">
-        //           <div className="flex flex-row justify-between w-full">
-        //             <div>
-        //               <p className=' text-slate-400 '>Homestay</p>
-        //               <div className='text-lg flex justify-start'>Alex</div>
-        //             </div>
-        //             <div className=''>
-        //               <p className=' text-slate-400 '>Contract Id </p>
-        //               <div className='text-lg flex justify-start'>{tokenId}</div>
-        //             </div>
-        //           </div>
-        //         </div>
-        //       </div>
-        //       {/* <div className='flex flex-row justify-between'>
-        //               <p className='text-slate-400 w-full'>NFT Id </p>
-        //               <div className='text-lg flex justify-end w-full'>{tokenId}</div>
-        //       </div> */}
-        //       <div className='flex flex-row justify-between'>
-        //         <p className='text-slate-400 w-full'>Price</p>
-        //         <div className="text-lg flex justify-end w-full text-green-600">{convertedPrice ? `${convertedPrice} $` : "0 $"}</div>
-        //       </div>
-        //       <button className={`${page === "booking" ? "hidden" : ""} hover:bg-sky-800 text-slate-300 bg-blue-950 py-2 rounded-md w-full`} onClick={handleSelectContract}>
-        //         Select
-        //       </button>
-        //     </div>
-        //   </div>
-        //   {isViewClicked && (
-        //     <Modal open={isViewClicked} onCancel={() => setIsViewClicked(false)} onOk={() => setIsViewClicked(false)} width={1200} closable={false}>
-        //       <BookedCard tokenId={tokenId} page={page} isApprovedForAll={isApprovedForAll} queryData={data} convertedPrice={convertedPrice}></BookedCard>
-        //     </Modal>
-        //   )}
-        // </div>
       )}
     </>
   );

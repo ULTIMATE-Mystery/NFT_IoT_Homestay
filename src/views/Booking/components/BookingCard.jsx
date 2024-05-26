@@ -6,6 +6,7 @@ import {  DatePicker, Space  } from 'antd';
 import './Booking.scss';
 import { ConnectWallet } from "@thirdweb-dev/react";
 import { parseBigNumber } from 'utils/function/parseBigNumber';
+import ButtonNFT from 'components/ButtonNFT';
 const { RangePicker } = DatePicker;
 
 
@@ -144,15 +145,9 @@ const BookingCard = () => {
                                 <div className="w-full flex justify-center pt-8">
                                     {address&&<button
                                         type="submit"
-                                        className="rounded-xl text-white bg-gradient-to-r 
-                                        from-blue-700 via-pink-400 via-purple-600 to-blue-600 
-                                        shadow-lg hover:scale-110 duration-200 hover:drop-shadow-2xl hover:shadow-[#7dd3fc] hover:cursor-pointer
-                                        hover:bg-gradient-to-bl font-bold rounded-md 
-                                        text-sm py-4 px-16 text-center flex w-fit "
+                                        className="!text-white"
                                     >
-                                        <p className="text-xl">
-                                            Book now
-                                        </p>
+                                        <ButtonNFT content={"Book now"} className={" !py-4 !px-16"}/>
                                     </button>}
                                     {
                                     !address && (
