@@ -33,6 +33,22 @@ const RevenueChart = () => {
   const isSingleDate = uniqueDates === 1;
   const isMultipleDates = uniqueDates > 1;
 
+  // Function to group and sum revenue by date
+  const groupByDate = (data) => {
+    const groupedData = {};
+    data.forEach(({ date, rentAmount }) => {
+      if (!groupedData[date]) {
+        groupedData[date] = { date, rentAmount: 0 };
+      }
+      groupedData[date].rentAmount += rentAmount;
+    });
+
+    // Convert grouped data object to array and sort by date
+    return Object.values(groupedData).sort((a, b) => new Date(a.date) - new Date(b.date));
+  };
+
+  const groupedAndSortedData = isSingleMonth ? groupByDate(singleMonthData) : rentData;
+
   return (
     <div className="w-full h-full py-8">
       <ResponsiveContainer width="100%" height="100%">
@@ -40,7 +56,7 @@ const RevenueChart = () => {
           <BarChart
             width={400}
             height={240}
-            data={singleMonthData}
+            data={groupedAndSortedData}
             margin={{
               top: 10,
               right: 30,
@@ -57,7 +73,7 @@ const RevenueChart = () => {
           <AreaChart
             width={400}
             height={240}
-            data={singleMonthData}
+            data={groupedAndSortedData}
             margin={{
               top: 10,
               right: 30,
@@ -74,7 +90,7 @@ const RevenueChart = () => {
           <AreaChart
             width={400}
             height={240}
-            data={rentData}
+            data={groupedAndSortedData}
             margin={{
               top: 10,
               right: 30,
