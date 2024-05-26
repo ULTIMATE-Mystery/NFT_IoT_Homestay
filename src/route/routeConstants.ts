@@ -4,7 +4,7 @@ const routeConstants = {
     BOOKING: '/booking',
     MANAGEMENT: '/management',
     HISTORY: '/history',
-    DASHBOARD: '/iot/dashboard/:roomId',
+    DASHBOARD: '/dashboard/:roomId',
     MARKETPLACE: '/marketplace',
     ABOUT_US: '/about-us',
     MARKETPLACE_DETAIL: '/marketplace/:id',
