@@ -1,4 +1,5 @@
 import {
+  useAddress,
   useContract,
   useContractRead,
 } from "@thirdweb-dev/react";
@@ -18,19 +19,25 @@ import Message from "components/Message";
 import Loader from "components/Loader";
 import ButtonNFT from "components/ButtonNFT";
 
-const BookedCard = ({tokenId,page,isApprovedForAll,queryData}) => {
+const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice}) => {
   const { contract: marketplaceContract } = useContract(MARKETPLACE_ADDRESS);
   const { contract } = useContract(CONTRACT_ADDRESS);
+  const address = useAddress();
   // const [queryData,setQueryData] = useState(queryData);
   const { data, isLoading } = useContractRead(contract, "getNFTInfo", [tokenId]);
   const [isModalListNFT, setModalListNFT] = useState(false); 
   const [isModalChangePrice,setModalChangePrice] = useState(false);
   const [inputListPrice,setInputListPrice] = useState(0);
+  const [inputChangePrice,setInputChangePrice] = useState(convertedPrice);
   const [isListNFTLoading,setListNFTLoading] = useState(-1);
   const [isUnlistNFTLoading,setUnlistNFTLoading] = useState(-2);
   const [isChangePriceLoading,setChangePriceLoading] = useState(-3);
+  const [isBuyNFTLoading,setBuyNFTLoading] = useState(-4);
   const onListPriceChange = (e) => {
     setInputListPrice(e.target.value);
+  }
+  const onChangePriceChange = (e) => {
+    setInputChangePrice(e.target.value);
   }
 
   const parseBigNumber = (value) => {
@@ -44,10 +51,10 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData}) => {
       window.location.reload();
     });
     
-    // or listen to a particular event type
-      contract.events.addEventListener("isApprovedForAll", (event) => {
-      console.log(event);
-    });
+    // // or listen to a particular event type
+    //   contract.events.addEventListener("isApprovedForAll", (event) => {
+    //   console.log(event);
+    // });
     
   }
   console.log(queryData)
@@ -111,9 +118,9 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData}) => {
              );
                setChangePriceLoading(isLoadingChangePrice);
                // or listen to a particular event type
-               marketplaceContract.events.addEventListener("ChangePrice", (event) => {
-               console.log(event);
-               });
+              //  marketplaceContract.events.addEventListener("ChangePrice", (event) => {
+              //  console.log(event);
+              //  });
              
              Message.sendSuccess('Successfully change price of NFT!');
              
@@ -154,9 +161,39 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData}) => {
           Message.sendError('Contract not loaded or not connected to Web3');
       }
   };
+  const onClickBuyNft = async (tokenId) => {
+    // e.preventDefault();
+     if (marketplaceContract) {
+         try {
+             setBuyNFTLoading(true);
+             
+             console.log("price",tokenId,queryData.tokens[0].price/10**18)
+             // Call the buy NFT function
+              const {data:dataBuyNFT,isLoading: isLoadingBuyNFT} = await marketplaceContract.call("buyNFT",
+               [
+                 tokenId,
+               ],{
+                value: queryData.tokens[0].price
+               }
+              );
+              setBuyNFTLoading(isLoadingBuyNFT);
+              // or listen to a particular event type
+              marketplaceContract.events.addEventListener("BuyNFT", (event) => {
+              console.log(event);
+              });             
+             Message.sendSuccess('Successfully buy NFT!');             
+         } catch (error) {
+             console.error('Error calling buy NFT:', error);
+             Message.sendError('Your purchase was not successful');
+         }
+     } else {
+         console.error('Contract not loaded or not connected to Web3');
+         Message.sendError('Contract not loaded or not connected to Web3');
+     }
+ };
   console.log(isListNFTLoading)
   useEffect(()=>{
-    if (isListNFTLoading==undefined||isUnlistNFTLoading==undefined||isChangePriceLoading==undefined) 
+    if (isListNFTLoading==undefined||isUnlistNFTLoading==undefined||isChangePriceLoading==undefined||isBuyNFTLoading==undefined) 
       setTimeout(()=>{
         window.location.reload();
       },3000)
@@ -262,13 +299,22 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData}) => {
           </div>
           {queryData&&
           
-          <div className="p-4 flex w-full justify-center">
-            {console.log(queryData,MARKETPLACE_ADDRESS.toLowerCase())}
+          <div className="p-4 flex w-full justify-center mt-2">
             {isApprovedForAll&&queryData?(
               queryData.tokens[0].owner == MARKETPLACE_ADDRESS.toLowerCase() ? (
+                queryData.tokens[0].renter != address.toLowerCase() ?
+                <div>
+                  {isBuyNFTLoading!=true &&
+                    <div className="flex rounded-xl justify-center"
+                    onClick={()=>onClickBuyNft(tokenId)}>
+                      <ButtonNFT content={"Buy NFT"}/> 
+                  </div>}
+                </div>
+                :
+                (isChangePriceLoading!=true && isUnlistNFTLoading!=true &&
                 <div className="flex flex-col">
                   <div className="flex rounded-xl justify-center"
-                  onClick={()=>onClickChangePrice(tokenId)}>
+                  onClick={setModalChangePrice}>
                     <ButtonNFT content={"Change Price"}/>
                   </div>
                   <div className="flex rounded-xl justify-center"
@@ -277,7 +323,7 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData}) => {
                       Unlist NFT
                     </button>
                   </div>
-                </div>
+                </div>)
               ) : (
               isListNFTLoading!=true &&
                 <div className="flex rounded-xl justify-center"
@@ -338,7 +384,7 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData}) => {
               </button>}
             </div>
           </Modal>
-          {isListNFTLoading == true && <Loader/>}
+          {isListNFTLoading == true || isUnlistNFTLoading == true || isChangePriceLoading == true || isBuyNFTLoading == true && <Loader/>}
           <Modal open={isModalChangePrice} centered 
             onCancel={()=>setModalChangePrice(false)}
           >
@@ -349,7 +395,7 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData}) => {
               <form>
                 <label class="block">
                   <span class="block text-sm text-slate-500 pl-3">Enter Price(BUSD)</span>
-                  <input class=" border-slate-700 w-full rounded-lg h-[48px] px-[16px]" value={inputListPrice} onChange={onListPriceChange} type="number" required/>
+                  <input class=" border-slate-700 w-full rounded-lg h-[48px] px-[16px]" value={inputChangePrice} onChange={onChangePriceChange} type="number" required/>
                   <span class="block text-sm text-slate-500 pt-[16px] flex flex-row relative w-full">
                   <span>Est</span>
                   <span class="right-0 absolute">≈$1,716</span>
@@ -374,7 +420,7 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData}) => {
               {isChangePriceLoading!=true &&
               <button class="relative flex flex-row justify-center items-center"
                 onClick={()=>{
-                  onClickChangePrice(tokenId, inputListPrice);
+                  onClickChangePrice(tokenId, inputChangePrice);
                   setModalChangePrice(false)}}>
                 <div class="absolute top-0 left-0 h-full w-full z-10 rounded-xl">
                 </div>

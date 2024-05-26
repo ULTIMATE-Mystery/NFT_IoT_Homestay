@@ -85,7 +85,7 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
     fetchConvertedPrice();
   }, [data, price, contract, address, isLoading]);
   
-  console.log(tokenId,prefix,dataToken)
+  // console.log(tokenId,prefix,dataToken)
 
   return (
     <>
@@ -125,7 +125,7 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
           </div>
           {isViewClicked && (
             <Modal open={isViewClicked} onCancel={() => setIsViewClicked(false)} onOk={() => setIsViewClicked(false)} width={1200} closable={false}>
-              <BookedCard tokenId={tokenId} page={page} isApprovedForAll={isApprovedForAll} queryData={data}></BookedCard>
+              <BookedCard tokenId={tokenId} page={page} isApprovedForAll={isApprovedForAll} queryData={data} convertedPrice={convertedPrice}></BookedCard>
             </Modal>
           )}
         </div>
