@@ -244,7 +244,7 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice}) =>
           style={{ opacity: '100%' }}
         />
       </div>
-      <div className='basis-1/3 flex rounded-xl bg-gradient-to-r from-teal-200 via-cyan-300 
+      <div className='relative basis-1/3 flex rounded-xl bg-gradient-to-r from-teal-200 via-cyan-300 
       via-purple-400 to-pink-400 text-base rounded-2xl'>
         <div className="m-[2px] bg-white rounded-xl w-full p-4">
             <div className='flex flex-col space-y-3'>
@@ -334,7 +334,7 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice}) =>
           || isUnlistNFTLoading == true 
           || isChangePriceLoading == true 
           || isBuyNFTLoading == true
-          || isApprovedForAllLoading == true) &&
+          || isApprovedForAllLoading == true) && 
           <div className="p-4 flex w-full justify-center mt-2">
             {isApprovedForAll&&queryData?(
               queryData.tokens[0].owner == MARKETPLACE_ADDRESS.toLowerCase() ? (
@@ -431,14 +431,7 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice}) =>
               <Loader/>
             </div>
           </Modal> */}
-          {(isListNFTLoading == true 
-          || isUnlistNFTLoading == true 
-          || isChangePriceLoading == true 
-          || isBuyNFTLoading == true
-          || isApprovedForAllLoading == true)
-          && <div className="justify-center flex">
-              <Loader/>
-            </div>}
+          
           <Modal open={isModalChangePrice} centered 
             onCancel={()=>setModalChangePrice(false)}
           >
@@ -485,6 +478,14 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice}) =>
             </div>
           </Modal>
         </div>
+        {(isListNFTLoading == true 
+          || isUnlistNFTLoading == true 
+          || isChangePriceLoading == true 
+          || isBuyNFTLoading == true
+          || isApprovedForAllLoading == true)
+          && <div className="justify-center absolute top-72 right-[20px] text-center self-center scale-150">
+              <Loader/>
+            </div>}
       </div>
     </div>
     )}

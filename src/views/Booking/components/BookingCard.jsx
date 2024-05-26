@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAddress, useContract } from '@thirdweb-dev/react';
 import Message from 'components/Message';
 import { CONTRACT_ADDRESS } from 'utils/constant';
@@ -7,6 +7,7 @@ import './Booking.scss';
 import { ConnectWallet } from "@thirdweb-dev/react";
 import { parseBigNumber } from 'utils/function/parseBigNumber';
 import ButtonNFT from 'components/ButtonNFT';
+import Loader from 'components/Loader';
 const { RangePicker } = DatePicker;
 
 
@@ -19,7 +20,7 @@ const BookingCard = () => {
     const [startTimestamp, setStartTimestamp] = useState('');
     const [endTimestamp, setEndTimestamp] = useState('');
     const [roomId, setRoomId] = useState('');
-
+    const [isBookingLoading,setBookingLoading] = useState(-1);
     const onChange = (value, dateString) => {
         const startDate = new Date(value[0]);
         const endDate = new Date(value[1]);
@@ -51,8 +52,9 @@ const BookingCard = () => {
                     amountUsd,
                 ]);
                 console.log('amountBnb',parseBigNumber(amountBnb));
+                setBookingLoading(true);
                 // Call the safeMint function
-                await contract.call('safeMint', [
+                const {data:isDataBooking, loading: isBookingLoading} = await contract.call('safeMint', [
                     roomId,
                     0,
                     Math.floor(startTimestamp/1000),
@@ -60,7 +62,7 @@ const BookingCard = () => {
                 ],{
                     value: amountBnb,
                 });
-                
+                setBookingLoading(isBookingLoading)
                 Message.sendSuccess('Successfully booked!');
             } catch (error) {
                 console.error('Error calling safeMint:', error);
@@ -71,6 +73,12 @@ const BookingCard = () => {
             Message.sendError('Contract not loaded or not connected to Web3');
         }
     };
+    useEffect(()=>{
+        if (isBookingLoading==undefined) 
+          setTimeout(()=>{
+            window.location.reload();
+          },3000)
+      },[isBookingLoading]);
 
     return (
         <>
@@ -83,7 +91,7 @@ const BookingCard = () => {
                     <div className="m-[2px] bg-slate-950 rounded-xl w-full flex">
                         <div
                             to="/home"
-                            className="min-[800px]:p-20 min-[750px]:p-10 min-[400px]:p-6 p-4 mr-0 w-full flex flex-col"
+                            className="relative min-[800px]:p-20 min-[750px]:p-10 min-[400px]:p-6 p-4 mr-0 w-full flex flex-col"
                         >
                             <div className="min-[1000px]:w-full flex justify-end min-[1000px]:space-x-4 max-[1000px]:space-y-3 mb-4 min-[1000px]:flex-row flex-col">
                                 <button class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-40 my-auto  rounded-md bg-sky-600 p-2 flex justify-center items-center font-extrabold">
@@ -143,7 +151,8 @@ const BookingCard = () => {
                                 </div>
                                 
                                 <div className="w-full flex justify-center pt-8">
-                                    {address&&<button
+                                    {address && !(isBookingLoading == true) &&
+                                    <button
                                         type="submit"
                                         className="!text-white"
                                     >
@@ -161,8 +170,13 @@ const BookingCard = () => {
                                         />
                                     )
                                     }
+                                    
                                 </div>
                             </form>
+                            {(isBookingLoading == true)
+                            && <div className="justify-center flex absolute self-center text-center top-72 scale-150">
+                                <Loader/>
+                            </div>}
                         </div>
                     </div>
                 </div>
