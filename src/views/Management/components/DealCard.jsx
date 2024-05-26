@@ -22,7 +22,7 @@ const DealCard = ({ renter, rentAmount }) => {
             <div className='text-lg'>Address</div>
             <div>{formattedAddress}</div>
           </div>
-          <div className='pl-2 text-xl my-auto text-lime-700 font-bold'>
+          <div className='flex-grow text-xl my-auto text-lime-700 font-bold text-right'>
             {displayAmount}
           </div>
         </>
