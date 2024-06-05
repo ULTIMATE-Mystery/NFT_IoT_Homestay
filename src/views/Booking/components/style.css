@@ -23,6 +23,11 @@
     background: linear-gradient(43deg, rgb(65, 88, 208) 0%, rgb(200, 80, 192) 46%, rgb(255, 204, 112) 100%);
   }
   
+  .cancelled #card {
+    background: gray; /* Or any other styling for cancelled state */
+    opacity: 0.5; /* Example: make the card semi-transparent */
+  }
+
   .subtitle {
     transform: translateY(160px);
     color: rgb(134, 110, 221);

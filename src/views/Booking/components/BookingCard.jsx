@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { useAddress, useContract } from '@thirdweb-dev/react';
 import Message from 'components/Message';
 import { CONTRACT_ADDRESS } from 'utils/constant';
-import {  DatePicker, Space  } from 'antd';
+import {  DatePicker, Modal, Space  } from 'antd';
 import './Booking.scss';
 import { ConnectWallet } from "@thirdweb-dev/react";
 import { parseBigNumber } from 'utils/function/parseBigNumber';
 import ButtonNFT from 'components/ButtonNFT';
 import Loader from 'components/Loader';
+import Policy from './Policy';
 const { RangePicker } = DatePicker;
 
 
@@ -21,6 +22,7 @@ const BookingCard = () => {
     const [endTimestamp, setEndTimestamp] = useState('');
     const [roomId, setRoomId] = useState('');
     const [isBookingLoading,setBookingLoading] = useState(-1);
+    const [isPolicyModalOpen,setPolicyModalOpen] = useState(false);
     const onChange = (value, dateString) => {
         const startDate = new Date(value[0]);
         const endDate = new Date(value[1]);
@@ -59,6 +61,7 @@ const BookingCard = () => {
                     0,
                     Math.floor(startTimestamp/1000),
                     Math.ceil(endTimestamp/1000),
+                    true
                 ],{
                     value: amountBnb,
                 });
@@ -101,14 +104,27 @@ const BookingCard = () => {
                                         <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
                                         <p class="z-10">See room validity</p>
                                 </button>
-                                <button class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-64 my-auto  rounded-md bg-sky-600 p-2 flex justify-center items-center font-extrabold">
+                                <button class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-48 my-auto  rounded-md bg-sky-600 p-2 flex justify-center items-center font-extrabold"
+                                        onClick={()=>setPolicyModalOpen(true)}
+                                >
                                         <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-950"></div>
                                         <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-900"></div>
                                         <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
                                         <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
-                                        <p class="z-10">Change homestay contract</p>
+                                        <p class="z-10">Booking Policy</p>
                                 </button>
                             </div>
+                            {console.log(isPolicyModalOpen)}
+                             {
+                                    isPolicyModalOpen && 
+                                    <Modal 
+                                    open={isPolicyModalOpen} 
+                                    onCancel={()=>setPolicyModalOpen(false)}
+                                    onOk={()=>setPolicyModalOpen(false)}
+                                    className='z-50'>
+                                        <Policy/>
+                                    </Modal>
+                                }
                             <form
                                 onSubmit={handleSubmit}
                                 className="flex flex-col space-y-6"

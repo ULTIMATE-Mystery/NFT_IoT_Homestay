@@ -55,7 +55,7 @@ const Inner = memo(() => {
                             cursor: 'pointer'
                         }}
                     >
-                        Listings
+                        My Listings
                     </div>
                 </div>
                 <Booked isButtonClicked={isButtonClicked} page={"booking"} assetsStatus={assetsStatus}/>

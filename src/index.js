@@ -10,7 +10,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client
 // You can also import additional chains from `@thirdweb-dev/chains` and pass them directly.
 const activeChain = "binance-testnet";
 const client = new ApolloClient({
-  uri: 'https://api.studio.thegraph.com/query/47492/homestaybooking/version/latest',
+  uri: 'https://api.studio.thegraph.com/query/47492/nftstay/version/latest',
   cache: new InMemoryCache(),
 });
 const container = document.getElementById("root");

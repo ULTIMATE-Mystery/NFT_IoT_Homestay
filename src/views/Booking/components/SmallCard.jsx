@@ -15,7 +15,7 @@ import ButtonNFT from 'components/ButtonNFT';
 
 const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,price,roomId}) => {
   const { contract } = useContract(CONTRACT_ADDRESS);
-  // const { data, isLoading } = useContractRead(contract, "getNFTInfo", [tokenId]);
+  const { data: dataNFT, isLoading: isLoadingNFT } = useContractRead(contract, "getNFTInfo", [tokenId]);
   const [dataToken,setDataToken] = useState();
   const [isViewClicked,setIsViewClicked] = useState(false);
   const [convertedPrice, setConvertedPrice] = useState(null);
@@ -90,8 +90,8 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
 
   return (
     <>
-      {!isLoading && data && (
-      <div className='relative'>
+      {!isLoading && data && dataNFT && (
+      <div className={`relative ${dataNFT.isCancelled?"cancelled":""}`}>
         <div class="container noselect" onClick={() => setIsViewClicked(true)}>
             <div class="canvas">
                 <div class="tracker tr-1"></div>
@@ -137,7 +137,7 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
         </button>
         {isViewClicked && (
             <Modal open={isViewClicked} onCancel={() => setIsViewClicked(false)} onOk={() => setIsViewClicked(false)} width={1200} closable={false}>
-              <BookedCard tokenId={tokenId} page={page} isApprovedForAll={isApprovedForAll} queryData={data} convertedPrice={convertedPrice}></BookedCard>
+              <BookedCard tokenId={tokenId} page={page} isApprovedForAll={isApprovedForAll} queryData={data} convertedPrice={convertedPrice} isCancelled={dataNFT.isCancelled}></BookedCard>
             </Modal>
         )}
     </div>
