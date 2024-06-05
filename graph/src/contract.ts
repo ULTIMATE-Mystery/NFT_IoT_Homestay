@@ -27,6 +27,7 @@ export function handleMint(event: MintEvent): void {
   token!.provider = event.params.provider;
   token!.renter = event.params.renter;
   token!.roomId = event.params.roomId;
+  token!.isPrepaid = event.params.isPrepaid;
   token!.save();
 }
 

@@ -8,4 +8,6 @@ type Token @entity {
   owner: Bytes # address
   creator: Bytes # address
   price: BigInt
+  isPrepaid: Boolean
+  isPaidAll: Boolean
 }

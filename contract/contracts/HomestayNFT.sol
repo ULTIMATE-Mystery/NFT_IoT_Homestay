@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import {AggregatorV3Interface} from "@chainlink/contracts@1.0.0/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
+import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 
 contract DataConsumerV3 {
     AggregatorV3Interface internal dataFeed;
@@ -44,21 +44,33 @@ contract HomestayNFT is ERC721, Ownable {
     using SafeMath for uint256;
     Counters.Counter private _tokenIdCounter;
 
-    
-    uint256 public immutable _startTime;                          //time create contract
-    bool[] _roomValidity;                                           //array of validity of rooms [room id] (validity of room is decided by owner of homestay)
-    uint256 public _noRooms;                                        //number of rooms when create contract
-    uint256[] public _price;                                       //price of first 2 hours, every hour after first 2 hours, every day, every month. 
-    mapping (address=>uint256) private _noNftOfRenter;              //number of nfts (rental contract) of renter [address renter]
-    uint256[] private _nftsOfProvider;                              //array of nfts (rental contract of users) of provider [token id]
-    mapping (address=>uint256) private _noNftOfProvider;            //number of nfts of provider [address provider]
-    mapping(address=>uint256[]) private _nftsOfRenter;              //array of nfts of renter [address renter]
-    mapping(address => bool) private _authorizedGateways; 
+    DataConsumerV3 dataConsumerV3;
+    uint256 public immutable _startTime;                           // time create contract
+    bool[] _roomValidity;                                          // array of validity of rooms [room id] (validity of room is decided by owner of homestay)
+    uint256 public _noRooms;                                       // number of rooms when create contract
+    uint256[] public _price;                                       // price of first 2 hours, every hour after first 2 hours, every day, every month. 
 
-    event Mint(address indexed provider, address indexed renter, uint256 roomId, uint256 rentAmount, uint256 startTimestamp, uint256 endTimestamp, uint256 createTimestamp, uint256 indexed tokenId, bool isCancelled, bool isCheckedOut);
+    uint256 public _version;                                        // curent version of policy
+    uint256[] public _minTimeToCancelPrepaid;                       // minimum time to cancel prepaid booking
+    uint256[] public _minTimeToCancelDeposit;                       // minimum time to cancel deposit booking
+    uint256[] public _percentDeposit;                               // percent deposit for deposit booking   
+
+    mapping (address=>uint256) public _noNftOfRenter;              // number of nfts (rental contract) of renter [address renter]
+    uint256[] public _nftsOfProvider;                              // array of nfts (rental contract of users) of provider [token id]
+    mapping (address=>uint256) public _noNftOfProvider;            // number of nfts of provider [address provider]
+    mapping(address=>uint256[]) public _nftsOfRenter;              // array of nfts of renter [address renter]
+    mapping(address => bool) public _authorizedGateways; 
+
+    event Mint(address indexed provider, address indexed renter, uint256 roomId, uint256 rentAmount, uint256 startTimestamp, uint256 endTimestamp, uint256 createTimestamp, uint256 indexed tokenId, bool isCancelled, bool isCheckedOut, uint256 version, bool isPrepaid, bool isPaidAll);
+    event PayRemaining(uint256 indexed tokenId);
     event LogIoTDevice(uint256 indexed tokenId, uint256 deviceId, bool status, uint256 timestamp);
     event Checkout(uint256 indexed tokenId, uint256 indexed roomId, uint256 startTimestamp);
     event DataSent(string encryptedData, bytes32 hashedData);
+
+    event ListNFT(address indexed from, uint256 tokenId, uint256 price);
+    event UnlistNFT(address indexed from, uint256 tokenId);
+    event BuyNFT(address indexed from, uint256 tokenId, uint256 price);
+    event UpdateListingNFTPrice(uint256 tokenId, uint256 price);
     //rental contract between provider and renter (NFT)
     struct NFT{
         address provider;
@@ -69,14 +81,19 @@ contract HomestayNFT is ERC721, Ownable {
         uint256 endTimestamp;
         uint256 createTimestamp; 
         bool isCancelled;
-        bool isCheckedOut;  
+        bool isCheckedOut;
+        uint256 price;
+        uint256 version;  
+        bool isPrepaid;
+        bool isPaidAll; // if isPrepaid false it means that this is deposit booking, so isPaidAll will be the flag to check if renter paid all or not 
     }
     
     mapping(uint256 => NFT) public _nfts;                           //all nfts that were created
     mapping(uint256 => string) public _logIoTdevices;       //all logIoTdevice that were created
 
     //constructor function: all rooms are valid (for use) and store time constructed.
-    constructor(uint256 noRooms, uint256 firstTwoHourPrice, uint256 hourPrice, uint256 dayPrice, uint256 monthPrice) ERC721("HomestayNFT", "HNFT") Ownable() {
+    constructor(address dataConsumerV3Address,uint256 noRooms, uint256 firstTwoHourPrice, uint256 hourPrice, uint256 dayPrice, uint256 monthPrice) ERC721("HomestayNFT", "HNFT") Ownable() {
+        dataConsumerV3 = DataConsumerV3(dataConsumerV3Address);
         _startTime = block.timestamp;
         _noRooms = noRooms;
         for (uint256 i = 0; i < noRooms; i++) {
@@ -94,6 +111,14 @@ contract HomestayNFT is ERC721, Ownable {
         _;
     }
 
+    modifier checkoutRequirement(uint256 tokenId) {
+        require(_nfts[tokenId].isCancelled == false, "This contract has already been cancelled");
+        require(_nfts[tokenId].isCheckedOut == false, "This contract has already been checked out");
+        require(ownerOf(tokenId)!=address(0), "Token ID does not exist");
+        require(msg.sender == ownerOf(tokenId) || (msg.sender == owner() && (block.timestamp>=_nfts[tokenId].endTimestamp)),"You must be a user want to check out or you must be owner and checkout contract after renting time of user");
+        _;
+    }
+
     // function to add an authorized gateway
     function addAuthorizedGateway(address gateway) external onlyOwner {
         _authorizedGateways[gateway] = true;
@@ -104,8 +129,15 @@ contract HomestayNFT is ERC721, Ownable {
         _authorizedGateways[gateway] = false;
     }
 
-    //function change the number of room of homestay (in case want to expand homestay)
+    // function to update new policy 
+    function newPolicyVersion(uint256 minTimeToCancelPrepaid, uint256 minTimeToCancelDeposit, uint256 percentDeposit) public onlyOwner {
+        _minTimeToCancelPrepaid.push(minTimeToCancelPrepaid);
+        _minTimeToCancelDeposit.push(minTimeToCancelDeposit);
+        _percentDeposit.push(percentDeposit);
+        _version++;
+    }
 
+    //function change the number of room of homestay (in case want to expand homestay)
     function setNoRooms(uint256 noRooms) public {
         require(noRooms>_noRooms,"Number of rooms must be greater than at present");
         for (uint256 i = _noRooms; i < noRooms; i++) {
@@ -115,7 +147,6 @@ contract HomestayNFT is ERC721, Ownable {
     }
 
     //functions about validity of rooms
-
     function getRoomValidity(uint256 roomId) public view returns(bool){
         return _roomValidity[roomId];
     }
@@ -143,28 +174,48 @@ contract HomestayNFT is ERC721, Ownable {
         _price = price;
     }
 
+    function getBnbPrice() public view returns (uint256) {
+        return uint256(dataConsumerV3.getChainlinkDataFeedLatestAnswer());
+    }
+    function usdToBnb(uint256 amountUsd) public view returns(uint256 amountBnb) {
+        uint256 bnbPrice = getBnbPrice();
+        amountBnb = amountUsd*(1 ether)/bnbPrice*10**8*(1 wei);
+    }
+    function bnbToUsd(uint256 amountBnb) public view returns(uint256 amountUsd) {
+        uint256 bnbPrice = getBnbPrice();
+        amountUsd = amountBnb*bnbPrice/(1 ether * 10**8) + 1;
+    }
+
     //mint a token (create a homestay contract by user)
-    function safeMint(uint256 roomId, uint256 rentAmount, uint256 startTimestamp, uint256 endTimestamp) public {
+    function safeMint(uint256 roomId, uint256 rentAmount, uint256 startTimestamp, uint256 endTimestamp, bool isPrepaid) public payable {
         require(_roomValidity[roomId]==true,"This room is not available");
         require(startTimestamp>block.timestamp,"Invalid start time");
-        uint256 tokenId = _tokenIdCounter.current();
-        
         uint256 timeDiff = endTimestamp - startTimestamp;
         require(timeDiff > 0, "Invalid timestamps");
 
+        uint256 tokenId = _tokenIdCounter.current();
+        
         //rent amount for owner is decided by owner
-        //if not the owner , the rent amount will be calculated
-        if (msg.sender != owner()) rentAmount = calculateRentAmount(timeDiff);
-        _nfts[tokenId] = NFT(owner(),msg.sender,roomId,rentAmount,startTimestamp,endTimestamp,block.timestamp,false,false);
+        //if not the owner , the rent amount will be calculated (rent amount is calc followed by USD, but price is followed by Bnb price)
+        if (msg.sender != owner()) {
+            rentAmount = calculateRentAmount(timeDiff);
+            if (isPrepaid)
+                require(msg.value >= usdToBnb(rentAmount)* 1 wei, "Insufficient funds to mint prepaid NFT stay");
+            else 
+                require(msg.value >= usdToBnb(rentAmount*_percentDeposit[_version-1]/100)* 1 wei, "Insufficient funds to mint deposit NFT stay");
+        }
+        uint256 price = usdToBnb(rentAmount);
+        _nfts[tokenId] = NFT(owner(),msg.sender,roomId,rentAmount,startTimestamp,endTimestamp,block.timestamp,false,false,price,_version-1,isPrepaid,false);
         _nftsOfProvider.push(tokenId);
         _nftsOfRenter[msg.sender].push(tokenId);
         _tokenIdCounter.increment();
         _noNftOfProvider[owner()]++;
         _noNftOfRenter[msg.sender]++;
+        
         _safeMint(msg.sender,tokenId);
-        emit Mint(owner(),msg.sender,roomId,rentAmount,startTimestamp,endTimestamp,block.timestamp,tokenId,false,false);
+        emit Mint(owner(),msg.sender,roomId,rentAmount,startTimestamp,endTimestamp,block.timestamp,tokenId,false,false,_version-1,isPrepaid,false);
     } 
-    function calculateRentAmount(uint256 timeDiff) public{
+    function calculateRentAmount(uint256 timeDiff) public view returns (uint256){
         uint256 calRentAmount;
         if (timeDiff <= 2 hours) {
             calRentAmount = _price[0];
@@ -184,13 +235,31 @@ contract HomestayNFT is ERC721, Ownable {
         return calRentAmount;
     }
 
+    function payRemaining(uint256 tokenId) public payable {
+        require(ownerOf(tokenId)!=address(0), "Token ID does not exist");
+        require(_nfts[tokenId].isPrepaid == false, "This is prepaid booking");
+        require(_nfts[tokenId].isPaidAll == false, "This contract has already been paid all");
+        require(msg.value >= usdToBnb(_nfts[tokenId].rentAmount*(100-_percentDeposit[_version-1])/100)* 1 wei, "Insufficient funds to pay remaining");
+        _nfts[tokenId].isPaidAll = true;
+        emit PayRemaining(tokenId);
+    }
+
     //cancel contract and mark as isCancellled
-    function cancelContract(uint256 tokenId) public{
+    function cancelContract(uint256 tokenId) public {
+        require(_nfts[tokenId].isCancelled == false, "This contract has already been cancelled");
         require(msg.sender==ownerOf(tokenId),"You are not room's owner");
+        if (_nfts[tokenId].isPrepaid) 
+            require(block.timestamp < _nfts[tokenId].startTimestamp - _minTimeToCancelPrepaid[_version-1], "You cannot cancel this prepaid contract");
+        else 
+            require(block.timestamp < _nfts[tokenId].startTimestamp - _minTimeToCancelDeposit[_version-1], "You cannot cancel this deposit contract");
         _noNftOfProvider[owner()]--;
         _noNftOfRenter[msg.sender]--;
-        transferFrom(msg.sender, address(0), tokenId);
         _nfts[tokenId].isCancelled = true;
+        if (_nfts[tokenId].isPrepaid) {
+            payable(owner()).transfer(usdToBnb(_nfts[tokenId].rentAmount)*1 wei);
+        } else {
+            payable(owner()).transfer(usdToBnb(_nfts[tokenId].rentAmount*_percentDeposit[_version-1]/100)*1 wei);
+        }
     }
 
     //get info of a NFT (a rental contract)
@@ -220,12 +289,9 @@ contract HomestayNFT is ERC721, Ownable {
     }
 
     //function that store log of iot devices when checkout 
-    function checkout(uint256 tokenId) public {
-        require(_nfts[tokenId].isCheckedOut == false, "This contract has already been checked out")
-        require(ownerOf(tokenId)!=address(0), "Token ID does not exist");                                
-        require(ownerOf(tokenId) == msg.sender, "You are not the owner of this token");      
-
+    function checkout(uint256 tokenId) public checkoutRequirement((tokenId)){
         _nfts[tokenId].isCheckedOut = true;
+        payable(owner()).transfer(usdToBnb(_nfts[tokenId].rentAmount)*1 wei);
         emit Checkout(tokenId,_nfts[tokenId].roomId,_nfts[tokenId].startTimestamp);
     }
 
@@ -241,6 +307,16 @@ contract HomestayNFT is ERC721, Ownable {
         return _logIoTdevices[tokenId];
     }
 
+    //function that return info of policy
+    function getPolicyByVersion(uint256 version) public view returns (uint256[3] memory) {
+        return [_minTimeToCancelPrepaid[version], _minTimeToCancelDeposit[version], _percentDeposit[version]];
+    }
+
+    //function that return info of the latest policy
+    function getLatestPolicy() public view returns (uint256[3] memory) {
+        return [_minTimeToCancelPrepaid[_version-1], _minTimeToCancelDeposit[_version-1], _percentDeposit[_version-1]];
+    }
+
 
     function tokenURI(uint256 tokenId) public view  override(ERC721) returns (string memory){
         return super.tokenURI(tokenId);
@@ -250,5 +326,27 @@ contract HomestayNFT is ERC721, Ownable {
         return block.timestamp-_startTime;
     }
 
+    // SPDX-IGNORE
+    function emitListNFT(address from,uint256 tokenId,uint256 price) public  {
+        emit ListNFT(from, tokenId, price);
+    }
 
+    // SPDX-IGNORE
+    function emitBuyNFT(address from, uint256 tokenId, uint256 price) public  {
+        emit BuyNFT(from, tokenId, price);
+    }
+
+    // SPDX-IGNORE
+    function emitUnlistNFT(address from, uint256 tokenId) public  {
+        emit UnlistNFT(from, tokenId);
+    }
+
+    // SPDX-IGNORE
+    function emitUpdateListingNFTPrice(uint256 tokenId,uint256 price) public  {
+        emit UpdateListingNFTPrice(tokenId, price);
+    }
+
+    function getBalance() public view returns(uint256){
+        return address(this).balance;
+    }
 }

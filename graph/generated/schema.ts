@@ -177,4 +177,30 @@ export class Token extends Entity {
       this.set("price", Value.fromBigInt(<BigInt>value));
     }
   }
+
+  get isPrepaid(): boolean {
+    let value = this.get("isPrepaid");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set isPrepaid(value: boolean) {
+    this.set("isPrepaid", Value.fromBoolean(value));
+  }
+
+  get isPaidAll(): boolean {
+    let value = this.get("isPaidAll");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set isPaidAll(value: boolean) {
+    this.set("isPaidAll", Value.fromBoolean(value));
+  }
 }
