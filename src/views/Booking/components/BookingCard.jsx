@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAddress, useContract } from '@thirdweb-dev/react';
 import Message from 'components/Message';
 import { CONTRACT_ADDRESS } from 'utils/constant';
-import {  DatePicker, Modal, Space  } from 'antd';
+import {  DatePicker, Modal, Space, Radio  } from 'antd';
 import './Booking.scss';
 import { ConnectWallet } from "@thirdweb-dev/react";
 import { parseBigNumber } from 'utils/function/parseBigNumber';
@@ -23,6 +23,7 @@ const BookingCard = () => {
     const [roomId, setRoomId] = useState('');
     const [isBookingLoading,setBookingLoading] = useState(-1);
     const [isPolicyModalOpen,setPolicyModalOpen] = useState(false);
+    const [isPrepaid, setIsPrepaid] = useState(true);
     const onChange = (value, dateString) => {
         const startDate = new Date(value[0]);
         const endDate = new Date(value[1]);
@@ -56,15 +57,17 @@ const BookingCard = () => {
                 console.log('amountBnb',parseBigNumber(amountBnb));
                 setBookingLoading(true);
                 // Call the safeMint function
+                console.time('Booking')
                 const {data:isDataBooking, loading: isBookingLoading} = await contract.call('safeMint', [
                     roomId,
                     0,
                     Math.floor(startTimestamp/1000),
                     Math.ceil(endTimestamp/1000),
-                    true
+                    isPrepaid,
                 ],{
                     value: amountBnb,
                 });
+                console.timeEnd('Booking')
                 setBookingLoading(isBookingLoading)
                 Message.sendSuccess('Successfully booked!');
             } catch (error) {
@@ -77,12 +80,14 @@ const BookingCard = () => {
         }
     };
     useEffect(()=>{
-        if (isBookingLoading==undefined) 
+        if (isBookingLoading===undefined) 
           setTimeout(()=>{
             window.location.reload();
           },3000)
       },[isBookingLoading]);
-
+    const onIsPrepaidChange = (e) => {
+        setIsPrepaid(e.target.value);
+    };
     return (
         <>
         <div className=''>
@@ -97,21 +102,21 @@ const BookingCard = () => {
                             className="relative min-[800px]:p-20 min-[750px]:p-10 min-[400px]:p-6 p-4 mr-0 w-full flex flex-col"
                         >
                             <div className="min-[1000px]:w-full flex justify-end min-[1000px]:space-x-4 max-[1000px]:space-y-3 mb-4 min-[1000px]:flex-row flex-col">
-                                <button class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-40 my-auto  rounded-md bg-sky-600 p-2 flex justify-center items-center font-extrabold">
-                                        <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-950"></div>
-                                        <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-900"></div>
-                                        <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
-                                        <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
-                                        <p class="z-10">See room validity</p>
+                                <button className="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-40 my-auto  rounded-md bg-sky-600 p-2 flex justify-center items-center font-extrabold">
+                                        <div className="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-950"></div>
+                                        <div className="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-900"></div>
+                                        <div className="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
+                                        <div className="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
+                                        <p className="z-10">See room validity</p>
                                 </button>
-                                <button class="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-48 my-auto  rounded-md bg-sky-600 p-2 flex justify-center items-center font-extrabold"
+                                <button className="border hover:scale-95 duration-300 relative group cursor-pointer text-sky-50  overflow-hidden h-[44px] w-48 my-auto  rounded-md bg-sky-600 p-2 flex justify-center items-center font-extrabold"
                                         onClick={()=>setPolicyModalOpen(true)}
                                 >
-                                        <div class="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-950"></div>
-                                        <div class="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-900"></div>
-                                        <div class="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
-                                        <div class="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
-                                        <p class="z-10">Booking Policy</p>
+                                        <div className="absolute right-32 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-40 h-40 rounded-full group-hover:scale-150 duration-500 bg-sky-950"></div>
+                                        <div className="absolute right-2 -top-4  group-hover:top-1 group-hover:right-2 z-10 w-32 h-32 rounded-full group-hover:scale-150  duration-500 bg-sky-900"></div>
+                                        <div className="absolute -right-12 top-4 group-hover:top-1 group-hover:right-2 z-10 w-24 h-24 rounded-full group-hover:scale-150  duration-500 bg-sky-800"></div>
+                                        <div className="absolute right-20 -top-4 group-hover:top-1 group-hover:right-2 z-10 w-16 h-16 rounded-full group-hover:scale-150  duration-500 bg-sky-700"></div>
+                                        <p className="z-10">Booking Policy</p>
                                 </button>
                             </div>
                             {console.log(isPolicyModalOpen)}
@@ -165,9 +170,15 @@ const BookingCard = () => {
                                         {console.log(startTime,endTime)}
                                     </Space> 
                                 </div>
-                                
+                                <div className='flex items-center min-[800px]:flex-row flex-col flex-basis'>
+                                    <div className='my-auto text-2xl font-bold text-slate-500 basis-1/5 '>Contract type</div>
+                                    <Radio.Group value={isPrepaid} onChange={onIsPrepaidChange} size='large'>
+                                        <Radio value={true}>Prepaid contract</Radio>
+                                        <Radio value={false}>Deposit contract</Radio>
+                                    </Radio.Group>
+                                </div>
                                 <div className="w-full flex justify-center pt-8">
-                                    {address && !(isBookingLoading == true) &&
+                                    {address && !(isBookingLoading === true) &&
                                     <button
                                         type="submit"
                                         className="!text-white"
@@ -189,7 +200,7 @@ const BookingCard = () => {
                                     
                                 </div>
                             </form>
-                            {(isBookingLoading == true)
+                            {(isBookingLoading === true)
                             && <div className="justify-center flex absolute self-center text-center top-72 scale-150">
                                 <Loader/>
                             </div>}

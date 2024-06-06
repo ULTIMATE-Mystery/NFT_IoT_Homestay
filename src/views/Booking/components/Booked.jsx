@@ -55,7 +55,7 @@ const Booked = ({ isButtonClicked,page,contractId,selectContract,setModalCheckou
     const { loading:isLoadingListings, error:errorListings, data:dataListings } = useQuery(GET_LISTINGS);
     if (queryData) console.log(queryData.tokens)
     useEffect(()=>{
-    if (assetsStatus=="myassets"||page==="management") {
+    if (assetsStatus==="myassets"||page==="management") {
         if (queryData) 
             setTokens(queryData.tokens);
     }
@@ -71,7 +71,7 @@ const Booked = ({ isButtonClicked,page,contractId,selectContract,setModalCheckou
     return (
         <>
             <div className="flex rounded-xl text-base mt-8 relative">
-                <div className={`${page=="booking"?"min-[1580px]:grid-cols-5 min-[1400px]:grid-cols-4 gap-24":"gap-12"} m-[2px] rounded-xl w-full grid lg:grid-cols-3 min-[780px]:grid-cols-2 grid-cols-1 justify-between justify-items-center `}>
+                <div className={`${page==="booking"?"min-[1580px]:grid-cols-5 min-[1400px]:grid-cols-4 gap-24":"gap-12"} m-[2px] rounded-xl w-full grid lg:grid-cols-3 min-[780px]:grid-cols-2 grid-cols-1 justify-between justify-items-center `}>
                     {isLoading && <div className='absolute py-40 flex justify-center'>
                                         <Loading/>
                                     </div>}

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useContract, useAddress } from '@thirdweb-dev/react';
 import { parseBigNumber } from 'utils/function/parseBigNumber.js';
-import { formatDate } from 'utils/function/formatDate.js';
 import { CONTRACT_ADDRESS } from 'utils/constant.ts';
 import moment from 'moment';
 
@@ -78,13 +77,13 @@ export function useManagementData() {
                 // Current month and previous month details
                 const currentMonth = moment().startOf('month');
                 const previousMonth = moment().subtract(1, 'months').startOf('month');
-                
+
                 const currentMonthRentDetails = rentDetails.filter(({ createTimestamp }) => moment(createTimestamp).isSame(currentMonth, 'month'));
                 const previousMonthRentDetails = rentDetails.filter(({ createTimestamp }) => moment(createTimestamp).isSame(previousMonth, 'month'));
 
                 const totalCurrentMonthRent = currentMonthRentDetails.reduce((acc, { rentAmount }) => acc + rentAmount, 0);
                 const totalPreviousMonthRent = previousMonthRentDetails.reduce((acc, { rentAmount }) => acc + rentAmount, 0);
-                
+
                 const currentMonthUniqueUsers = new Set(currentMonthRentDetails.map(({ renter }) => renter));
                 const previousMonthUniqueUsers = new Set(previousMonthRentDetails.map(({ renter }) => renter));
 

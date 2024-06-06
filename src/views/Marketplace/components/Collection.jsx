@@ -299,11 +299,11 @@ const Collection = ({setNoCollection,index}) => {
             </div>
         </div>
         <div className="bg-slate-900 flex flex-row w-fit rounded-xl p-1">
-            <button className={`text-white ${mode=="item"?"bg-slate-800 font-bold":""} px-6 py-2 rounded-xl`}
+            <button className={`text-white ${mode==="item"?"bg-slate-800 font-bold":""} px-6 py-2 rounded-xl`}
             onClick={()=>setMode("item")}>
                 Items
             </button>
-            <button className={`text-white ${mode=="activity"?"bg-slate-800 font-bold":""} px-6 py-2 rounded-xl`}
+            <button className={`text-white ${mode==="activity"?"bg-slate-800 font-bold":""} px-6 py-2 rounded-xl`}
             onClick={()=>setMode("activity")}>
                 Activity
             </button>

@@ -9,7 +9,7 @@ import BookedCard from './BookedCard';
 import homestay4 from 'assets/image/homestay/homestay4.jpg';
 import { CONTRACT_ADDRESS, MARKETPLACE_ADDRESS } from 'utils/constant';
 import { useQuery, gql } from '@apollo/client';
-import { hexToBigInt } from 'thirdweb';
+// import { hexToBigInt } from 'thirdweb';
 import './style.css'
 import ButtonNFT from 'components/ButtonNFT';
 
@@ -20,10 +20,10 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
   const [isViewClicked,setIsViewClicked] = useState(false);
   const [convertedPrice, setConvertedPrice] = useState(null);
 
-  const parseBigNumber = (value) => {
-    return value ? value.toString() : "";
+  // const parseBigNumber = (value) => {
+  //   return value ? value.toString() : "";
   
-  };
+  // };
   const handleSelectContract = ()=>{
     select(tokenId);
     setModalCheckoutOpened(false);
@@ -92,41 +92,41 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
     <>
       {!isLoading && data && dataNFT && (
       <div className={`relative ${dataNFT.isCancelled?"cancelled":""}`}>
-        <div class="container noselect" onClick={() => setIsViewClicked(true)}>
-            <div class="canvas">
-                <div class="tracker tr-1"></div>
-                <div class="tracker tr-2"></div>
-                <div class="tracker tr-3"></div>
-                <div class="tracker tr-4"></div>
-                <div class="tracker tr-5"></div>
-                <div class="tracker tr-6"></div>
-                <div class="tracker tr-7"></div>
-                <div class="tracker tr-8"></div>
-                <div class="tracker tr-9"></div>
-                <div class="tracker tr-10"></div>
-                <div class="tracker tr-11"></div>
-                <div class="tracker tr-12"></div>
-                <div class="tracker tr-13"></div>
-                <div class="tracker tr-14"></div>
-                <div class="tracker tr-15"></div>
-                <div class="tracker tr-16"></div>
-                <div class="tracker tr-17"></div>
-                <div class="tracker tr-18"></div>
-                <div class="tracker tr-19"></div>
-                <div class="tracker tr-20"></div>
-                <div class="tracker tr-21"></div>
-                <div class="tracker tr-22"></div>
-                <div class="tracker tr-23"></div>
-                <div class="tracker tr-24"></div>
-                <div class="tracker tr-25"></div>
+        <div className="container noselect" onClick={() => setIsViewClicked(true)}>
+            <div className="canvas">
+                <div className="tracker tr-1"></div>
+                <div className="tracker tr-2"></div>
+                <div className="tracker tr-3"></div>
+                <div className="tracker tr-4"></div>
+                <div className="tracker tr-5"></div>
+                <div className="tracker tr-6"></div>
+                <div className="tracker tr-7"></div>
+                <div className="tracker tr-8"></div>
+                <div className="tracker tr-9"></div>
+                <div className="tracker tr-10"></div>
+                <div className="tracker tr-11"></div>
+                <div className="tracker tr-12"></div>
+                <div className="tracker tr-13"></div>
+                <div className="tracker tr-14"></div>
+                <div className="tracker tr-15"></div>
+                <div className="tracker tr-16"></div>
+                <div className="tracker tr-17"></div>
+                <div className="tracker tr-18"></div>
+                <div className="tracker tr-19"></div>
+                <div className="tracker tr-20"></div>
+                <div className="tracker tr-21"></div>
+                <div className="tracker tr-22"></div>
+                <div className="tracker tr-23"></div>
+                <div className="tracker tr-24"></div>
+                <div className="tracker tr-25"></div>
                 <div id="card" className='relative'>
                   <div className="rounded-t-[26px] overflow-hidden p-[8px] absolute h-[85%] top-0">
                     <img src={homestay4} alt="Background" className="w-full h-full object-cover rounded-t-lg image" />
                   </div>
                   
                     <p id="prompt">Price {convertedPrice ? `${convertedPrice} $` : "0 $"}</p>
-                    <div class="title">Room {roomId}</div>
-                    <div class="subtitle">
+                    <div className="title">Room {roomId}</div>
+                    <div className="subtitle">
                         NFT STAY {tokenId}
                     </div> 
                 </div>

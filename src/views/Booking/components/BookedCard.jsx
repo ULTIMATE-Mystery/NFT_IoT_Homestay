@@ -379,44 +379,44 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice,isCa
             onCancel={()=>setModalListNFT(false)}
             footer={null}
           >
-            <div class="w-full h-full flex flex-col gap-[40px] ">
+            <div className="w-full h-full flex flex-col gap-[40px] ">
               <div>
                 List NFT
               </div>
               <form>
-                <label class="block">
-                  <span class="block text-sm  pl-3">Enter Price (USD)</span>
-                  <input class=" border-slate-700 w-full rounded-lg h-[48px] px-[16px]" value={inputListPrice} onChange={onListPriceChange} type="number" required/>
-                  <span class="block text-sm pt-[16px] flex flex-row relative w-full">
+                <label className="block">
+                  <span className="block text-sm  pl-3">Enter Price (USD)</span>
+                  <input className=" border-slate-700 w-full rounded-lg h-[48px] px-[16px]" value={inputListPrice} onChange={onListPriceChange} type="number" required/>
+                  <span className="block text-sm pt-[16px] flex flex-row relative w-full">
                   <span>Est</span>
-                  <span class="right-0 absolute">≈${inputListPrice?inputListPrice:0}</span>
+                  <span className="right-0 absolute">≈${inputListPrice?inputListPrice:0}</span>
                   </span>
                 </label>
               </form>
-              <span class="flex flex-col gap-[16px] text-sm text-slate-500">
+              <span className="flex flex-col gap-[16px] text-sm text-slate-500">
                 <div>Listing is FREE! When the sale succeeds, the following fees will occur.</div>
-                <div class="w-full relative flex flex-row">
+                <div className="w-full relative flex flex-row">
                   <div>Marketplace Fee</div>
-                    <div class=" absolute right-0 ">5%
+                    <div className=" absolute right-0 ">5%
                     </div>
                   </div>
-                <div class="w-full relative flex flex-row">
+                <div className="w-full relative flex flex-row">
                   <div>
                     You will receive
                   </div>
-                  <div class=" absolute right-0 ">
+                  <div className=" absolute right-0 ">
                     ${inputListPrice?inputListPrice*0.95:0}
                   </div>
                 </div>
               </span>
               {isListNFTLoading!==true &&
-              <button class="relative flex flex-row justify-center items-center"
+              <button className="relative flex flex-row justify-center items-center"
                 onClick={()=>{
                   onClickListNft(tokenId, inputListPrice);
                   setModalListNFT(false)}}>
-                <div class="absolute top-0 left-0 h-full w-full z-10 rounded-xl">
+                <div className="absolute top-0 left-0 h-full w-full z-10 rounded-xl">
                 </div>
-                <div class="relative z-20 ">
+                <div className="relative z-20 ">
                   <ButtonNFT content={"List NFT"}/>
                 </div>
               </button>}
@@ -426,44 +426,44 @@ const BookedCard = ({tokenId,page,isApprovedForAll,queryData,convertedPrice,isCa
             onCancel={()=>setModalChangePrice(false)}
             footer={null}
           >
-            <div class="w-full h-full flex flex-col gap-[40px] ">
+            <div className="w-full h-full flex flex-col gap-[40px] ">
               <div>
                 Change NFT's Price
               </div>
               <form>
-                <label class="block">
-                  <span class="block text-sm text-slate-500 pl-3">Enter Price (USD)</span>
-                  <input class=" border-slate-700 w-full rounded-lg h-[48px] px-[16px]" value={inputChangePrice} onChange={onChangePriceChange} type="number" required/>
-                  <span class="block text-sm text-slate-500 pt-[16px] flex flex-row relative w-full">
+                <label className="block">
+                  <span className="block text-sm text-slate-500 pl-3">Enter Price (USD)</span>
+                  <input className=" border-slate-700 w-full rounded-lg h-[48px] px-[16px]" value={inputChangePrice} onChange={onChangePriceChange} type="number" required/>
+                  <span className="block text-sm text-slate-500 pt-[16px] flex flex-row relative w-full">
                   <span>Est</span>
-                  <span class="right-0 absolute">≈${inputChangePrice?inputChangePrice:0}</span>
+                  <span className="right-0 absolute">≈${inputChangePrice?inputChangePrice:0}</span>
                   </span>
                 </label>
               </form>
-              <span class="flex flex-col gap-[16px] text-sm text-slate-500">
+              <span className="flex flex-col gap-[16px] text-sm text-slate-500">
                 <div>Listing is FREE! When the sale succeeds, the following fees will occur.</div>
-                <div class="w-full relative flex flex-row">
+                <div className="w-full relative flex flex-row">
                   <div>Marketplace Fee</div>
-                    <div class=" absolute right-0 ">5%
+                    <div className=" absolute right-0 ">5%
                     </div>
                   </div>
-                <div class="w-full relative flex flex-row">
+                <div className="w-full relative flex flex-row">
                   <div>
                     You will receive
                   </div>
-                  <div class=" absolute right-0 ">
+                  <div className=" absolute right-0 ">
                     ${inputChangePrice?inputChangePrice*0.95:0}
                   </div>
                 </div>
               </span>
               {isChangePriceLoading!==true &&
-              <button class="relative flex flex-row justify-center items-center"
+              <button className="relative flex flex-row justify-center items-center"
                 onClick={()=>{
                   onClickChangePrice(tokenId, inputChangePrice);
                   setModalChangePrice(false)}}>
-                <div class="absolute top-0 left-0 h-full w-full z-10 rounded-xl">
+                <div className="absolute top-0 left-0 h-full w-full z-10 rounded-xl">
                 </div>
-                <div class="relative z-20 ">
+                <div className="relative z-20 ">
                   <ButtonNFT content={"Change Price"}/>
                 </div>
               </button>}

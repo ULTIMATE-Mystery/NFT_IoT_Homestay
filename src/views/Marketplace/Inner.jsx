@@ -6,7 +6,7 @@ const Inner = memo(() => {
 
     return (
         <>
-            {noCollection==-1&&
+            {noCollection===-1&&
                 <Collections setNoCollection={setNoCollection}/>
             }
             {noCollection>=0&&noCollection<=11&&
