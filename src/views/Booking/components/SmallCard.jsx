@@ -132,7 +132,7 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
                 </div>
             </div>
         </div>
-        <button className={`${page === "booking" ? "hidden" : "pt-12"} flex justify-center mx-auto`} onClick={handleSelectContract}>
+        <button className={`${page === "booking" ? "hidden" : "pt-12"} flex justify-center mx-auto ${isCancelled?"opacity-50":""}`} disabled={isCancelled} onClick={handleSelectContract}>
             <ButtonNFT content={"Select"}/>
         </button>
         {isViewClicked && (

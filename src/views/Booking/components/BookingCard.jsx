@@ -50,10 +50,20 @@ const BookingCard = () => {
                 const amountUsd = await contract.call('calculateRentAmount', [
                     Math.floor(endTimestamp/1000)-Math.ceil(startTimestamp/1000),
                 ]);
+                let amountBnb;
                 //amount bnb by wei
-                const amountBnb = await contract.call('usdToBnb', [
-                    amountUsd,
-                ]);
+                if( isPrepaid) 
+                    amountBnb = await contract.call('usdToBnb', [
+                        amountUsd,
+                    ]);
+                else {
+                    const percentDeposit = await contract.call('getLatestPolicy');
+                    amountBnb = await contract.call('usdToBnb', [
+                        amountUsd,
+                    ]);
+                    amountBnb = amountBnb*parseBigNumber(percentDeposit[2])/100
+                };
+
                 console.log('amountBnb',parseBigNumber(amountBnb));
                 setBookingLoading(true);
                 // Call the safeMint function
@@ -163,7 +173,7 @@ const BookingCard = () => {
                                     </div>
                                     <Space className='flex w-full' direction="vertical" size={12}>
                                         <RangePicker
-                                        className=' bg-slate-800 border border-slate-950 py-3 px-6 w-full'
+                                        className=' bg-slate-800 border border-slate-950 py-3 px-6 w-full focus:bg-slate-800'
                                         showTime={{
                                             format: 'HH:mm',
                                         }}
