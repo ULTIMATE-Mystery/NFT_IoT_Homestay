@@ -16,50 +16,27 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Approval
-        - ApprovalForAll
-        - BuyNFT
-        - CancelContract
-        - Checkout
-        - DataSent
-        - ListNFT
-        - LogIoTDevice
-        - Mint
-        - OwnershipTransferred
-        - PayRemaining
-        - Transfer
-        - UnlistNFT
-        - UpdateListingNFTPrice
+        - Token
       abis:
         - name: Contract
           file: ./abis/Contract.json
       eventHandlers:
-        - event: Approval(indexed address,indexed address,indexed uint256)
-          handler: handleApproval
         - event: ApprovalForAll(indexed address,indexed address,bool)
           handler: handleApprovalForAll
-        - event: BuyNFT(indexed address,uint256,uint256)
-          handler: handleBuyNFT
-        - event: CancelContract(indexed uint256)
-          handler: handleCancelContract
-        - event: Checkout(indexed uint256,indexed uint256,uint256)
-          handler: handleCheckout
-        - event: DataSent(string,bytes32)
-          handler: handleDataSent
-        - event: ListNFT(indexed address,uint256,uint256)
-          handler: handleListNFT
-        - event: LogIoTDevice(indexed uint256,uint256,bool,uint256)
-          handler: handleLogIoTDevice
         - event: Mint(indexed address,indexed address,uint256,uint256,uint256,uint256,uint256,indexed uint256,bool,bool,uint256,bool,bool)
           handler: handleMint
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
         - event: PayRemaining(indexed uint256)
           handler: handlePayRemaining
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+        - event: ListNFT(indexed address,uint256,uint256)
+          handler: handleListNFT
         - event: UnlistNFT(indexed address,uint256)
           handler: handleUnlistNFT
+        - event: BuyNFT(indexed address,uint256,uint256)
+          handler: handleBuyNFT
         - event: UpdateListingNFTPrice(uint256,uint256)
           handler: handleUpdateListingNFTPrice
+        - event: CancelContract(indexed uint256)
+          handler: handleCancelContract
       file: ./src/contract.ts

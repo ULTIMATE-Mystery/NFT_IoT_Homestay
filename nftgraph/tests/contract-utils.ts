@@ -4,6 +4,7 @@ import {
   Approval,
   ApprovalForAll,
   BuyNFT,
+  CancelContract,
   Checkout,
   DataSent,
   ListNFT,
@@ -86,6 +87,21 @@ export function createBuyNFTEvent(
   )
 
   return buyNftEvent
+}
+
+export function createCancelContractEvent(tokenId: BigInt): CancelContract {
+  let cancelContractEvent = changetype<CancelContract>(newMockEvent())
+
+  cancelContractEvent.parameters = new Array()
+
+  cancelContractEvent.parameters.push(
+    new ethereum.EventParam(
+      "tokenId",
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    )
+  )
+
+  return cancelContractEvent
 }
 
 export function createCheckoutEvent(
