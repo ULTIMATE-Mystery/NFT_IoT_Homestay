@@ -79,12 +79,17 @@ const BookingCard = () => {
             Message.sendError('Contract not loaded or not connected to Web3');
         }
     };
-    useEffect(()=>{
-        if (isBookingLoading===undefined) 
-          setTimeout(()=>{
-            window.location.reload();
-          },3000)
-      },[isBookingLoading]);
+
+    const handleContractTypeClick = (isPrepaidValue) => {
+        setIsPrepaid(isPrepaidValue);
+    };
+    console.log(isPrepaid);
+    // useEffect(()=>{
+    //     if (isBookingLoading===undefined) 
+    //       setTimeout(()=>{
+    //         window.location.reload();
+    //       },3000)
+    //   },[isBookingLoading]);
     const onIsPrepaidChange = (e) => {
         setIsPrepaid(e.target.value);
     };
@@ -119,7 +124,6 @@ const BookingCard = () => {
                                         <p className="z-10">Booking Policy</p>
                                 </button>
                             </div>
-                            {console.log(isPolicyModalOpen)}
                              {
                                     isPolicyModalOpen && 
                                     <Modal 
@@ -172,10 +176,20 @@ const BookingCard = () => {
                                 </div>
                                 <div className='flex items-center min-[800px]:flex-row flex-col flex-basis'>
                                     <div className='my-auto text-2xl font-bold text-slate-500 basis-1/5 '>Contract type</div>
-                                    <Radio.Group value={isPrepaid} onChange={onIsPrepaidChange} size='large'>
-                                        <Radio value={true}>Prepaid contract</Radio>
-                                        <Radio value={false}>Deposit contract</Radio>
-                                    </Radio.Group>
+                                    <div className="flex space-x-4">
+                                        <div 
+                                            className={`cursor-pointer text-lg font-bold border rounded-lg px-6 py-2 hover:scale-105 ${isPrepaid ? 'text-blue-300 border-blue-400' : 'text-slate-600 border-slate-600 hover:text-slate-500 hover:border-slate-400'}`}
+                                            onClick={() => handleContractTypeClick(true)}
+                                        >
+                                            Prepaid
+                                        </div>
+                                        <div 
+                                            className={`cursor-pointer text-lg font-bold border rounded-lg px-6 py-2 hover:scale-105 ${!isPrepaid ? 'text-blue-300 border-blue-400' : 'text-slate-600 border-slate-600 hover:text-slate-500 hover:border-slate-400'}`}
+                                            onClick={() => handleContractTypeClick(false)}
+                                        >
+                                            Deposit
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="w-full flex justify-center pt-8">
                                     {address && !(isBookingLoading === true) &&
