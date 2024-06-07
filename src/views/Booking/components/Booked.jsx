@@ -88,7 +88,7 @@ const Booked = ({ isButtonClicked,page,contractId,selectContract,setModalCheckou
                                     setModalCheckoutOpened={setModalCheckoutOpened}
                                     price={data.price}
                                     roomId={data.roomId}
-                                    inCancelled={data.inCancelled}     
+                                    isCancelled={data.isCancelled}     
                                 ></SmallCard>
                             ))}
                         </>
