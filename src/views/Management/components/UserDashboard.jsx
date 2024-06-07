@@ -45,7 +45,9 @@ const UserDashboard = ({ mode, setMode }) => {
     setIsLoading(true);
 
     try {
+      console.time('Checkout')
       const data = await checkout({ args: [contractId] });
+      console.timeEnd('Checkout')
       console.info("Contract call success", data);
       Message.sendSuccess('Successfully checked out!');
       setLastSuccessfulContractId(contractId);

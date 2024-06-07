@@ -50,7 +50,22 @@ const LogCardCheckout = ({ tokenId }) => {
   useEffect(() => {
     fetchDeviceData();
   }, [fetchDeviceData]);
-
+  const formatDeviceName = (name) => {
+    if (name === 'RFID Reader') {
+      return 'Door access';
+    }
+    else if (name === 'AC Measure Unit') {
+      return 'Power usage';
+    }
+  }
+  const formatDeviceUnit = (name, value) => {
+    if (name === 'RFID Reader') {
+      return value ? 'SUCCESS' : 'FAILED';
+    }
+    else if (name === 'AC Measure Unit') {
+      return value.toString() + ' kWh';
+    }
+  }
   return (
     <div className='log-card-checkout' style={{ maxWidth: '1200px', height: '80vh', overflowY: 'auto', padding: '0 20px' }}>
       {isLoading ? (
@@ -63,9 +78,10 @@ const LogCardCheckout = ({ tokenId }) => {
             const device = deviceData.find(d => Number(d.DeviceCode) === Number(parseBigNumber(item[0])));
             return (
               <div key={index} className='flex flex-cols justify-center w-full mb-4 border-b text-[13px] font-bold text-slate-600 py-2'>
-                <div className='basis-2/4 flex justify-center text-slate-500'>{device ? device.DeviceName : 'Unknown Device'}</div>
+                <div className='basis-2/4 flex justify-center text-slate-500'>{device ? formatDeviceName(device?.DeviceName) : 'Unknown Device'}</div>
                 <div className={`basis-1/4 flex justify-center ${parseBigNumber(item[1]) ? 'text-lime-400' : 'text-red-300'}`}>
-                  {!parseBigNumber(item[1]) ? 'OFF' : parseBigNumber(item[1]) !== true ? parseBigNumber(item[1]) : 'ON'}
+                  {/* {!parseBigNumber(item[1]) ? 'OFF' : parseBigNumber(item[1]) !== true ? parseBigNumber(item[1]) : 'ON'} */}
+                  {formatDeviceUnit(device?.DeviceName, parseBigNumber(item[1]))}
                 </div>
                 <div className='basis-2/4 flex justify-center text-slate-500'>{formatDate(parseBigNumber(item[2]))}</div>
               </div>
