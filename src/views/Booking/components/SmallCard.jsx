@@ -13,9 +13,8 @@ import { useQuery, gql } from '@apollo/client';
 import './style.css'
 import ButtonNFT from 'components/ButtonNFT';
 
-const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,price,roomId}) => {
+const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,price,roomId,isCancelled}) => {
   const { contract } = useContract(CONTRACT_ADDRESS);
-  const { data: dataNFT, isLoading: isLoadingNFT } = useContractRead(contract, "getNFTInfo", [tokenId]);
   const [dataToken,setDataToken] = useState();
   const [isViewClicked,setIsViewClicked] = useState(false);
   const [convertedPrice, setConvertedPrice] = useState(null);
@@ -53,6 +52,7 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
           creator
           price
           owner
+          isCancelled
         }
       }
   `;
@@ -90,8 +90,8 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
 
   return (
     <>
-      {!isLoading && data && dataNFT && (
-      <div className={`relative ${dataNFT.isCancelled?"cancelled":""}`}>
+      {!isLoading && data && (
+      <div className={`relative ${isCancelled?"cancelled":""}`}>
         <div className="container noselect" onClick={() => setIsViewClicked(true)}>
             <div className="canvas">
                 <div className="tracker tr-1"></div>
@@ -137,7 +137,7 @@ const SmallCard = ({key,tokenId,page,contractId,select,setModalCheckoutOpened,pr
         </button>
         {isViewClicked && (
             <Modal open={isViewClicked} onCancel={() => setIsViewClicked(false)} onOk={() => setIsViewClicked(false)} width={1200} closable={false}>
-              <BookedCard tokenId={tokenId} page={page} isApprovedForAll={isApprovedForAll} queryData={data} convertedPrice={convertedPrice} isCancelled={dataNFT.isCancelled}></BookedCard>
+              <BookedCard tokenId={tokenId} page={page} isApprovedForAll={isApprovedForAll} queryData={data} convertedPrice={convertedPrice} isCancelled={isCancelled}></BookedCard>
             </Modal>
         )}
     </div>

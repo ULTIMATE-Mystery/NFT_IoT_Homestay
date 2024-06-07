@@ -1,6 +1,15 @@
-type ExampleEntity @entity {
-  id: Bytes!
-  count: BigInt!
-  owner: Bytes! # address
-  approved: Bytes! # address
+type Token @entity {
+  id: ID!
+  roomId: BigInt
+  provider: Bytes
+  renter: Bytes
+  approved: Boolean
+  tokenId: BigInt!
+  owner: Bytes # address
+  creator: Bytes # address
+  price: BigInt
+  version: BigInt
+  isCancelled: Boolean
+  isPrepaid: Boolean
+  isPaidAll: Boolean
 }

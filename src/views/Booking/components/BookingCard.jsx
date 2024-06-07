@@ -83,13 +83,13 @@ const BookingCard = () => {
     const handleContractTypeClick = (isPrepaidValue) => {
         setIsPrepaid(isPrepaidValue);
     };
-    console.log(isPrepaid);
-    // useEffect(()=>{
-    //     if (isBookingLoading===undefined) 
-    //       setTimeout(()=>{
-    //         window.location.reload();
-    //       },3000)
-    //   },[isBookingLoading]);
+
+    useEffect(()=>{
+        if (isBookingLoading===undefined) 
+          setTimeout(()=>{
+            window.location.reload();
+          },3000)
+      },[isBookingLoading]);
     const onIsPrepaidChange = (e) => {
         setIsPrepaid(e.target.value);
     };
@@ -130,7 +130,8 @@ const BookingCard = () => {
                                     open={isPolicyModalOpen} 
                                     onCancel={()=>setPolicyModalOpen(false)}
                                     onOk={()=>setPolicyModalOpen(false)}
-                                    className='z-50'>
+                                    className='z-50'
+                                    footer={null}>
                                         <Policy/>
                                     </Modal>
                                 }
